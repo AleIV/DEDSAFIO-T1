@@ -1,5 +1,5 @@
-name: NoobstersCore
+name: PERMADED
 version: ${version}
-main: net.noobsters.core.paper.Core
+main: net.noobsters.core.paper.PERMADED
 api-version: 1.16
 api: ["1.16"]
