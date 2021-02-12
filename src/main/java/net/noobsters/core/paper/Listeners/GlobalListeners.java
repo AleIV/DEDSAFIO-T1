@@ -1,34 +1,21 @@
 package net.noobsters.core.paper.Listeners;
 
-import java.util.List;
 import java.util.Random;
 
-import org.bukkit.Color;
-import org.bukkit.FireworkEffect;
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Arrow;
-import org.bukkit.entity.Bat;
-import org.bukkit.entity.Chicken;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Ghast;
-import org.bukkit.entity.Phantom;
-import org.bukkit.entity.Pig;
-import org.bukkit.entity.Piglin;
-import org.bukkit.entity.Pillager;
-import org.bukkit.entity.Sheep;
-import org.bukkit.entity.Skeleton;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Vex;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.bukkit.event.entity.ProjectileHitEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.CrossbowMeta;
-import org.bukkit.inventory.meta.FireworkMeta;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.ItemSpawnEvent;
+import org.bukkit.event.player.PlayerGameModeChangeEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 
-import fr.mrmicky.fastinv.ItemBuilder;
 import net.noobsters.core.paper.PERMADED;
 
 public class GlobalListeners implements Listener{
@@ -39,83 +26,86 @@ public class GlobalListeners implements Listener{
     GlobalListeners(PERMADED instance){
         this.instance = instance;
     }
-    
+
     @EventHandler
-    public void piglinZombification(CreatureSpawnEvent e) {
-        if (e.getEntity() instanceof Piglin) {
-            Piglin piglin = (Piglin) e.getEntity();
-            piglin.setImmuneToZombification(true);
-            piglin.getEquipment().setChestplate(new ItemStack(Material.DIAMOND_CHESTPLATE));
-            piglin.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 100000, 3));
-            var item = new ItemStack(Material.CROSSBOW);
-            var meta = (CrossbowMeta) item.getItemMeta();
-
-            var rocket = new ItemBuilder(Material.FIREWORK_ROCKET).amount(64).build();
-            var rocketMeta = (FireworkMeta) rocket.getItemMeta();
-            var fireworkEffect = FireworkEffect.builder().withColor(Color.AQUA).withFade(Color.GREEN).build();
-            rocketMeta.addEffect(fireworkEffect);
-            rocket.setItemMeta(rocketMeta);
-
-            var proyectiles = List.of(rocket,rocket,rocket);
-            meta.setChargedProjectiles(proyectiles);
-            item.setItemMeta(meta);
-            piglin.getEquipment().setItemInOffHand(rocket);
-            piglin.getEquipment().setItemInMainHand(item);
-
-        } else if (e.getEntity() instanceof Bat) {
-            Bat bat = (Bat) e.getEntity();
-            var entity = bat.getWorld().spawnEntity(bat.getLocation(), EntityType.BLAZE);
-            bat.addPassenger(entity);
-
-        } else if (e.getEntity() instanceof Pig) {
-            Pig pig = (Pig) e.getEntity();
-            e.setCancelled(true);
-            var ghast = (Ghast) pig.getWorld().spawnEntity(pig.getLocation().add(0, 20, 0), EntityType.GHAST);
-            
+    public void passengerDeath(EntityDeathEvent e){
+        var entity = e.getEntity();
+        if(entity instanceof Vex){
+            var vex = (Vex) entity;
+            vex.getPassengers().forEach(passengers ->{
+                if(passengers instanceof ArmorStand){
+                    var armorStand = (ArmorStand) passengers;
+                    armorStand.damage(100);
+                }
+            });
         }
-        else if (e.getEntity() instanceof Sheep) {
-            Sheep pig = (Sheep) e.getEntity();
-            e.setCancelled(true);
-            var phantom = (Phantom) pig.getWorld().spawnEntity(pig.getLocation().add(0, 20, 0), EntityType.PHANTOM);
-            
-        }
-        else if (e.getEntity() instanceof Pillager) {
-            Pillager pillager = (Pillager) e.getEntity();
-            pillager.getEquipment().setItemInMainHand(new ItemBuilder(Material.CROSSBOW).enchant(Enchantment.PIERCING)
-                .enchant(Enchantment.QUICK_CHARGE, 3).enchant(Enchantment.MULTISHOT).build());
-            
-        }
-
-        else if (e.getEntity() instanceof Chicken) {
-            Chicken chicken = (Chicken) e.getEntity();
-            var entity = (org.bukkit.entity.Skeleton) chicken.getWorld().spawnEntity(chicken.getLocation(), EntityType.SKELETON);
-            entity.getEquipment().setHelmet(new ItemStack(Material.DIAMOND_HELMET));
-            chicken.addPassenger(entity);
-            
-        }
-        else if (e.getEntity() instanceof Skeleton) {
-            Skeleton skeleton = (Skeleton) e.getEntity();
-            skeleton.getEquipment().setHelmet(new ItemBuilder(Material.DIAMOND_HELMET).enchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2).build());
-            skeleton.getEquipment().setChestplate(new ItemBuilder(Material.DIAMOND_CHESTPLATE).enchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2).build());
-            skeleton.getEquipment().setLeggings(new ItemBuilder(Material.IRON_LEGGINGS).enchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2).build());
-            skeleton.getEquipment().setBoots(new ItemBuilder(Material.IRON_BOOTS).enchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2).build());
-            skeleton.getEquipment().setItemInMainHand(new ItemBuilder(Material.BOW).enchant(Enchantment.ARROW_DAMAGE, 3).build());
-            
-        }
-
     }
 
-    
     @EventHandler
-    public void impact(ProjectileHitEvent e){
-        if(e.getEntity() instanceof Arrow){
-            var hitblock = e.getHitBlock();
-            var entity = e.getHitEntity();
-            if(hitblock != null){
-                hitblock.getLocation().createExplosion(5.0f, true);
-            } else if(entity != null){
-                entity.getLocation().createExplosion(5.0f, true);
+    public void riderDamage(EntityDamageByEntityEvent e){
+        var entity = e.getEntity();
+        if(entity instanceof ArmorStand && entity.getCustomName() != null){
+            entity = (ArmorStand) e.getEntity();
+            var findVex = entity.getLocation().getNearbyEntities(1, 2, 1).stream().filter(ent -> (ent instanceof Vex)).findAny();
+            if(findVex.isPresent()){
+                var vex = (Vex) findVex.get();
+                var damage = e.getDamage();
+                e.setCancelled(true);
+                vex.damage(damage);
             }
+
+        }
+    }
+
+    @EventHandler
+    public void mobsDamageModifier(EntityDamageByEntityEvent e){
+        var damager = e.getDamager();
+        if(!(damager instanceof Player) && damager.getCustomName() != null){
+            var damageAmplifier = instance.getGame().getDamageAmplifier();
+            e.setDamage(e.getDamage()*damageAmplifier);
+        }
+    }
+
+    @EventHandler
+    public void onJoinHide(PlayerJoinEvent e) {
+        var player = e.getPlayer();
+        // If gamemode is Spectator, then hide him from all other non spectators
+        if (e.getPlayer().getGameMode() == GameMode.SPECTATOR) {
+            Bukkit.getOnlinePlayers().stream().filter(all -> all.getGameMode() != GameMode.SPECTATOR)
+                    .forEach(all -> all.hidePlayer(instance, player));
+        } else {
+            // If gamemode isn't Spectator, then hide all spectators for him.
+            Bukkit.getOnlinePlayers().stream().filter(it -> it.getGameMode() == GameMode.SPECTATOR)
+                    .forEach(all -> player.hidePlayer(instance, all.getPlayer()));
+        }
+    }
+
+    @EventHandler
+    public void onGamemodeChange(PlayerGameModeChangeEvent e) {
+        var player = e.getPlayer();
+        // If gamemode to change is spectator
+        if (e.getNewGameMode() == GameMode.SPECTATOR) {
+
+            Bukkit.getOnlinePlayers().stream().forEach(all -> {
+                // If players are not specs, hide them the player
+                if (all.getGameMode() != GameMode.SPECTATOR) {
+                    all.hidePlayer(instance, player);
+                } else {
+                    // If players are specs, then show them to the player
+                    player.showPlayer(instance, all);
+                }
+            });
+        } else {
+            Bukkit.getOnlinePlayers().stream().forEach(all -> {
+                // When switching to other gamemodes, show them if not visible to player
+                if (!all.canSee(player)) {
+                    all.showPlayer(instance, player);
+                }
+                // If one of the players is a spec, hide them from the player
+                if (all.getGameMode() == GameMode.SPECTATOR) {
+                    player.hidePlayer(instance, all);
+                }
+            });
         }
     }
 

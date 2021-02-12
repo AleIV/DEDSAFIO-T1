@@ -13,6 +13,14 @@ public class ListenerManager {
         this.instance = instance;
     
         Bukkit.getPluginManager().registerEvents(new GlobalListeners(instance), instance);
+        Bukkit.getPluginManager().registerEvents(new SurvivalListeners(instance), instance);
+        Bukkit.getPluginManager().registerEvents(new Animals(instance), instance);
+        Bukkit.getPluginManager().registerEvents(new Riders(instance), instance);
+        Bukkit.getPluginManager().registerEvents(new Monsters(instance), instance);
+        Bukkit.getPluginManager().registerEvents(new UnDead(instance), instance);
+        Bukkit.getPluginManager().registerEvents(new Demons(instance), instance);
+        Bukkit.getPluginManager().registerEvents(new Items(instance), instance);
+
 
     }
 

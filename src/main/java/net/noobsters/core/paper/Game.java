@@ -4,13 +4,8 @@ import lombok.Data;
 
 @Data
 public class Game {
-    private int day = 0;
-    private String fase = "VANILLA";
-    private Stage stage = Stage.VANILLA;
-
-
-    public enum Stage {
-        VANILLA, FASE1, FASE2, FASE3;
-    }
+    int damageAmplifier = 2;
+    int resistanceAmplifier = 2;
+    int difficultyChange = 3;
 
 }
