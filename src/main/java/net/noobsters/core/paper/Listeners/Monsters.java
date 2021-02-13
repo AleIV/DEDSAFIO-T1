@@ -23,10 +23,11 @@ public class Monsters implements Listener{
     @EventHandler
     public void monsterSpawns(CreatureSpawnEvent e) {
         var game = instance.getGame();
-        if (game.getDifficultyChange() >= 2 && e.getEntity() instanceof Spider) {
+        if (e.getEntity() instanceof Spider && game.getDifficultyChange() >= 2) {
             var spider = (Spider) e.getEntity();
             spider.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 20*10000, 1));
             spider.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20*10000, 1));
+            spider.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20*10000, 0));
             spider.setCustomName("Monster Spider");
         }
 

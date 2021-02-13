@@ -42,13 +42,19 @@ public class SurvivalListeners implements Listener{
             var iterator = combatlog.entrySet().iterator();
             while (iterator.hasNext()) {
                 var entry = iterator.next();
-                var player = Bukkit.getPlayer(entry.getKey());
                 var differential = entry.getValue() - System.currentTimeMillis();
+                var player = Bukkit.getPlayer(entry.getKey());
                 if (differential <= 0) {
                     iterator.remove();
-                    player.sendMessage(ChatColor.AQUA + "[CombatLog] " + ChatColor.GREEN + "You are no longer in combat. You can log out.");
-                    player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_DIDGERIDOO, 1, 0.6f);
+                    Bukkit.broadcastMessage("PLAYER REMOVED");
+                    if (player != null && player.isOnline()) {
+                        player.sendMessage(ChatColor.AQUA + "[CombatLog] " + ChatColor.GREEN + "You are no longer in combat. You can log out.");
+                        player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_DIDGERIDOO, 1, 0.6f);
+                        Bukkit.broadcastMessage("PLAYER MESSAGE SENT");
+                    }
+                    
                 }
+
             }
         }, 2L, 2L);
 
@@ -68,17 +74,27 @@ public class SurvivalListeners implements Listener{
         if(e.getEntity() instanceof Player && damager instanceof Player && e.getEntity() != e.getDamager()){
             var player = (Player) e.getEntity();
             var player2 = (Player) e.getDamager();
+            var uuid1 = player.getUniqueId().toString();
+            var uuid2 = player2.getUniqueId().toString();
 
-            if(!combatlog.containsKey(player.getUniqueId().toString())){
-                var message = ChatColor.AQUA + "[CombatLog] " + ChatColor.RED + "YOU ARE IN COMBAT. do not disconnect.";
-                player.sendMessage(message);
-                player2.sendMessage(message);
-                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_DIDGERIDOO, 1, 0.6f);
-                player2.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_DIDGERIDOO, 1, 0.6f);
+            if(!combatlog.containsKey(player.getUniqueId().toString()) || !combatlog.containsKey(player2.getUniqueId().toString())){
+                var message = ChatColor.YELLOW + "[CombatLog] " + ChatColor.RED + "You are in combat. Do not disconnect.";
+
+                if(!combatlog.containsKey(uuid1)){
+                    player.sendMessage(message);
+                    player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_DIDGERIDOO, 1, 0.6f);
+                }
+
+                if(!combatlog.containsKey(uuid2)){
+                    player2.sendMessage(message);
+                    player2.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_DIDGERIDOO, 1, 0.6f);
+                }
+                
             }
 
             combatlog.put(player.getUniqueId().toString(), System.currentTimeMillis() + 30_000);
             combatlog.put(player2.getUniqueId().toString(), System.currentTimeMillis() + 30_000);
+            Bukkit.broadcastMessage("PLAYER ADDED && REFRESH");
 
         }
     }
@@ -125,7 +141,7 @@ public class SurvivalListeners implements Listener{
     public void onSpawn(PlayerJoinEvent e){
         var player = e.getPlayer();
         if(!player.hasPlayedBefore()){
-            var loc = new Location(Bukkit.getWorld("world"), chooseCoord(), 200, chooseCoord());
+            var loc = new Location(Bukkit.getWorld("world"), chooseCoord(500), 200, chooseCoord(500));
             player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 20*30, 0));
             player.teleport(loc);
         }
@@ -135,7 +151,7 @@ public class SurvivalListeners implements Listener{
     public void onRespawn(PlayerRespawnEvent e){
         var player = e.getPlayer();
         if(player.getBedSpawnLocation() == null){
-            var loc = new Location(Bukkit.getWorld("world"), chooseCoord(), 200, chooseCoord());
+            var loc = new Location(Bukkit.getWorld("world"), chooseCoord(500), 200, chooseCoord(500));
             e.setRespawnLocation(loc);
         }
     }
@@ -146,8 +162,8 @@ public class SurvivalListeners implements Listener{
         player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 20*30, 0));
     }
 
-    public Integer chooseCoord(){
-        var num = random.nextInt(500);
+    public Integer chooseCoord(int radius){
+        var num = random.nextInt(radius);
         num = random.nextBoolean() ? ~(num) : num;
         return num;
     }

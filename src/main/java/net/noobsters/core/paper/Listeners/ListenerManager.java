@@ -20,6 +20,7 @@ public class ListenerManager {
         Bukkit.getPluginManager().registerEvents(new UnDead(instance), instance);
         Bukkit.getPluginManager().registerEvents(new Demons(instance), instance);
         Bukkit.getPluginManager().registerEvents(new Items(instance), instance);
+        Bukkit.getPluginManager().registerEvents(new MiniBosses(instance), instance);
 
 
     }

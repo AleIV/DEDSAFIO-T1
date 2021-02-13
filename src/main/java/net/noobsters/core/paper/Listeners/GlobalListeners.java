@@ -4,15 +4,10 @@ import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
-import org.bukkit.Material;
-import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Vex;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
@@ -28,42 +23,13 @@ public class GlobalListeners implements Listener{
     }
 
     @EventHandler
-    public void passengerDeath(EntityDeathEvent e){
-        var entity = e.getEntity();
-        if(entity instanceof Vex){
-            var vex = (Vex) entity;
-            vex.getPassengers().forEach(passengers ->{
-                if(passengers instanceof ArmorStand){
-                    var armorStand = (ArmorStand) passengers;
-                    armorStand.damage(100);
-                }
-            });
-        }
-    }
-
-    @EventHandler
-    public void riderDamage(EntityDamageByEntityEvent e){
-        var entity = e.getEntity();
-        if(entity instanceof ArmorStand && entity.getCustomName() != null){
-            entity = (ArmorStand) e.getEntity();
-            var findVex = entity.getLocation().getNearbyEntities(1, 2, 1).stream().filter(ent -> (ent instanceof Vex)).findAny();
-            if(findVex.isPresent()){
-                var vex = (Vex) findVex.get();
-                var damage = e.getDamage();
-                e.setCancelled(true);
-                vex.damage(damage);
-            }
-
-        }
-    }
-
-    @EventHandler
     public void mobsDamageModifier(EntityDamageByEntityEvent e){
         var damager = e.getDamager();
         if(!(damager instanceof Player) && damager.getCustomName() != null){
             var damageAmplifier = instance.getGame().getDamageAmplifier();
             e.setDamage(e.getDamage()*damageAmplifier);
         }
+
     }
 
     @EventHandler

@@ -2,12 +2,13 @@ package net.noobsters.core.paper.Listeners;
 
 import java.util.Random;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Husk;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.bukkit.inventory.ItemFlag;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
 import net.md_5.bungee.api.ChatColor;
@@ -25,7 +26,7 @@ public class UnDead implements Listener{
     @EventHandler
     public void unDeadSpawns(CreatureSpawnEvent e) {
         var game = instance.getGame();
-        if (game.getDifficultyChange() >= 1 && e.getEntity() instanceof Husk) {
+        if (e.getEntity() instanceof Husk && game.getDifficultyChange() >= 1) {
             var chef = (Husk) e.getEntity();
 
             var chefHat = new ItemStack(Material.CARVED_PUMPKIN);
@@ -54,6 +55,17 @@ public class UnDead implements Listener{
             chef.getEquipment().setItemInMainHand(taco);
             chef.getEquipment().setItemInMainHandDropChance(0.1f);
 
+        }
+
+    }
+
+    @EventHandler
+    public void sounds1(EntityDamageByEntityEvent e){
+        var damager = e.getDamager();
+
+        if(damager instanceof Husk){
+            var loc = damager.getLocation();
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:burp ambient @a " + loc.getX() +" "+ loc.getY()+ " " + loc.getZ() + " 1 1");
         }
 
     }
