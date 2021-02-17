@@ -5,6 +5,8 @@ import java.util.Random;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
+import org.bukkit.entity.WitherSkull;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -25,9 +27,35 @@ public class GlobalListeners implements Listener{
     @EventHandler
     public void mobsDamageModifier(EntityDamageByEntityEvent e){
         var damager = e.getDamager();
+        var entity = e.getEntity();
+        var damageAmplifier = instance.getGame().getDamageAmplifier();
+        if(damager instanceof Projectile){
+            var proj = (Projectile) damager;
+            var shooter = proj.getShooter();
+            if(shooter != null && !(shooter instanceof Player)){
+                e.setDamage(e.getDamage()*damageAmplifier);
+            }
+        }
+
+        if(damager instanceof WitherSkull && entity instanceof Player){
+            var player = (Player) entity;
+            
+            player.damage(4*damageAmplifier);
+        }
+
         if(!(damager instanceof Player) && damager.getCustomName() != null){
-            var damageAmplifier = instance.getGame().getDamageAmplifier();
             e.setDamage(e.getDamage()*damageAmplifier);
+
+        }
+
+    }
+
+    @EventHandler
+    public void mobsResistanceModifier(EntityDamageByEntityEvent e){
+        var entity = e.getEntity();
+        if(entity.getCustomName() != null){
+            var resistanceAmplifier = instance.getGame().getResistanceAmplifier();
+            e.setDamage(e.getDamage()-resistanceAmplifier);
         }
 
     }

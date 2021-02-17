@@ -9,6 +9,7 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import net.md_5.bungee.api.ChatColor;
 import net.noobsters.core.paper.PERMADED;
 
 public class Monsters implements Listener{
@@ -28,7 +29,7 @@ public class Monsters implements Listener{
             spider.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 20*10000, 1));
             spider.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20*10000, 1));
             spider.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20*10000, 0));
-            spider.setCustomName("Monster Spider");
+            spider.setCustomName(ChatColor.RED + "Monster Spider");
         }
 
     }

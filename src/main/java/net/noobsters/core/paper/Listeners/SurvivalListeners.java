@@ -45,15 +45,12 @@ public class SurvivalListeners implements Listener {
                 var differential = entry.getValue() - System.currentTimeMillis();
                 var player = Bukkit.getPlayer(UUID.fromString(entry.getKey()));
                 /** Test if the code is working at all? */
-                Bukkit.broadcastMessage(player.getName() + " diff=" + differential);
                 if (differential <= 0) {
                     iterator.remove();
-                    Bukkit.broadcastMessage("PLAYER REMOVED");
                     if (player != null && player.isOnline()) {
                         player.sendMessage(ChatColor.AQUA + "[CombatLog] " + ChatColor.GREEN
                                 + "You are no longer in combat. You can log out.");
                         player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_DIDGERIDOO, 1, 0.6f);
-                        Bukkit.broadcastMessage("PLAYER MESSAGE SENT");
                     }
 
                 }
@@ -65,24 +62,26 @@ public class SurvivalListeners implements Listener {
 
     @EventHandler
     public void onCombat(EntityDamageByEntityEvent e) {
-        var damager = e.getDamager();
-
-        if (damager instanceof Projectile) {
-            var projectile = (Projectile) damager;
-            if (projectile.getShooter() instanceof Player) {
-                damager = (Player) projectile.getShooter();
+        Player damager = null;
+        
+        if (e.getDamager() instanceof Player) {
+            damager = (Player) e.getDamager();
+        } else if (e.getDamager() instanceof Projectile) {
+            Projectile proj = (Projectile) e.getDamager();
+            if (proj.getShooter() instanceof Player) {
+                damager = (Player) proj.getShooter();
             }
         }
 
-        if (e.getEntity() instanceof Player && damager instanceof Player && e.getEntity() != e.getDamager()) {
+        if (damager != null && e.getEntity() instanceof Player && damager instanceof Player && e.getEntity() != e.getDamager()) {
             var player = (Player) e.getEntity();
-            var player2 = (Player) e.getDamager();
+            var player2 = damager;
             var uuid1 = player.getUniqueId().toString();
             var uuid2 = player2.getUniqueId().toString();
 
             if (!combatlog.containsKey(player.getUniqueId().toString())
                     || !combatlog.containsKey(player2.getUniqueId().toString())) {
-                var message = ChatColor.YELLOW + "[CombatLog] " + ChatColor.RED
+                var message = ChatColor.GOLD + "[CombatLog] " + ChatColor.RED
                         + "You are in combat. Do not disconnect.";
 
                 if (!combatlog.containsKey(uuid1)) {
@@ -99,7 +98,6 @@ public class SurvivalListeners implements Listener {
 
             combatlog.put(player.getUniqueId().toString(), System.currentTimeMillis() + 30_000);
             combatlog.put(player2.getUniqueId().toString(), System.currentTimeMillis() + 30_000);
-            Bukkit.broadcastMessage("PLAYER ADDED && REFRESH");
 
         }
     }

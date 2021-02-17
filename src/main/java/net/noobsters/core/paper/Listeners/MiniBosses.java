@@ -5,7 +5,6 @@ import java.util.UUID;
 
 import com.destroystokyo.paper.event.entity.EnderDragonFireballHitEvent;
 import com.destroystokyo.paper.event.entity.EnderDragonFlameEvent;
-import com.destroystokyo.paper.event.entity.EnderDragonShootFireballEvent;
 
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
@@ -17,7 +16,6 @@ import org.bukkit.entity.Vex;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.bukkit.event.entity.EnderDragonChangePhaseEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -93,16 +91,6 @@ public class MiniBosses implements Listener {
     }
 
     @EventHandler
-    public void onFireBall3(EnderDragonShootFireballEvent e) {
-
-    }
-
-    @EventHandler
-    public void onFireBall4(EnderDragonChangePhaseEvent e) {
-
-    }
-
-    @EventHandler
     public void bossDeath(EntityDeathEvent e) {
         var entity = e.getEntity();
         if (entity instanceof EnderDragon && instance.getGame().getDifficultyChange() >= 3) {
@@ -113,63 +101,88 @@ public class MiniBosses implements Listener {
                     var bloodMeta = bloodAmor.getItemMeta();
                     bloodMeta.setDisplayName(ChatColor.RED + "Blood Helmet");
                     bloodMeta.setCustomModelData(123);
-                    final AttributeModifier knockback = new AttributeModifier(UUID.randomUUID(), "GENERIC.KNOCKBACK_RESISTANCE", 0.1, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD);
+                    final AttributeModifier knockback = new AttributeModifier(UUID.randomUUID(),
+                            "GENERIC.KNOCKBACK_RESISTANCE", 0.1, AttributeModifier.Operation.ADD_NUMBER,
+                            EquipmentSlot.HEAD);
                     bloodMeta.addAttributeModifier(Attribute.GENERIC_KNOCKBACK_RESISTANCE, knockback);
-                    final AttributeModifier armor = new AttributeModifier(UUID.randomUUID(), "GENERIC.ARMOR", 3.0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD);
+                    final AttributeModifier armor = new AttributeModifier(UUID.randomUUID(), "GENERIC.ARMOR", 3.0,
+                            AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD);
                     bloodMeta.addAttributeModifier(Attribute.GENERIC_ARMOR, armor);
-                    final AttributeModifier toughness = new AttributeModifier(UUID.randomUUID(), "GENERIC.ARMOR_TOUGHNESS", 2.0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD);
+                    final AttributeModifier toughness = new AttributeModifier(UUID.randomUUID(),
+                            "GENERIC.ARMOR_TOUGHNESS", 2.0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD);
                     bloodMeta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, toughness);
-                    final AttributeModifier health = new AttributeModifier(UUID.randomUUID(), "GENERIC.MAX_HEALTH", 5.0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD);
+                    final AttributeModifier health = new AttributeModifier(UUID.randomUUID(), "GENERIC.MAX_HEALTH", 5.0,
+                            AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD);
                     bloodMeta.addAttributeModifier(Attribute.GENERIC_MAX_HEALTH, health);
                     bloodAmor.setItemMeta(bloodMeta);
 
-                }break;
+                }
+                    break;
                 case 2: {
                     bloodAmor = new ItemStack(Material.NETHERITE_CHESTPLATE);
                     var bloodMeta = bloodAmor.getItemMeta();
                     bloodMeta.setDisplayName(ChatColor.RED + "Blood Chestplate");
                     bloodMeta.setCustomModelData(123);
-                    final AttributeModifier knockback = new AttributeModifier(UUID.randomUUID(), "GENERIC.KNOCKBACK_RESISTANCE", 0.1, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.CHEST);
+                    final AttributeModifier knockback = new AttributeModifier(UUID.randomUUID(),
+                            "GENERIC.KNOCKBACK_RESISTANCE", 0.1, AttributeModifier.Operation.ADD_NUMBER,
+                            EquipmentSlot.CHEST);
                     bloodMeta.addAttributeModifier(Attribute.GENERIC_KNOCKBACK_RESISTANCE, knockback);
-                    final AttributeModifier armor = new AttributeModifier(UUID.randomUUID(), "GENERIC.ARMOR", 8.0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.CHEST);
+                    final AttributeModifier armor = new AttributeModifier(UUID.randomUUID(), "GENERIC.ARMOR", 8.0,
+                            AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.CHEST);
                     bloodMeta.addAttributeModifier(Attribute.GENERIC_ARMOR, armor);
-                    final AttributeModifier toughness = new AttributeModifier(UUID.randomUUID(), "GENERIC.ARMOR_TOUGHNESS", 2.0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.CHEST);
+                    final AttributeModifier toughness = new AttributeModifier(UUID.randomUUID(),
+                            "GENERIC.ARMOR_TOUGHNESS", 2.0, AttributeModifier.Operation.ADD_NUMBER,
+                            EquipmentSlot.CHEST);
                     bloodMeta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, toughness);
-                    final AttributeModifier health = new AttributeModifier(UUID.randomUUID(), "GENERIC.MAX_HEALTH", 5.0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.CHEST);
+                    final AttributeModifier health = new AttributeModifier(UUID.randomUUID(), "GENERIC.MAX_HEALTH", 5.0,
+                            AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.CHEST);
                     bloodMeta.addAttributeModifier(Attribute.GENERIC_MAX_HEALTH, health);
                     bloodAmor.setItemMeta(bloodMeta);
-                }break;
+                }
+                    break;
                 case 3: {
                     bloodAmor = new ItemStack(Material.NETHERITE_LEGGINGS);
                     var bloodMeta = bloodAmor.getItemMeta();
                     bloodMeta.setDisplayName(ChatColor.RED + "Blood Leggings");
                     bloodMeta.setCustomModelData(123);
-                    final AttributeModifier knockback = new AttributeModifier(UUID.randomUUID(), "GENERIC.KNOCKBACK_RESISTANCE", 0.1, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.LEGS);
+                    final AttributeModifier knockback = new AttributeModifier(UUID.randomUUID(),
+                            "GENERIC.KNOCKBACK_RESISTANCE", 0.1, AttributeModifier.Operation.ADD_NUMBER,
+                            EquipmentSlot.LEGS);
                     bloodMeta.addAttributeModifier(Attribute.GENERIC_KNOCKBACK_RESISTANCE, knockback);
-                    final AttributeModifier armor = new AttributeModifier(UUID.randomUUID(), "GENERIC.ARMOR", 6.0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.LEGS);
+                    final AttributeModifier armor = new AttributeModifier(UUID.randomUUID(), "GENERIC.ARMOR", 6.0,
+                            AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.LEGS);
                     bloodMeta.addAttributeModifier(Attribute.GENERIC_ARMOR, armor);
-                    final AttributeModifier toughness = new AttributeModifier(UUID.randomUUID(), "GENERIC.ARMOR_TOUGHNESS", 2.0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.LEGS);
+                    final AttributeModifier toughness = new AttributeModifier(UUID.randomUUID(),
+                            "GENERIC.ARMOR_TOUGHNESS", 2.0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.LEGS);
                     bloodMeta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, toughness);
-                    final AttributeModifier health = new AttributeModifier(UUID.randomUUID(), "GENERIC.MAX_HEALTH", 5.0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.LEGS);
+                    final AttributeModifier health = new AttributeModifier(UUID.randomUUID(), "GENERIC.MAX_HEALTH", 5.0,
+                            AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.LEGS);
                     bloodMeta.addAttributeModifier(Attribute.GENERIC_MAX_HEALTH, health);
                     bloodAmor.setItemMeta(bloodMeta);
-                }break;
+                }
+                    break;
 
                 default: {
                     bloodAmor = new ItemStack(Material.NETHERITE_BOOTS);
                     var bloodMeta = bloodAmor.getItemMeta();
                     bloodMeta.setDisplayName(ChatColor.RED + "Blood Boots");
                     bloodMeta.setCustomModelData(123);
-                    final AttributeModifier knockback = new AttributeModifier(UUID.randomUUID(), "GENERIC.KNOCKBACK_RESISTANCE", 0.1, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.FEET);
+                    final AttributeModifier knockback = new AttributeModifier(UUID.randomUUID(),
+                            "GENERIC.KNOCKBACK_RESISTANCE", 0.1, AttributeModifier.Operation.ADD_NUMBER,
+                            EquipmentSlot.FEET);
                     bloodMeta.addAttributeModifier(Attribute.GENERIC_KNOCKBACK_RESISTANCE, knockback);
-                    final AttributeModifier armor = new AttributeModifier(UUID.randomUUID(), "GENERIC.ARMOR", 3.0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.FEET);
+                    final AttributeModifier armor = new AttributeModifier(UUID.randomUUID(), "GENERIC.ARMOR", 3.0,
+                            AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.FEET);
                     bloodMeta.addAttributeModifier(Attribute.GENERIC_ARMOR, armor);
-                    final AttributeModifier toughness = new AttributeModifier(UUID.randomUUID(), "GENERIC.ARMOR_TOUGHNESS", 2.0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.FEET);
+                    final AttributeModifier toughness = new AttributeModifier(UUID.randomUUID(),
+                            "GENERIC.ARMOR_TOUGHNESS", 2.0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.FEET);
                     bloodMeta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, toughness);
-                    final AttributeModifier health = new AttributeModifier(UUID.randomUUID(), "GENERIC.MAX_HEALTH", 5.0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.FEET);
+                    final AttributeModifier health = new AttributeModifier(UUID.randomUUID(), "GENERIC.MAX_HEALTH", 5.0,
+                            AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.FEET);
                     bloodMeta.addAttributeModifier(Attribute.GENERIC_MAX_HEALTH, health);
                     bloodAmor.setItemMeta(bloodMeta);
-                }break;
+                }
+                    break;
             }
             e.getDrops().add(bloodAmor);
         }
