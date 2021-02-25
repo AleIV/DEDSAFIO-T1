@@ -34,7 +34,6 @@ public class PERMADED extends JavaPlugin {
     //commands
     commandManager.registerCommand(new worldCMD(this));
     commandManager.registerCommand(new permadedCMD(this));
-        
 
     }
 

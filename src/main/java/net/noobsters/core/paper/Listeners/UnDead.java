@@ -72,12 +72,23 @@ public class UnDead implements Listener {
         } else if (e.getEntity() instanceof Skeleton && game.getDifficultyChange() >= 4) {
             var skeleton = (Skeleton) e.getEntity();
 
-            if (skeleton.getLocation().getWorld() != Bukkit.getWorld("world"))
+            if(skeleton.getType() == EntityType.WITHER_SKELETON){
+
+                skeleton.setCustomName(ChatColor.RED + "The Death");
+
+                var weapon = new ItemStack(Material.NETHERITE_SWORD);
+                var meta = weapon.getItemMeta();
+                meta.setCustomModelData(90);
+                meta.setDisplayName(ChatColor.BLUE + "Guadaña");
+                weapon.setItemMeta(meta);
+                var skeletonEquipment = skeleton.getEquipment();
+                skeletonEquipment.setItemInMainHand(weapon);
                 return;
+            }
 
             switch (random.nextInt(4)) {
                 case 1: {
-                    skeleton.setCustomName(ChatColor.RED + "Sans");
+                    skeleton.setCustomName(ChatColor.AQUA + "Sans");
                     var bow = new ItemStack(Material.BOW);
                     var meta = bow.getItemMeta();
                     meta.setCustomModelData(113);
@@ -91,8 +102,6 @@ public class UnDead implements Listener {
                     skeleton.setCustomName(ChatColor.RED + "Zozo");
                     var bow = new ItemStack(Material.BOW);
                     var meta = bow.getItemMeta();
-                    meta.setCustomModelData(115);
-                    meta.setDisplayName(ChatColor.BLUE + "Nocturnal Bow");
                     meta.addEnchant(Enchantment.ARROW_DAMAGE, 3, true);
                     bow.setItemMeta(meta);
                     var skeletonEquipment = skeleton.getEquipment();
@@ -111,7 +120,7 @@ public class UnDead implements Listener {
                     break;
 
                 default: {
-                    skeleton.setCustomName(ChatColor.RED + "Pirate");
+                    skeleton.setCustomName(ChatColor.RED + "Captain Parrot");
 
                     var bow = new ItemStack(Material.BOW);
                     var meta = bow.getItemMeta();
@@ -153,8 +162,10 @@ public class UnDead implements Listener {
                     skeletonEquipment.setLeggings(pirateLegs);
                     skeletonEquipment.setBoots(pirateBoots);
 
-                    var parrot = skeleton.getWorld().spawnEntity(skeleton.getLocation(), EntityType.PARROT);
-                    skeleton.addPassenger(parrot);
+                    if(random.nextBoolean() && random.nextBoolean()){
+                        var parrot = skeleton.getWorld().spawnEntity(skeleton.getLocation(), EntityType.PARROT);
+                        skeleton.addPassenger(parrot);
+                    }
                 }
                     break;
             }
@@ -186,17 +197,11 @@ public class UnDead implements Listener {
     @EventHandler
     public void onShoot(EntityShootBowEvent e) {
         var entity = e.getEntity();
-        var item = e.getBow().getItemMeta();
         if (entity instanceof Skeleton && entity.getCustomName() != null
                 && entity.getCustomName().contains("Sans")) {
             var loc = entity.getLocation();
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:sans_talking ambient @a "
                     + loc.getX() + " " + loc.getY() + " " + loc.getZ() + " 1 1");
-        }
-
-        if(item.hasCustomModelData() && item.getCustomModelData() == 113){
-            var skull = e.getEntity().getWorld().spawnEntity(e.getEntity().getLocation().add(0, 1, 0), EntityType.WITHER_SKULL);
-            e.setProjectile(skull);
         }
     }
 

@@ -6,6 +6,6 @@ import lombok.Data;
 public class Game {
     int damageAmplifier = 3;
     int resistanceAmplifier = 4;
-    int difficultyChange = 4;
+    int difficultyChange = 6;
 
 }

@@ -12,16 +12,61 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerLocaleChangeEvent;
 
+import net.md_5.bungee.api.ChatColor;
 import net.noobsters.core.paper.PERMADED;
 
 public class GlobalListeners implements Listener{
 
     PERMADED instance;
     Random random = new Random();
+    static public String NO_RP_EN = ChatColor.AQUA + "You need the custom resourcepack to play!\n " +
+         ChatColor.GREEN + "1. Download the resource pack. \n" +
+         ChatColor.YELLOW + "https://www.dropbox.com/s/4qotet9czhvkhv1/PERMADED.zip?dl=1 \n" + 
+         ChatColor.GREEN + "2. Paste the file into the resource folder in Minecraft. \n" + 
+         ChatColor.GREEN + "3. Select the resource pack in the game and select the custom language: 'PERMADED(NIGHTMARE)' \n";
+
+    static public String NO_RP_ES = ChatColor.AQUA + "Necesitas el texture pack para jugar!\n " +
+         ChatColor.GREEN + "1. Descarga el texture pack. \n" +
+         ChatColor.YELLOW + "https://www.dropbox.com/s/4qotet9czhvkhv1/PERMADED.zip?dl=1 \n" + 
+         ChatColor.GREEN + "2. Pega el archivo en el resource pack folder en la carpeta de Minecraft. \n" + 
+         ChatColor.GREEN + "3. Activa el texture pack en el juego y después selecciona el lenguaje custom: 'PERMADED(NIGHTMARE)' \n";
 
     GlobalListeners(PERMADED instance){
         this.instance = instance;
+    }
+
+    /*
+    @EventHandler
+    public void impact(ProjectileHitEvent e) {
+        var entity = e.getHitEntity();
+        var block = e.getHitBlock();
+        var projectile = e.getEntity();
+        var shooter = projectile.getShooter();
+        if(projectile instanceof Arrow){
+            var loc = block.getLocation();
+            if(entity != null){
+                loc.add(0, -10, 0).createExplosion(100, true);
+                loc.getBlock().setType(Material.OBSIDIAN);
+            }else if(block != null){
+                loc.add(0, -10, 0).createExplosion(100, true);
+                loc.getBlock().setType(Material.OBSIDIAN);
+
+            }
+        }
+    }*/
+
+    @EventHandler
+    public void onResourcePackChange(PlayerLocaleChangeEvent e){
+        var player = e.getPlayer();
+
+        if(!e.getLocale().contains("NOOBSTERS")){
+            player.kickPlayer(NO_RP_ES);
+        }else if(!e.getLocale().contains("NOOBSTERS_2")){
+            player.kickPlayer(NO_RP_ES + ChatColor.RED + "\n Hay otra actualizacion del texture pack, descarga la ultima!");
+            
+        }
     }
 
     @EventHandler
