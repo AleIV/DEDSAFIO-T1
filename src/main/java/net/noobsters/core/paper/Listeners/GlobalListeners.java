@@ -4,6 +4,11 @@ import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.World.Environment;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Hoglin;
+import org.bukkit.entity.Pillager;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.WitherSkull;
@@ -15,6 +20,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLocaleChangeEvent;
 
 import net.md_5.bungee.api.ChatColor;
+import net.noobsters.core.paper.GameTickEvent;
 import net.noobsters.core.paper.PERMADED;
 
 public class GlobalListeners implements Listener{
@@ -63,7 +69,8 @@ public class GlobalListeners implements Listener{
 
         if(!e.getLocale().contains("NOOBSTERS")){
             player.kickPlayer(NO_RP_ES);
-        }else if(!e.getLocale().contains("NOOBSTERS_2")){
+        }else if(!e.getLocale().contains("NOOBSTERS_4")){
+            //Bukkit.broadcastMessage("CANT JOIN " + e.getPlayer().getName().toString() + "RESOURCE= " + e.getLocale());
             player.kickPlayer(NO_RP_ES + ChatColor.RED + "\n Hay otra actualizacion del texture pack, descarga la ultima!");
             
         }
@@ -77,6 +84,18 @@ public class GlobalListeners implements Listener{
         if(damager instanceof Projectile){
             var proj = (Projectile) damager;
             var shooter = proj.getShooter();
+            if(proj.getCustomName() != null && proj.getCustomName().contains("lead")){
+                e.setDamage(e.getDamage()+8);
+                if(random.nextBoolean() && shooter instanceof Pillager){
+                    var pillager = (Pillager) shooter;
+                    var loc = pillager.getLocation();
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:boomheadshot ambient @a " + loc.getX()
+                        + " " + loc.getY() + " " + loc.getZ() + " 1 1");
+                }
+            }else if(proj.getCustomName() != null && proj.getCustomName().contains("golden")){
+                e.setDamage(e.getDamage()+4);
+            }
+
             if(shooter != null && !(shooter instanceof Player)){
                 e.setDamage(e.getDamage()*damageAmplifier);
             }
@@ -99,22 +118,118 @@ public class GlobalListeners implements Listener{
     public void mobsResistanceModifier(EntityDamageByEntityEvent e){
         var entity = e.getEntity();
         if(entity.getCustomName() != null){
-            var resistanceAmplifier = instance.getGame().getResistanceAmplifier();
-            e.setDamage(e.getDamage()-resistanceAmplifier);
+            var mobResistance = instance.getGame().getMobResistance();
+            e.setDamage(e.getDamage()-((e.getDamage()/100)*mobResistance));
         }
 
+    }
+
+    public Integer chooseCoord(int radius) {
+        var num = random.nextInt(radius);
+        num = random.nextBoolean() ? ~(num) : num;
+        return num;
+    }
+
+    public Location randomCoord(Location loc, int radius){
+        var location = new Location(loc.getWorld(), chooseCoord(radius), 80, chooseCoord(radius));
+        location.setY(loc.getWorld().getHighestBlockYAt(location)+3);
+        return location;
+    }
+
+    public void spawnPiglinPatrol(Location loc) {
+
+        var beast = (Hoglin) loc.getWorld().spawnEntity(loc, EntityType.HOGLIN);
+        beast.setImmuneToZombification(true);
+        beast.setAdult();
+
+        var riding = loc.getWorld().spawnEntity(loc, EntityType.PIGLIN);
+        beast.addPassenger(riding);
+
+        loc.getWorld().spawnEntity(loc.add(5, 0, 5), EntityType.PIGLIN);
+
+        loc.getWorld().spawnEntity(loc.add(-5, 0, 5), EntityType.PIGLIN);
+
+        loc.getWorld().spawnEntity(loc.add(5, 0, -5), EntityType.PIGLIN);
+
+        loc.getWorld().spawnEntity(loc.add(-5, 0, -5), EntityType.PIGLIN);
+
+    }
+
+
+
+    public void spawnPillagerPatrol(Location loc) {
+
+        var beast = loc.getWorld().spawnEntity(loc, EntityType.RAVAGER);
+
+        var riding = loc.getWorld().spawnEntity(loc, EntityType.EVOKER);
+        beast.addPassenger(riding);
+
+        loc.getWorld().spawnEntity(loc.add(-5, 0, 5), EntityType.PILLAGER);
+
+        loc.getWorld().spawnEntity(loc.add(5, 0, -5), EntityType.PILLAGER);
+
+        loc.getWorld().spawnEntity(loc.add(-5, 0, -5), EntityType.PILLAGER);
+
+        loc.getWorld().spawnEntity(loc.add(5, 0, 5), EntityType.VINDICATOR);
+
+    }
+
+    @EventHandler
+    public void customSpawns(GameTickEvent e) {
+        var difficulty = instance.getGame().getDifficultyChange();
+        final var second = e.getSecond();
+        if (difficulty >= 7 && second % instance.getGame().getSpawnPatrolDelay() == 0) {
+            Bukkit.getOnlinePlayers().forEach(player -> {
+                var loc = player.getLocation();
+                Bukkit.getScheduler().runTask(instance, () -> {
+                    
+                    if (player.getGameMode() != GameMode.SPECTATOR && player.getWorld() == Bukkit.getWorld("world") && player.getLocation().getY() > 45) {
+                        switch (random.nextInt(2)) {
+                            case 1: {
+                                var spawn = player.getLocation().add(chooseCoord(20), 0, chooseCoord(20));
+                                spawn.setY(player.getWorld().getHighestBlockAt(spawn).getY()+3);
+                                spawnPillagerPatrol(spawn);
+                            }
+                                break;
+
+                            default: {
+                                var spawn = player.getLocation().add(chooseCoord(20), 3, chooseCoord(20));
+                                spawn.setY(player.getWorld().getHighestBlockAt(spawn).getY());
+                                spawnPiglinPatrol(spawn);
+                            }
+                                break;
+                        }
+
+                    } else if (player.getWorld().getEnvironment() == Environment.THE_END) {
+                        // soul ghasts end
+                        loc.getWorld().spawnEntity(loc.add(-15, 20, -15), EntityType.GHAST);
+
+                        loc.getWorld().spawnEntity(loc.add(15, 20, 15), EntityType.GHAST);
+
+                    }else if (player.getWorld().getEnvironment() == Environment.NORMAL && (second % instance.getGame().getSpawnPatrolDelay()*3) == 0) {
+                        // soul ghasts over
+                        loc.getWorld().spawnEntity(loc.add(25, 20, -25), EntityType.GHAST);
+
+                    }else if (player.getWorld().getEnvironment() != Environment.NETHER && second % (instance.getGame().getSpawnPatrolDelay()*2) == 0) {
+                        // blaze over
+                        loc.getWorld().spawnEntity(loc.add(-25, 15, 25), EntityType.BLAZE);
+                    }
+
+                });
+            });
+        }
     }
 
     @EventHandler
     public void onJoinHide(PlayerJoinEvent e) {
         var player = e.getPlayer();
         // If gamemode is Spectator, then hide him from all other non spectators
-        if (e.getPlayer().getGameMode() == GameMode.SPECTATOR) {
-            Bukkit.getOnlinePlayers().stream().filter(all -> all.getGameMode() != GameMode.SPECTATOR)
+        if (e.getPlayer().getGameMode() != GameMode.SURVIVAL) {
+            Bukkit.getOnlinePlayers().stream().filter(all -> all.getGameMode() == GameMode.SURVIVAL)
                     .forEach(all -> all.hidePlayer(instance, player));
         } else {
             // If gamemode isn't Spectator, then hide all spectators for him.
-            Bukkit.getOnlinePlayers().stream().filter(it -> it.getGameMode() == GameMode.SPECTATOR)
+            Bukkit.getOnlinePlayers().stream().filter(it -> it.getGameMode() != GameMode.SURVIVAL)
                     .forEach(all -> player.hidePlayer(instance, all.getPlayer()));
         }
     }
@@ -123,11 +238,11 @@ public class GlobalListeners implements Listener{
     public void onGamemodeChange(PlayerGameModeChangeEvent e) {
         var player = e.getPlayer();
         // If gamemode to change is spectator
-        if (e.getNewGameMode() == GameMode.SPECTATOR) {
+        if (e.getNewGameMode() != GameMode.SURVIVAL) {
 
             Bukkit.getOnlinePlayers().stream().forEach(all -> {
                 // If players are not specs, hide them the player
-                if (all.getGameMode() != GameMode.SPECTATOR) {
+                if (all.getGameMode() == GameMode.SURVIVAL) {
                     all.hidePlayer(instance, player);
                 } else {
                     // If players are specs, then show them to the player
@@ -141,7 +256,7 @@ public class GlobalListeners implements Listener{
                     all.showPlayer(instance, player);
                 }
                 // If one of the players is a spec, hide them from the player
-                if (all.getGameMode() == GameMode.SPECTATOR) {
+                if (all.getGameMode() != GameMode.SURVIVAL) {
                     player.hidePlayer(instance, all);
                 }
             });

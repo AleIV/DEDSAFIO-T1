@@ -5,6 +5,7 @@ import java.util.Random;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Husk;
 import org.bukkit.entity.Parrot;
@@ -41,6 +42,8 @@ public class UnDead implements Listener {
         var game = instance.getGame();
         if (e.getEntity() instanceof Husk && game.getDifficultyChange() >= 1) {
             var chef = (Husk) e.getEntity();
+
+            chef.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20 * 600, 0));
 
             var chefHat = new ItemStack(Material.CARVED_PUMPKIN);
             var chefHatMeta = chefHat.getItemMeta();
@@ -84,6 +87,9 @@ public class UnDead implements Listener {
                 var skeletonEquipment = skeleton.getEquipment();
                 skeletonEquipment.setItemInMainHand(weapon);
                 return;
+            }else if(skeleton.getType() == EntityType.STRAY){
+                e.setCancelled(true);
+                skeleton.getWorld().spawnEntity(skeleton.getLocation(), EntityType.SKELETON);
             }
 
             switch (random.nextInt(4)) {
@@ -150,7 +156,7 @@ public class UnDead implements Listener {
                     var pirateBoots = new ItemStack(Material.DIAMOND_BOOTS);
                     var bootsMeta = pirateBoots.getItemMeta();
                     bootsMeta.setCustomModelData(128);
-                    legsMeta.setDisplayName(ChatColor.DARK_GREEN + "Rusty Boots");
+                    bootsMeta.setDisplayName(ChatColor.DARK_GREEN + "Rusty Boots");
                     pirateBoots.setItemMeta(bootsMeta);
 
                     var skeletonEquipment = skeleton.getEquipment();
@@ -185,7 +191,8 @@ public class UnDead implements Listener {
 
     @EventHandler
     public void impact(ProjectileHitEvent e) {
-        if (e.getEntity() instanceof WitherSkull) {
+        var difficulty = instance.getGame().getDifficultyChange();
+        if (difficulty >= 4 && e.getEntity() instanceof WitherSkull) {
             var entity = e.getHitEntity();
             if (entity != null && entity instanceof Player) {
                 var player = (Player) entity;
@@ -226,7 +233,7 @@ public class UnDead implements Listener {
                     "playsound minecraft:burp ambient @a " + loc.getX() + " " + loc.getY() + " " + loc.getZ() + " 1 1");
 
         } else if (game.getDifficultyChange() >= 4 && entity instanceof Skeleton && entity.getCustomName() != null
-                && entity.getCustomName().contains("Sans")) {
+                && entity.getCustomName().contains("Sans") && (damager instanceof Player || damager instanceof Arrow)) {
 
             var loc = damager.getLocation();
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:sans_song ambient @a " + loc.getX()

@@ -7,6 +7,7 @@ import java.util.UUID;
 import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -62,6 +63,8 @@ public class SurvivalListeners implements Listener {
 
     @EventHandler
     public void onCombat(EntityDamageByEntityEvent e) {
+        
+        if(!instance.getGame().isCombatlog()) return;
         Player damager = null;
         
         if (e.getDamager() instanceof Player) {
@@ -105,6 +108,11 @@ public class SurvivalListeners implements Listener {
     @EventHandler
     public void onCombatLogOut(PlayerQuitEvent e) {
         var player = e.getPlayer();
+
+        if(player.getGameMode() != GameMode.SURVIVAL){
+            e.setQuitMessage("");
+        }
+
         if (combatlog.containsKey(player.getUniqueId().toString())) {
             player.damage(200);
         }
@@ -112,15 +120,22 @@ public class SurvivalListeners implements Listener {
 
     @EventHandler
     public void onDeath(PlayerDeathEvent e) {
-        var loc = e.getEntity().getLocation();
+        var player = e.getEntity();
+
+        if(player.getGameMode() != GameMode.SURVIVAL){
+            e.setDeathMessage("");
+            return;
+        }
+
+        var loc = player.getLocation();
         var x = (int) loc.getX();
         var y = (int) loc.getY();
         var z = (int) loc.getZ();
-        Bukkit.broadcastMessage(ChatColor.GREEN + e.getEntity().getName().toString() + " died at coordinates: "
+        Bukkit.broadcastMessage(ChatColor.GREEN + player.getName().toString() + " died at coordinates: "
                 + ChatColor.AQUA + "X=" + x + " Y=" + y + " Z=" + z);
 
-        if (e.getEntity().getLastDamageCause().getCause() == DamageCause.CUSTOM) {
-            e.setDeathMessage(e.getEntity().getName().toString() + " died combat log out");
+        if (player.getLastDamageCause().getCause() == DamageCause.CUSTOM) {
+            e.setDeathMessage(player.getName().toString() + " died combat log out");
         }
     }
 
@@ -143,6 +158,11 @@ public class SurvivalListeners implements Listener {
     @EventHandler
     public void onSpawn(PlayerJoinEvent e) {
         var player = e.getPlayer();
+        
+        if(player.getGameMode() != GameMode.SURVIVAL){
+            e.setJoinMessage("");
+        }
+
         if (!player.hasPlayedBefore()) {
             var loc = new Location(Bukkit.getWorld("world"), chooseCoord(500), 200, chooseCoord(500));
             player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 20 * 30, 0));

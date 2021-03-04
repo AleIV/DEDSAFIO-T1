@@ -37,7 +37,7 @@ public class MiniBosses implements Listener {
         var game = instance.getGame();
         if (e.getEntity() instanceof EnderDragon && game.getDifficultyChange() >= 3) {
             var dragon = (EnderDragon) e.getEntity();
-            dragon.setCustomName("Blood Ender Dragon");
+            dragon.setCustomName(ChatColor.GOLD + "Blood Ender Dragon");
         }
 
     }
@@ -49,15 +49,12 @@ public class MiniBosses implements Listener {
         if (instance.getGame().getDifficultyChange() < 3)
             return;
 
-        var spirit = (Vex) cloud.getWorld().spawnEntity(cloud.getLocation().add(chooseCoord(5), 2, chooseCoord(5)),
+       cloud.getWorld().spawnEntity(cloud.getLocation().add(chooseCoord(5), 2, chooseCoord(5)),
                 EntityType.VEX);
-        var spirit2 = (Vex) cloud.getWorld().spawnEntity(cloud.getLocation().add(chooseCoord(5), 2, chooseCoord(5)),
+        cloud.getWorld().spawnEntity(cloud.getLocation().add(chooseCoord(5), 2, chooseCoord(5)),
                 EntityType.VEX);
-        var spirit3 = (Vex) cloud.getWorld().spawnEntity(cloud.getLocation().add(chooseCoord(5), 2, chooseCoord(5)),
+        cloud.getWorld().spawnEntity(cloud.getLocation().add(chooseCoord(5), 2, chooseCoord(5)),
                 EntityType.VEX);
-        spirit.setCustomName("Spirit");
-        spirit2.setCustomName("Spirit");
-        spirit3.setCustomName("Spirit");
 
         if (e.getTargets() != null) {
             e.getTargets().forEach(target -> {
@@ -87,12 +84,12 @@ public class MiniBosses implements Listener {
     public void bossDeath(EntityDeathEvent e) {
         var entity = e.getEntity();
         if (entity instanceof EnderDragon && instance.getGame().getDifficultyChange() >= 3) {
-            var bloodScale = new ItemStack(Material.RABBIT_FOOT);
+            var bloodScale = new ItemStack(Material.RABBIT_FOOT, random.nextInt(10)+1);
             var bloodScaleMeta = bloodScale.getItemMeta();
             bloodScaleMeta.setDisplayName(ChatColor.RED + "Blood Scale");
             bloodScaleMeta.setCustomModelData(143);
             bloodScale.setItemMeta(bloodScaleMeta);
-            e.getDrops().add(random.nextInt(20), bloodScale);
+            e.getDrops().add(bloodScale);
         }
 
     }

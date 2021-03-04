@@ -26,14 +26,19 @@ public class permadedCMD extends BaseCommand {
 
     @Subcommand("resistance")
     public void resistanceChange(CommandSender sender, int change) {
-        instance.getGame().setResistanceAmplifier(change);
-        sender.sendMessage(ChatColor.GREEN + "Resistance amplifier set to " + change);
+        instance.getGame().setMobResistance(change);
+        sender.sendMessage(ChatColor.GREEN + "Resistance set to " + change);
     }
 
     @Subcommand("damage")
     public void damageChange(CommandSender sender, int change) {
         instance.getGame().setDamageAmplifier(change);
         sender.sendMessage(ChatColor.GREEN + "Damage amplifier set to " + change);
+    }
+    @Subcommand("spawn-patrol-delay")
+    public void patrol(CommandSender sender, int change) {
+        instance.getGame().setSpawnPatrolDelay(change);
+        sender.sendMessage(ChatColor.GREEN + "Spawn patrol delay set to " + change);
     }
 
 }

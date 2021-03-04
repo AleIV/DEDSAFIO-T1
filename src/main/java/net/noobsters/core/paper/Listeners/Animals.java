@@ -16,7 +16,6 @@ import org.bukkit.entity.Horse;
 import org.bukkit.entity.Pig;
 import org.bukkit.entity.Piglin;
 import org.bukkit.entity.Sheep;
-import org.bukkit.entity.Squid;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
@@ -44,16 +43,10 @@ public class Animals implements Listener {
     public void animals(CreatureSpawnEvent e) {
         var entity = e.getEntity();
         var difficulty = instance.getGame().getDifficultyChange();
-        if (difficulty >= 5 && ((entity instanceof Sheep) || (entity instanceof Squid) || (entity instanceof Donkey) || (entity instanceof Horse))) {
+        if (difficulty >= 5 && ((entity instanceof Sheep) || (entity instanceof Donkey) || (entity instanceof Horse))) {
             e.setCancelled(true);
 
-        } /*else if (difficulty >= 5 && entity instanceof Dolphin) {
-            e.setCancelled(true);
-            var guardian = (Guardian) entity.getWorld().spawnEntity(entity.getLocation(), EntityType.GUARDIAN);
-            guardian.setCustomName(ChatColor.RED + "Guardian");
-            guardian.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20 * 1000, 1));
-
-        }*/else if (difficulty >= 5 && entity instanceof Pig) {
+        }else if (difficulty >= 5 && entity instanceof Pig) {
 
             if (random.nextInt(20) == 1) {
                 var pig = (Pig) entity;
@@ -64,22 +57,22 @@ public class Animals implements Listener {
             }
 
         }else if(difficulty >= 5 && entity.getType() == EntityType.ZOMBIFIED_PIGLIN){
+
             if(random.nextInt(20) == 1){
                 e.setCancelled(true);
                 entity.getWorld().spawnEntity(entity.getLocation(), EntityType.PIG);
             }else{
-                e.setCancelled(true);
+                if(random.nextInt(30) == 1){
+                    entity.getWorld().spawnEntity(entity.getLocation(), EntityType.BLAZE);
+                }else{
+                    e.setCancelled(true);
+                }
             }
         }else if(difficulty >= 6 && entity instanceof Cow){
 
-            if(entity.getWorld().isDayTime()){
-                e.setCancelled(true);
-                return;
-            }
-
             if(random.nextInt(5) != 1){
                 e.setCancelled(true);
-                entity.getWorld().spawnEntity(entity.getLocation(), EntityType.RAVAGER);
+                entity.getWorld().spawnEntity(entity.getLocation(), EntityType.PILLAGER);
             }else{
                 var cow = (Cow) entity;
                 cow.setCustomName(ChatColor.AQUA + "Moobloom");
@@ -88,6 +81,7 @@ public class Animals implements Listener {
         } else if (difficulty >= 5 && entity instanceof Piglin) {
             var piglin = (Piglin) entity;
             piglin.setImmuneToZombification(true);
+            piglin.setAdult();
             switch (random.nextInt(4)) {
                 case 1: {
 
@@ -235,7 +229,7 @@ public class Animals implements Listener {
 
                 var count = item.getAmount();
 
-                if(count == 1) item.setType(Material.AIR);
+                if(count == 1) e.getPlayer().getInventory().remove(Material.BUCKET);
                 else if(count >= 1) item.setAmount(count-1);
                  
                 e.getPlayer().getInventory().addItem(milk);

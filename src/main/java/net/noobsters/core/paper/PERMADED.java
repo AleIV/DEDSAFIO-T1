@@ -12,7 +12,7 @@ public class PERMADED extends JavaPlugin {
 
   private @Getter PaperCommandManager commandManager;
   private @Getter ListenerManager listenerManager;
-  private @Getter Game game = new Game();
+  private @Getter Game game;
 
   private static @Getter PERMADED instance;
 
@@ -30,6 +30,8 @@ public class PERMADED extends JavaPlugin {
     // managers
     commandManager = new PaperCommandManager(this);
     listenerManager = new ListenerManager(this);
+    game = new Game(this);
+    game.runTaskTimerAsynchronously(this, 0L, 20L);
         
     //commands
     commandManager.registerCommand(new worldCMD(this));
