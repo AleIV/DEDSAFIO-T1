@@ -70,7 +70,6 @@ public class Riders implements Listener {
         } else if (difficulty >= 6 && entity instanceof Ravager) {
             var ravager = (Ravager) entity;
             ravager.setCustomName(ChatColor.RED + "Ravager Powerful");
-            ravager.setHealth(ravager.getHealth() / 2);
 
         } else if (difficulty >= 6 && ((entity instanceof Witch) || (entity instanceof Villager))) {
             e.setCancelled(true);

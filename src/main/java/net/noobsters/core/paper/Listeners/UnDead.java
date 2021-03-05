@@ -168,7 +168,7 @@ public class UnDead implements Listener {
                     skeletonEquipment.setLeggings(pirateLegs);
                     skeletonEquipment.setBoots(pirateBoots);
 
-                    if(random.nextBoolean() && random.nextBoolean()){
+                    if(random.nextInt(20) == 1){
                         var parrot = skeleton.getWorld().spawnEntity(skeleton.getLocation(), EntityType.PARROT);
                         skeleton.addPassenger(parrot);
                     }

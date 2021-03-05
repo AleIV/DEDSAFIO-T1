@@ -38,7 +38,7 @@ public class Demons implements Listener{
 
         }else if(difficulty >= 8 && entity instanceof Ghast){
             var ghast = (Ghast) entity;
-            ghast.setCustomName(ChatColor.RED + "Soul Ghast");
+            ghast.setCustomName(ChatColor.RED + "Carminite Ghast Guard");
             var loc = ghast.getLocation();
             var players = loc.getNearbyPlayers(64, player-> player.getGameMode() == GameMode.SURVIVAL).stream().findAny();
             if(players.isPresent()) ghast.setTarget(players.get());

@@ -81,9 +81,12 @@ public class GlobalListeners implements Listener{
         var damager = e.getDamager();
         var entity = e.getEntity();
         var damageAmplifier = instance.getGame().getDamageAmplifier();
+        if(damager instanceof Player) return;
+
         if(damager instanceof Projectile){
             var proj = (Projectile) damager;
             var shooter = proj.getShooter();
+
             if(proj.getCustomName() != null && proj.getCustomName().contains("lead")){
                 e.setDamage(e.getDamage()+8);
                 if(random.nextBoolean() && shooter instanceof Pillager){
@@ -96,7 +99,9 @@ public class GlobalListeners implements Listener{
                 e.setDamage(e.getDamage()+4);
             }
 
-            if(shooter != null && !(shooter instanceof Player)){
+            if(shooter != null && shooter instanceof Player) return;
+
+            if(shooter != null){
                 e.setDamage(e.getDamage()*damageAmplifier);
             }
         }
@@ -107,7 +112,7 @@ public class GlobalListeners implements Listener{
             player.damage(4*damageAmplifier);
         }
 
-        if(!(damager instanceof Player) && damager.getCustomName() != null){
+        if(damager.getCustomName() != null){
             e.setDamage(e.getDamage()*damageAmplifier);
 
         }
@@ -206,13 +211,13 @@ public class GlobalListeners implements Listener{
 
                         loc.getWorld().spawnEntity(loc.add(15, 20, 15), EntityType.GHAST);
 
-                    }else if (player.getWorld().getEnvironment() == Environment.NORMAL && (second % instance.getGame().getSpawnPatrolDelay()*3) == 0) {
+                    }else if (player.getWorld().getEnvironment() == Environment.NORMAL && (second % instance.getGame().getSpawnPatrolDelay()*2.5) == 0) {
                         // soul ghasts over
                         loc.getWorld().spawnEntity(loc.add(25, 20, -25), EntityType.GHAST);
 
-                    }else if (player.getWorld().getEnvironment() != Environment.NETHER && second % (instance.getGame().getSpawnPatrolDelay()*2) == 0) {
+                    }else if (player.getWorld().getEnvironment() != Environment.NETHER) {
                         // blaze over
-                        loc.getWorld().spawnEntity(loc.add(-25, 15, 25), EntityType.BLAZE);
+                        loc.getWorld().spawnEntity(loc.add(-15, 10, 25), EntityType.BLAZE);
                     }
 
                 });
