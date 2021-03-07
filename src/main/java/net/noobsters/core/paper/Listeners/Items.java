@@ -230,7 +230,7 @@ public class Items implements Listener {
     public void onFireballSpawn(EntitySpawnEvent e){
         var entity = e.getEntity();
         var difficulty =  instance.getGame().getDifficultyChange();
-        if(difficulty >= 8 && entity instanceof Fireball){
+        if(difficulty >= 9 && entity instanceof Fireball){
             var fireball = (Fireball) entity;
             fireball.setYield(10);
         }
@@ -241,11 +241,11 @@ public class Items implements Listener {
         var entity =  e.getEntity();
         var damager = e.getDamager();
         var difficulty =  instance.getGame().getDifficultyChange();
-        if(difficulty >= 8 && entity instanceof Player && damager.getType() == EntityType.SMALL_FIREBALL){
+        if(difficulty >= 9 && entity instanceof Player && damager.getType() == EntityType.SMALL_FIREBALL){
             var player = (Player) entity;
             player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 20 * 1, 70));
             var loc = e.getEntity().getLocation();
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:shootingstars ambient @a " + loc.getX()
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:shootingstars master @a " + loc.getX()
                     + " " + loc.getY() + " " + loc.getZ() + " 1 1");
         }
     }
@@ -254,7 +254,7 @@ public class Items implements Listener {
     public void blazeDamage(EntitySpawnEvent e){
         var entity = e.getEntity();
         var difficulty =  instance.getGame().getDifficultyChange();
-        if(difficulty >= 8 && entity instanceof Fireball){
+        if(difficulty >= 9 && entity instanceof Fireball){
             var fireball = (Fireball) entity;
             fireball.setYield(10);
         }
@@ -278,21 +278,21 @@ public class Items implements Listener {
             //magic staff
             e.getProjectile().setCustomName("blue orb");
             var loc = e.getEntity().getLocation();
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:magic_1 ambient @a " + loc.getX()
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:magic_1 master @a " + loc.getX()
                     + " " + loc.getY() + " " + loc.getZ() + " 1 1");
 
         }else if (bow.getCustomModelData() == 108) {
             //rifle
             e.getProjectile().setCustomName("lead bullet");
             var loc = e.getEntity().getLocation();
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:rifle_shoot ambient @a " + loc.getX()
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:rifle_shoot master @a " + loc.getX()
                     + " " + loc.getY() + " " + loc.getZ() + " 1 1");
                     
         }else if (bow.getCustomModelData() == 107 || bow.getCustomModelData() == 109) {
             //pistol
             e.getProjectile().setCustomName("golden bullet");
             var loc = e.getEntity().getLocation();
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:gun_1 ambient @a " + loc.getX()
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:gun_1 master @a " + loc.getX()
                     + " " + loc.getY() + " " + loc.getZ() + " 1 1");
         }
         

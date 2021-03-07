@@ -13,10 +13,11 @@ public class Game extends BukkitRunnable{
     int spawnPatrolDelay = 600;
     int damageAmplifier = 4;
     int mobResistance = 60;
-    int difficultyChange = 8;
+    int difficultyChange = 10;
     boolean combatlog = true;
     long gameTime = 0;
     long startTime = 0;
+    
     
 
     public Game(PERMADED instance) {

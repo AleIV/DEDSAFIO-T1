@@ -2,6 +2,7 @@ name: PERMADED
 version: ${version}
 main: net.noobsters.core.paper.PERMADED
 load: STARTUP
+depend: [ProtocolLib]
 author: AleIV
 api-version: 1.16
 api: ["1.16"]

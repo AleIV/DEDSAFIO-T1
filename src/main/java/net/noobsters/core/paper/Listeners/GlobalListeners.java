@@ -5,7 +5,9 @@ import java.util.Random;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World.Environment;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Hoglin;
 import org.bukkit.entity.Pillager;
@@ -15,9 +17,12 @@ import org.bukkit.entity.WitherSkull;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLocaleChangeEvent;
+import org.bukkit.inventory.ItemStack;
 
 import net.md_5.bungee.api.ChatColor;
 import net.noobsters.core.paper.GameTickEvent;
@@ -43,25 +48,62 @@ public class GlobalListeners implements Listener{
         this.instance = instance;
     }
 
-    /*
+    @EventHandler
+    public void onShoot(EntityShootBowEvent e) {
+        var entity = e.getEntity();
+        var bow = e.getBow().getItemMeta();
+        var proj = e.getProjectile();
+        if (entity instanceof Player) {
+            var player = (Player) entity;
+            if (bow.getDisplayName().toString().contains("Meteor") && player.getGameMode() == GameMode.CREATIVE) {
+                proj.setCustomName("Meteor");
+
+                var armorStand = (ArmorStand) player.getWorld().spawnEntity(player.getLocation(), EntityType.ARMOR_STAND);
+                armorStand.setInvisible(true);
+                armorStand.setGlowing(true);
+                var meteor = new ItemStack(Material.WOODEN_HOE);
+                var meta =  meteor.getItemMeta();
+                meta.setDisplayName(ChatColor.BLACK + "Meteor");
+                meta.setCustomModelData(6);
+                meteor.setItemMeta(meta);
+                armorStand.getEquipment().setItemInMainHand(meteor);
+                proj.addPassenger(armorStand);
+
+
+
+                var loc = entity.getLocation();
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:meteorito_cayendo master @a " + loc.getX()
+                        + " " + loc.getY() + " " + loc.getZ() + " 100000 1");
+            }
+        }
+    }
+
+    
     @EventHandler
     public void impact(ProjectileHitEvent e) {
         var entity = e.getHitEntity();
         var block = e.getHitBlock();
         var projectile = e.getEntity();
-        var shooter = projectile.getShooter();
-        if(projectile instanceof Arrow){
-            var loc = block.getLocation();
+        if(projectile.getCustomName() != null && projectile.getCustomName().toString().contains("Meteor")){
             if(entity != null){
+                var loc = entity.getLocation();
                 loc.add(0, -10, 0).createExplosion(100, true);
-                loc.getBlock().setType(Material.OBSIDIAN);
+                entity.getWorld().strikeLightning(entity.getLocation());
+                entity.getWorld().strikeLightning(entity.getLocation());
+                entity.getWorld().strikeLightning(entity.getLocation());
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:meteorito_impacto master @a " + loc.getX()
+                        + " " + loc.getY() + " " + loc.getZ() + " 100000 1");
             }else if(block != null){
+                var loc = block.getLocation();
                 loc.add(0, -10, 0).createExplosion(100, true);
-                loc.getBlock().setType(Material.OBSIDIAN);
-
+                block.getWorld().strikeLightning(block.getLocation());
+                block.getWorld().strikeLightning(block.getLocation());
+                block.getWorld().strikeLightning(block.getLocation());
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:meteorito_impacto master @a " + loc.getX()
+                        + " " + loc.getY() + " " + loc.getZ() + " 100000 1");
             }
         }
-    }*/
+    }
 
     @EventHandler
     public void onResourcePackChange(PlayerLocaleChangeEvent e){
@@ -69,8 +111,7 @@ public class GlobalListeners implements Listener{
 
         if(!e.getLocale().contains("NOOBSTERS")){
             player.kickPlayer(NO_RP_ES);
-        }else if(!e.getLocale().contains("NOOBSTERS_4")){
-            //Bukkit.broadcastMessage("CANT JOIN " + e.getPlayer().getName().toString() + "RESOURCE= " + e.getLocale());
+        }else if(!e.getLocale().contains("NOOBSTERS_5")){
             player.kickPlayer(NO_RP_ES + ChatColor.RED + "\n Hay otra actualizacion del texture pack, descarga la ultima!");
             
         }
@@ -92,7 +133,7 @@ public class GlobalListeners implements Listener{
                 if(random.nextBoolean() && shooter instanceof Pillager){
                     var pillager = (Pillager) shooter;
                     var loc = pillager.getLocation();
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:boomheadshot ambient @a " + loc.getX()
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:boomheadshot master @a " + loc.getX()
                         + " " + loc.getY() + " " + loc.getZ() + " 1 1");
                 }
             }else if(proj.getCustomName() != null && proj.getCustomName().contains("golden")){
@@ -183,7 +224,7 @@ public class GlobalListeners implements Listener{
     public void customSpawns(GameTickEvent e) {
         var difficulty = instance.getGame().getDifficultyChange();
         final var second = e.getSecond();
-        if (difficulty >= 7 && second % instance.getGame().getSpawnPatrolDelay() == 0) {
+        if (difficulty >= 10 && second % instance.getGame().getSpawnPatrolDelay() == 0) {
             Bukkit.getOnlinePlayers().forEach(player -> {
                 var loc = player.getLocation();
                 Bukkit.getScheduler().runTask(instance, () -> {

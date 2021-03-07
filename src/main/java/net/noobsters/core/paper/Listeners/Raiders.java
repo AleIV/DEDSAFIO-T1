@@ -23,20 +23,20 @@ import org.bukkit.potion.PotionEffectType;
 import net.md_5.bungee.api.ChatColor;
 import net.noobsters.core.paper.PERMADED;
 
-public class Riders implements Listener {
+public class Raiders implements Listener {
 
     PERMADED instance;
     Random random = new Random();
 
-    Riders(PERMADED instance) {
+    Raiders(PERMADED instance) {
         this.instance = instance;
     }
 
     @EventHandler
-    public void riders(CreatureSpawnEvent e) {
+    public void raiders(CreatureSpawnEvent e) {
         var entity = e.getEntity();
         var difficulty = instance.getGame().getDifficultyChange();
-        if (difficulty >= 6 && entity instanceof Evoker) {
+        if (difficulty >= 7 && entity instanceof Evoker) {
             var evoker = (Evoker) entity;
             switch (random.nextInt(3)) {
                 case 1: {
@@ -67,15 +67,15 @@ public class Riders implements Listener {
                     break;
             }
 
-        } else if (difficulty >= 6 && entity instanceof Ravager) {
+        } else if (difficulty >= 7 && entity instanceof Ravager) {
             var ravager = (Ravager) entity;
-            ravager.setCustomName(ChatColor.RED + "Ravager Powerful");
+            ravager.setCustomName(ChatColor.BLUE + "Ravager Powerful");
 
-        } else if (difficulty >= 6 && ((entity instanceof Witch) || (entity instanceof Villager))) {
+        } else if (difficulty >= 7 && ((entity instanceof Witch) || (entity instanceof Villager))) {
             e.setCancelled(true);
             entity.getWorld().spawnEntity(entity.getLocation(), EntityType.EVOKER);
 
-        } else if (difficulty >= 7 && entity instanceof Pillager) {
+        } else if (difficulty >= 6 && entity instanceof Pillager) {
             var pillager = (Pillager) entity;
             var gun = new ItemStack(Material.CROSSBOW);
             var meta = (CrossbowMeta) gun.getItemMeta();
@@ -84,7 +84,7 @@ public class Riders implements Listener {
                     meta.setDisplayName(ChatColor.GRAY + "Sniper");
                     meta.setCustomModelData(108);
 
-                    pillager.setCustomName(ChatColor.RED + "Servant");
+                    pillager.setCustomName(ChatColor.GOLD + "Servant");
                 }
                     break;
 
@@ -92,7 +92,7 @@ public class Riders implements Listener {
                     meta.setDisplayName(ChatColor.GRAY + "Pistol");
                     meta.setCustomModelData(107);
 
-                    pillager.setCustomName(ChatColor.RED + "Blacksmith");
+                    pillager.setCustomName(ChatColor.GOLD + "Blacksmith");
                 }
                     break;
 
@@ -100,7 +100,7 @@ public class Riders implements Listener {
                     meta.setDisplayName(ChatColor.GRAY + "Pistol");
                     meta.setCustomModelData(109);
 
-                    pillager.setCustomName(ChatColor.RED + "Butler");
+                    pillager.setCustomName(ChatColor.GOLD + "Butler");
                 }
                     break;
             }
@@ -108,9 +108,9 @@ public class Riders implements Listener {
             gun.setItemMeta(meta);
             pillager.getEquipment().setItemInMainHand(gun);
 
-        } else if (difficulty >= 7 && entity instanceof Vindicator) {
+        } else if (difficulty >= 6 && entity instanceof Vindicator) {
             var vindicator = (Vindicator) entity;
-            vindicator.setCustomName(ChatColor.RED + "Mountaineer");
+            vindicator.setCustomName(ChatColor.GOLD + "Mountaineer");
             vindicator.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * 300, 1));
 
             var axe = new ItemStack(Material.NETHERITE_AXE);

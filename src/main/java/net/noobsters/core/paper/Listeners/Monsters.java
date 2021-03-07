@@ -8,6 +8,7 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.CaveSpider;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.MagmaCube;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Spider;
 import org.bukkit.entity.Zombie;
@@ -35,60 +36,70 @@ public class Monsters implements Listener {
     @EventHandler
     public void monsterSpawns(CreatureSpawnEvent e) {
         var game = instance.getGame();
+        var entity = e.getEntity();
         var difficulty = game.getDifficultyChange();
-        if (difficulty >= 2 && (e.getEntity() instanceof Spider || e.getEntity() instanceof CaveSpider)) {
-            var spider = (Spider) e.getEntity();
+        if (difficulty >= 2 && entity instanceof Spider) {
+
+            var spider = (Spider) entity;
             spider.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 20 * 600, 1));
             spider.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * 600, 1));
             spider.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20 * 600, 0));
             switch (random.nextInt(5)) {
                 case 1:
-                    spider.setCustomName(ChatColor.RED + "Green Spider");
+                    spider.setCustomName(ChatColor.GREEN + "Green Spider");
 
                     break;
                 case 2:
-                    spider.setCustomName(ChatColor.RED + "Stone Spider");
+                    spider.setCustomName(ChatColor.GREEN + "Stone Spider");
 
                     break;
                 case 3:
-                    spider.setCustomName(ChatColor.RED + "Dust Spider");
+                    spider.setCustomName(ChatColor.GREEN + "Dust Spider");
 
                     break;
                 case 4:
-                    spider.setCustomName(ChatColor.RED + "Glaciar Spider");
+                    spider.setCustomName(ChatColor.GREEN + "Glaciar Spider");
 
                     break;
 
                 default:
-                    spider.setCustomName(ChatColor.RED + "Ancient Spider");
+                    spider.setCustomName(ChatColor.GREEN + "Ancient Spider");
                     break;
             }
 
-        } else if (e.getEntity() instanceof Creeper && difficulty >= 8) {
-            var creeper = (Creeper) e.getEntity();
+        }else if(difficulty >= 2 && entity instanceof CaveSpider){
+            e.setCancelled(true);
+            entity.getWorld().spawnEntity(entity.getLocation(), EntityType.SPIDER);
+            
+        }else if(difficulty >= 1 && entity instanceof MagmaCube){
+            var magma = (MagmaCube) entity;
+            magma.setCustomName(ChatColor.DARK_RED + "Redstone Cube");
+
+        }else if (difficulty >= 10 && entity instanceof Creeper) {
+            var creeper = (Creeper) entity;
 
             switch (random.nextInt(5)) {
                 case 1: {
-                    creeper.setCustomName(ChatColor.RED + "Tesla Creeper");
+                    creeper.setCustomName(ChatColor.GREEN + "Tesla Creeper");
                     creeper.setPowered(true);
                 }
                     break;
                 case 2: {
-                    creeper.setCustomName(ChatColor.RED + "Impostor Creeper");
+                    creeper.setCustomName(ChatColor.GREEN + "Impostor Creeper");
                     creeper.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20 * 300, 0));
                     creeper.setSilent(true);
                     creeper.setExplosionRadius(3);
                 }
                     break;
                 case 3: {
-                    creeper.setCustomName(ChatColor.RED + "Creeperscrimer");
+                    creeper.setCustomName(ChatColor.GREEN + "Creeperscrimer");
                     creeper.setExplosionRadius(3);
                     creeper.setMaxFuseTicks(5);
                     creeper.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * 120, 2));
                 }
                     break;
                 case 4: {
-                    creeper.setCustomName(ChatColor.RED + "Atomic Creeper");
+                    creeper.setCustomName(ChatColor.GREEN + "Atomic Creeper");
                     creeper.setPowered(true);
                     creeper.setExplosionRadius(30);
                     creeper.setHealth(creeper.getHealth()/2);
@@ -97,7 +108,7 @@ public class Monsters implements Listener {
                     break;
                 // rubber chicken
                 default: {
-                    creeper.setCustomName(ChatColor.AQUA + "Rainbow Creeper");
+                    creeper.setCustomName(ChatColor.GREEN + "Rainbow Creeper");
                     creeper.setSilent(true);
                     creeper.setExplosionRadius(2);
                     creeper.setMaxFuseTicks(5);
@@ -110,7 +121,7 @@ public class Monsters implements Listener {
                     pollo.setItemMeta(polloMeta);
 
                     var miniZombie = (Zombie) creeper.getWorld().spawnEntity(creeper.getLocation(), EntityType.ZOMBIE);
-                    miniZombie.setCustomName(ChatColor.RED + "Rubber Chicken");
+                    miniZombie.setCustomName(ChatColor.YELLOW + "Rubber Chicken");
                     miniZombie.setSilent(true);
                     miniZombie.setInvisible(true);
                     miniZombie.setBaby();
@@ -141,20 +152,20 @@ public class Monsters implements Listener {
             var loc = entity.getLocation();
             switch (random.nextInt(4)) {
                 case 1:
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:pollo ambient @a "
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:pollo master @a "
                             + loc.getX() + " " + loc.getY() + " " + loc.getZ() + " 1 1");
                     break;
                 case 2:
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:pollo_2 ambient @a "
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:pollo_2 master @a "
                             + loc.getX() + " " + loc.getY() + " " + loc.getZ() + " 1 1");
                     break;
                 case 3:
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:pollo_3 ambient @a "
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:pollo_3 master @a "
                             + loc.getX() + " " + loc.getY() + " " + loc.getZ() + " 1 1");
                     break;
 
                 default:
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:pollo_4 ambient @a "
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:pollo_4 master @a "
                             + loc.getX() + " " + loc.getY() + " " + loc.getZ() + " 1 1");
                     break;
             }
@@ -172,20 +183,20 @@ public class Monsters implements Listener {
                 var loc = damager.getLocation();
                 switch (random.nextInt(4)) {
                     case 1:
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:pollo ambient @a "
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:pollo master @a "
                                 + loc.getX() + " " + loc.getY() + " " + loc.getZ() + " 1 1");
                         break;
                     case 2:
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:pollo_2 ambient @a "
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:pollo_2 master @a "
                                 + loc.getX() + " " + loc.getY() + " " + loc.getZ() + " 1 1");
                         break;
                     case 3:
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:pollo_3 ambient @a "
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:pollo_3 master @a "
                                 + loc.getX() + " " + loc.getY() + " " + loc.getZ() + " 1 1");
                         break;
 
                     default:
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:pollo_4 ambient @a "
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:pollo_4 master @a "
                                 + loc.getX() + " " + loc.getY() + " " + loc.getZ() + " 1 1");
                         break;
                 }

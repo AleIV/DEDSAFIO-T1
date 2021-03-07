@@ -61,8 +61,11 @@ public class Animals implements Listener {
             if(random.nextInt(20) == 1){
                 e.setCancelled(true);
                 entity.getWorld().spawnEntity(entity.getLocation(), EntityType.PIG);
-            }else{
-                if(random.nextInt(30) == 1){
+
+            }else if(difficulty >= 9){
+
+                if(random.nextInt(20) == 1){
+                    e.setCancelled(true);
                     entity.getWorld().spawnEntity(entity.getLocation(), EntityType.BLAZE);
                 }else{
                     e.setCancelled(true);
@@ -85,7 +88,7 @@ public class Animals implements Listener {
             switch (random.nextInt(4)) {
                 case 1: {
 
-                    piglin.setCustomName(ChatColor.RED + "Piglin Gentleman");
+                    piglin.setCustomName(ChatColor.BLUE + "Piglin Gentleman");
                     var hat = new ItemStack(Material.CARVED_PUMPKIN);
                     var hatMeta = hat.getItemMeta();
                     hatMeta.setCustomModelData(69);
@@ -107,7 +110,7 @@ public class Animals implements Listener {
                     break;
 
                 case 2: {
-                    piglin.setCustomName(ChatColor.RED + "Wizard Piglin");
+                    piglin.setCustomName(ChatColor.BLUE + "Wizard Piglin");
 
                     var weapon = new ItemStack(Material.CROSSBOW);
                     var weaponMeta = weapon.getItemMeta();
@@ -121,7 +124,7 @@ public class Animals implements Listener {
                     break;
 
                 case 3: {
-                    piglin.setCustomName(ChatColor.RED + "Piglin Rider");
+                    piglin.setCustomName(ChatColor.BLUE + "Piglin Rider");
 
                     var weapon = new ItemStack(Material.CROSSBOW);
                     var meta = (CrossbowMeta) weapon.getItemMeta();
@@ -145,7 +148,7 @@ public class Animals implements Listener {
                     break;
 
                 default: {
-                    piglin.setCustomName(ChatColor.RED + "Piglin Blacksmith");
+                    piglin.setCustomName(ChatColor.BLUE + "Piglin Blacksmith");
 
                     var hat = new ItemStack(Material.NETHERITE_HELMET);
 

@@ -32,61 +32,61 @@ public class Demons implements Listener{
     public void demons(CreatureSpawnEvent e) {
         var entity =  e.getEntity();
         var difficulty = instance.getGame().getDifficultyChange();
-        if (difficulty >= 3 && entity instanceof Vex) {
+        if (difficulty >= 4 && entity instanceof Vex) {
             var spirit = (Vex) entity;
             spirit.setCustomName(ChatColor.DARK_PURPLE + "Spirit");
 
-        }else if(difficulty >= 8 && entity instanceof Ghast){
+        }else if(difficulty >= 9 && entity instanceof Ghast){
             var ghast = (Ghast) entity;
-            ghast.setCustomName(ChatColor.RED + "Carminite Ghast Guard");
+            ghast.setCustomName(ChatColor.DARK_PURPLE + "Carminite Ghast Guard");
             var loc = ghast.getLocation();
             var players = loc.getNearbyPlayers(64, player-> player.getGameMode() == GameMode.SURVIVAL).stream().findAny();
             if(players.isPresent()) ghast.setTarget(players.get());
 
-        }else if(difficulty >= 8 && entity instanceof Phantom){
+        }else if(difficulty >= 9 && entity instanceof Phantom){
             e.setCancelled(true);
             var loc = entity.getLocation();
             loc.getWorld().spawnEntity(loc, EntityType.GHAST);
 
-        }else if(difficulty >= 8 && entity instanceof Blaze){
+        }else if(difficulty >= 9 && entity instanceof Blaze){
             var blaze = (Blaze) entity;
-            blaze.setCustomName(ChatColor.RED + "Pure Demon");
+            blaze.setCustomName(ChatColor.DARK_PURPLE + "Pure Demon");
             blaze.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20 * 600, 3));
             var loc = blaze.getLocation();
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-                    "playsound minecraft:lich ambient @a " + loc.getX() + " " + loc.getY() + " " + loc.getZ() + " 1 1");
+                    "playsound minecraft:lich master @a " + loc.getX() + " " + loc.getY() + " " + loc.getZ() + " 1 1");
 
-        }else if(difficulty >= 8 && entity instanceof Enderman){
+        }else if(difficulty >= 9 && entity instanceof Enderman){
             var enderman = (Enderman) entity;
             enderman.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20 * 600, 1));
             switch (random.nextInt(7)) {
                 case 1:{
-                    enderman.setCustomName(ChatColor.RED + "Corrupted Demon");
+                    enderman.setCustomName(ChatColor.DARK_PURPLE + "Corrupted Demon");
                 }
                     break;
                 case 2:{
-                    enderman.setCustomName(ChatColor.RED + "Horned Demon");
+                    enderman.setCustomName(ChatColor.DARK_PURPLE + "Horned Demon");
                 }
                     break;
                 case 3:{
-                    enderman.setCustomName(ChatColor.RED + "Demon");
+                    enderman.setCustomName(ChatColor.DARK_PURPLE + "Demon");
                 }
                     break;
                 case 4:{
-                    enderman.setCustomName(ChatColor.RED + "Old Demon");
+                    enderman.setCustomName(ChatColor.DARK_PURPLE + "Old Demon");
                 }
                     break;
                 case 5:{
-                    enderman.setCustomName(ChatColor.RED + "Wights");
+                    enderman.setCustomName(ChatColor.DARK_PURPLE + "Wights");
                 }
                     break;
                 case 6:{
-                    enderman.setCustomName(ChatColor.RED + "Ghost");
+                    enderman.setCustomName(ChatColor.DARK_PURPLE + "Ghost");
                 }
                     break;
             
                 default:{
-                    enderman.setCustomName(ChatColor.RED + "Wendigo");
+                    enderman.setCustomName(ChatColor.DARK_PURPLE + "Wendigo");
                 }
                     break;
             }

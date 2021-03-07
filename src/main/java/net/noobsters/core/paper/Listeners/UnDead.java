@@ -25,6 +25,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.spigotmc.event.entity.EntityDismountEvent;
 
+import me.libraryaddict.disguise.DisguiseAPI;
 import net.md_5.bungee.api.ChatColor;
 import net.noobsters.core.paper.PERMADED;
 
@@ -72,7 +73,7 @@ public class UnDead implements Listener {
             chefEquipment.setItemInMainHand(taco);
             chefEquipment.setItemInMainHandDropChance(0.1f);
 
-        } else if (e.getEntity() instanceof Skeleton && game.getDifficultyChange() >= 4) {
+        } else if (e.getEntity() instanceof Skeleton && game.getDifficultyChange() >= 3) {
             var skeleton = (Skeleton) e.getEntity();
 
             if(skeleton.getType() == EntityType.WITHER_SKELETON){
@@ -192,9 +193,9 @@ public class UnDead implements Listener {
     @EventHandler
     public void impact(ProjectileHitEvent e) {
         var difficulty = instance.getGame().getDifficultyChange();
-        if (difficulty >= 4 && e.getEntity() instanceof WitherSkull) {
+        if (difficulty >= 3 && e.getEntity() instanceof WitherSkull) {
             var entity = e.getHitEntity();
-            if (entity != null && entity instanceof Player) {
+            if (entity != null && entity instanceof Player && !DisguiseAPI.isDisguised(entity)) {
                 var player = (Player) entity;
                 player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 20 * 5, 0));
             }
@@ -207,7 +208,7 @@ public class UnDead implements Listener {
         if (entity instanceof Skeleton && entity.getCustomName() != null
                 && entity.getCustomName().contains("Sans")) {
             var loc = entity.getLocation();
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:sans_talking ambient @a "
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:sans_talking master @a "
                     + loc.getX() + " " + loc.getY() + " " + loc.getZ() + " 1 1");
         }
     }
@@ -230,13 +231,13 @@ public class UnDead implements Listener {
         if (damager instanceof Husk) {
             var loc = damager.getLocation();
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-                    "playsound minecraft:burp ambient @a " + loc.getX() + " " + loc.getY() + " " + loc.getZ() + " 1 1");
+                    "playsound minecraft:burp master @a " + loc.getX() + " " + loc.getY() + " " + loc.getZ() + " 1 1");
 
-        } else if (game.getDifficultyChange() >= 4 && entity instanceof Skeleton && entity.getCustomName() != null
+        } else if (game.getDifficultyChange() >= 3 && entity instanceof Skeleton && entity.getCustomName() != null
                 && entity.getCustomName().contains("Sans") && (damager instanceof Player || damager instanceof Arrow)) {
 
             var loc = damager.getLocation();
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:sans_song ambient @a " + loc.getX()
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:sans_song master @a " + loc.getX()
                     + " " + loc.getY() + " " + loc.getZ() + " 1 1");
         }
 
