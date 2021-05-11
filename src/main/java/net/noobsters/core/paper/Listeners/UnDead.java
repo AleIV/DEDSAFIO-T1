@@ -83,7 +83,7 @@ public class UnDead implements Listener {
                 var weapon = new ItemStack(Material.NETHERITE_SWORD);
                 var meta = weapon.getItemMeta();
                 meta.setCustomModelData(90);
-                meta.setDisplayName(ChatColor.BLUE + "Guadaña");
+                meta.setDisplayName(ChatColor.BLUE + "Raast");
                 weapon.setItemMeta(meta);
                 var skeletonEquipment = skeleton.getEquipment();
                 skeletonEquipment.setItemInMainHand(weapon);

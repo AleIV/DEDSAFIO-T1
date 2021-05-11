@@ -19,18 +19,14 @@ public class PERMADED extends JavaPlugin {
   @Override
   public void onEnable() {
 
-    // worldcreator
-    /*
-    WorldCreator arenaWorld = new WorldCreator("PERMADED");
-    arenaWorld.environment(Environment.THE_END);
-    arenaWorld.createWorld();
-    */
     instance = this;
 
     // managers
     commandManager = new PaperCommandManager(this);
     listenerManager = new ListenerManager(this);
     game = new Game(this);
+
+    
     game.runTaskTimerAsynchronously(this, 0L, 20L);
         
     //commands

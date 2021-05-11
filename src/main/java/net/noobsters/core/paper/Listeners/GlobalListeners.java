@@ -17,11 +17,12 @@ import org.bukkit.entity.WitherSkull;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerLocaleChangeEvent;
 import org.bukkit.inventory.ItemStack;
 
 import net.md_5.bungee.api.ChatColor;
@@ -46,6 +47,30 @@ public class GlobalListeners implements Listener{
 
     GlobalListeners(PERMADED instance){
         this.instance = instance;
+    }
+
+    /*
+    @EventHandler
+    public void onResourcePackChange(PlayerLocaleChangeEvent e){
+        var player = e.getPlayer();
+
+        if(!e.getLocale().contains("NOOBSTERS")){
+            player.kickPlayer(NO_RP_ES);
+        }else if(!e.getLocale().contains("NOOBSTERS_5")){
+            player.kickPlayer(NO_RP_ES + ChatColor.RED + "\n Hay otra actualizacion del texture pack, descarga la ultima!");
+            
+        }
+    }*/
+
+    @EventHandler
+    public void onDamage(EntityDamageEvent e){
+        var cause = e.getCause();
+        var damage = instance.getGame().getDamageAmplifier();
+        var difficulty = instance.getGame().getDifficultyChange();
+
+        if(difficulty >= 9 && cause == DamageCause.LAVA){
+            e.setDamage(e.getDamage()*damage);
+        }
     }
 
     @EventHandler
@@ -102,18 +127,6 @@ public class GlobalListeners implements Listener{
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:meteorito_impacto master @a " + loc.getX()
                         + " " + loc.getY() + " " + loc.getZ() + " 100000 1");
             }
-        }
-    }
-
-    @EventHandler
-    public void onResourcePackChange(PlayerLocaleChangeEvent e){
-        var player = e.getPlayer();
-
-        if(!e.getLocale().contains("NOOBSTERS")){
-            player.kickPlayer(NO_RP_ES);
-        }else if(!e.getLocale().contains("NOOBSTERS_5")){
-            player.kickPlayer(NO_RP_ES + ChatColor.RED + "\n Hay otra actualizacion del texture pack, descarga la ultima!");
-            
         }
     }
 
@@ -252,7 +265,8 @@ public class GlobalListeners implements Listener{
 
                         loc.getWorld().spawnEntity(loc.add(15, 20, 15), EntityType.GHAST);
 
-                    }else if (player.getWorld().getEnvironment() == Environment.NORMAL && (second % instance.getGame().getSpawnPatrolDelay()*2.5) == 0) {
+                    }else if (player.getWorld().getEnvironment() == Environment.NORMAL && player.getWorld() != Bukkit.getWorld("valhalla") 
+                        && (second % instance.getGame().getSpawnPatrolDelay()*2.5) == 0) {
                         // soul ghasts over
                         loc.getWorld().spawnEntity(loc.add(25, 20, -25), EntityType.GHAST);
 

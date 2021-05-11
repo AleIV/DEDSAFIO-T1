@@ -13,7 +13,6 @@ public class ListenerManager {
         this.instance = instance;
     
         Bukkit.getPluginManager().registerEvents(new GlobalListeners(instance), instance);
-        Bukkit.getPluginManager().registerEvents(new SurvivalListeners(instance), instance);
         Bukkit.getPluginManager().registerEvents(new Animals(instance), instance);
         Bukkit.getPluginManager().registerEvents(new Raiders(instance), instance);
         Bukkit.getPluginManager().registerEvents(new Monsters(instance), instance);
@@ -22,6 +21,7 @@ public class ListenerManager {
         Bukkit.getPluginManager().registerEvents(new Items(instance), instance);
         Bukkit.getPluginManager().registerEvents(new MiniBosses(instance), instance);
         Bukkit.getPluginManager().registerEvents(new Disguise(instance), instance);
+        Bukkit.getPluginManager().registerEvents(new DedsafioListener(instance), instance);
 
 
     }

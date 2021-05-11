@@ -15,6 +15,8 @@ public class Game extends BukkitRunnable{
     int mobResistance = 60;
     int difficultyChange = 10;
     boolean combatlog = true;
+
+    
     long gameTime = 0;
     long startTime = 0;
     
