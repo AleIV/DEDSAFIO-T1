@@ -8,6 +8,7 @@ import org.bukkit.WorldCreator;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -31,9 +32,27 @@ public class permadedCMD extends BaseCommand {
     private @NonNull PERMADED instance;
 
     @Subcommand("difficulty")
-    public void difficultyChange(CommandSender sender, int change) {
-        instance.getGame().setDifficultyChange(change);
-        sender.sendMessage(ChatColor.GREEN + "Difficulty change set to " + change);
+    public void difficultyChange(CommandSender sender, String change, boolean bool) {
+        var difficulty = instance.getGame().getDifficultyChanges();
+        if(!difficulty.containsKey(change)){
+            sender.sendMessage(ChatColor.RED + "Difficulty change doesn't exist.");
+        }
+        instance.getGame().getDifficultyChanges().put(change, bool);
+        sender.sendMessage(ChatColor.GREEN + "Difficulty change " + change + " set to " + bool);
+    }
+
+    @Subcommand("gulag")
+    public void gulag(CommandSender sender) {
+        var game = instance.getGame();
+        var bool = !game.isGulak();
+        game.setGulak(!game.isGulak());
+        sender.sendMessage(ChatColor.GREEN + "Gulag set to " + bool);
+    }
+
+    @Subcommand("difficulty-list")
+    public void difList(CommandSender sender) {
+        var game = instance.getGame();
+        sender.sendMessage(ChatColor.AQUA + "LIST: " + game.getDifficultyChanges().toString());
     }
 
     @Subcommand("resistance")
@@ -121,68 +140,17 @@ public class permadedCMD extends BaseCommand {
 
         sender.setGameMode(GameMode.SURVIVAL);
 
-
-
         sender.sendMessage(ChatColor.GOLD + "Disquised as Redstone Monstrosity");
     }
 
     @Subcommand("disguise")
-    public void disguiseCustom(Player sender) {
+    public void disguiseCustom(Player sender, EntityType entity, String name) {
 
-        var name = "&4Redstone Monstrosity";
-        Bukkit.dispatchCommand(sender, "disguise ravager setcustomname \""+ name +"\" setcustomnamevisible false setSelfDisguiseVisible false");
-
-        var melee = new ItemBuilder(Material.NETHERITE_SWORD).name(ChatColor.GOLD + "Melee").build();
-
-        var shootFireball = new ItemBuilder(Material.BOW).enchant(Enchantment.ARROW_INFINITE).name(ChatColor.GOLD + "Shoot Fireball").build();
-
-        var explosion = new ItemBuilder(Material.GUNPOWDER).name(ChatColor.GOLD + "Explosion").build();
-
-        var walk = new ItemBuilder(Material.NETHERITE_BOOTS).name(ChatColor.GREEN + "Walk").build();
-
-        var speed = new ItemBuilder(Material.DIAMOND_BOOTS).name(ChatColor.GREEN + "Speed").build();
-
-        var jump = new ItemBuilder(Material.IRON_BOOTS).name(ChatColor.GREEN + "Jump").build();
-
-        var roar = new ItemBuilder(Material.GLOWSTONE_DUST).name(ChatColor.GREEN + "Roar").build();
-
-        var laugh = new ItemBuilder(Material.SUGAR).name(ChatColor.GREEN + "Laugh").build();
-
-        var inv = sender.getInventory();
-        inv.addItem(melee);
-        inv.addItem(shootFireball);
-        inv.addItem(explosion);
-
-        inv.addItem(walk);
-        inv.addItem(speed);
-        inv.addItem(jump);
-        inv.addItem(roar);
-        inv.addItem(laugh);
-
-        inv.addItem(new ItemStack(Material.ARROW));
-
-        var helmet = new ItemBuilder(Material.NETHERITE_HELMET).enchant(Enchantment.PROTECTION_ENVIRONMENTAL, 4).build();
-        var chestplate = new ItemBuilder(Material.NETHERITE_CHESTPLATE).enchant(Enchantment.PROTECTION_ENVIRONMENTAL, 4).build();
-        var leggings = new ItemBuilder(Material.NETHERITE_LEGGINGS).enchant(Enchantment.PROTECTION_PROJECTILE, 4).build();
-        var boots = new ItemBuilder(Material.NETHERITE_BOOTS).enchant(Enchantment.PROTECTION_PROJECTILE, 4).build();
-
-        var equip = sender.getEquipment();
-        equip.setHelmet(helmet);
-        equip.setChestplate(chestplate);
-        equip.setLeggings(leggings);
-        equip.setBoots(boots);
-
-        sender.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(60.0);
-        sender.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(60.0);
-        sender.setHealth(60);
-        sender.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 100000, 14, false, false));
-        sender.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100000, 3, false, false));
+        Bukkit.dispatchCommand(sender, "disguise " + entity + " setcustomname \""+ name +"\" setcustomnamevisible false setSelfDisguiseVisible false");
 
         sender.setGameMode(GameMode.SURVIVAL);
 
-
-
-        sender.sendMessage(ChatColor.GOLD + "Disquised as Redstone Monstrosity");
+        sender.sendMessage(ChatColor.GOLD + "Disquised as " + name);
     }
 
 }

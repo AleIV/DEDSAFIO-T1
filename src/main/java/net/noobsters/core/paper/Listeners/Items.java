@@ -229,8 +229,8 @@ public class Items implements Listener {
     @EventHandler
     public void onFireballSpawn(EntitySpawnEvent e){
         var entity = e.getEntity();
-        var difficulty =  instance.getGame().getDifficultyChange();
-        if(difficulty >= 9 && entity instanceof Fireball){
+        var difficulty =  instance.getGame().getDifficultyChanges();
+        if(difficulty.get("demons") && entity instanceof Fireball){
             var fireball = (Fireball) entity;
             fireball.setYield(10);
         }
@@ -240,8 +240,8 @@ public class Items implements Listener {
     public void blazeBalls(EntityDamageByEntityEvent e){
         var entity =  e.getEntity();
         var damager = e.getDamager();
-        var difficulty =  instance.getGame().getDifficultyChange();
-        if(difficulty >= 9 && entity instanceof Player && damager.getType() == EntityType.SMALL_FIREBALL){
+        var difficulty =  instance.getGame().getDifficultyChanges();
+        if(difficulty.get("demons") && entity instanceof Player && damager.getType() == EntityType.SMALL_FIREBALL){
             var player = (Player) entity;
             player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 20 * 1, 70));
             var loc = e.getEntity().getLocation();
@@ -253,8 +253,8 @@ public class Items implements Listener {
     @EventHandler
     public void blazeDamage(EntitySpawnEvent e){
         var entity = e.getEntity();
-        var difficulty =  instance.getGame().getDifficultyChange();
-        if(difficulty >= 9 && entity instanceof Fireball){
+        var difficulty =  instance.getGame().getDifficultyChanges();
+        if(difficulty.get("demons") && entity instanceof Fireball){
             var fireball = (Fireball) entity;
             fireball.setYield(10);
         }

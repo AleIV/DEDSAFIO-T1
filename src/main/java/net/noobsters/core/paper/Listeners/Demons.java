@@ -31,24 +31,24 @@ public class Demons implements Listener{
     @EventHandler
     public void demons(CreatureSpawnEvent e) {
         var entity =  e.getEntity();
-        var difficulty = instance.getGame().getDifficultyChange();
-        if (difficulty >= 4 && entity instanceof Vex) {
+        var difficulty = instance.getGame().getDifficultyChanges();
+        if (entity instanceof Vex) {
             var spirit = (Vex) entity;
             spirit.setCustomName(ChatColor.DARK_PURPLE + "Spirit");
 
-        }else if(difficulty >= 9 && entity instanceof Ghast){
+        }else if(difficulty.get("demons") && entity instanceof Ghast){
             var ghast = (Ghast) entity;
             ghast.setCustomName(ChatColor.DARK_PURPLE + "Carminite Ghast Guard");
             var loc = ghast.getLocation();
             var players = loc.getNearbyPlayers(64, player-> player.getGameMode() == GameMode.SURVIVAL).stream().findAny();
             if(players.isPresent()) ghast.setTarget(players.get());
 
-        }else if(difficulty >= 9 && entity instanceof Phantom){
+        }else if(difficulty.get("demons") && entity instanceof Phantom){
             e.setCancelled(true);
             var loc = entity.getLocation();
             loc.getWorld().spawnEntity(loc, EntityType.GHAST);
 
-        }else if(difficulty >= 9 && entity instanceof Blaze){
+        }else if(difficulty.get("demons") && entity instanceof Blaze){
             var blaze = (Blaze) entity;
             blaze.setCustomName(ChatColor.DARK_PURPLE + "Pure Demon");
             blaze.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20 * 600, 3));
@@ -56,7 +56,7 @@ public class Demons implements Listener{
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
                     "playsound minecraft:lich master @a " + loc.getX() + " " + loc.getY() + " " + loc.getZ() + " 1 1");
 
-        }else if(difficulty >= 9 && entity instanceof Enderman){
+        }else if(difficulty.get("demons") && entity instanceof Enderman){
             var enderman = (Enderman) entity;
             enderman.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20 * 600, 1));
             switch (random.nextInt(7)) {

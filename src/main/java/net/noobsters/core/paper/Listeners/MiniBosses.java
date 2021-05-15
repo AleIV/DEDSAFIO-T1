@@ -34,8 +34,7 @@ public class MiniBosses implements Listener {
 
     @EventHandler
     public void bossSpawns(CreatureSpawnEvent e) {
-        var game = instance.getGame();
-        if (e.getEntity() instanceof EnderDragon && game.getDifficultyChange() >= 4) {
+        if (e.getEntity() instanceof EnderDragon) {
             var dragon = (EnderDragon) e.getEntity();
             dragon.setCustomName(ChatColor.YELLOW + "Blood Ender Dragon");
         }
@@ -45,9 +44,6 @@ public class MiniBosses implements Listener {
     @EventHandler
     public void onFireBall(EnderDragonFireballHitEvent e) {
         var cloud = e.getAreaEffectCloud();
-
-        if (instance.getGame().getDifficultyChange() < 4)
-            return;
 
        cloud.getWorld().spawnEntity(cloud.getLocation().add(chooseCoord(5), 2, chooseCoord(5)),
                 EntityType.VEX);
@@ -69,9 +65,6 @@ public class MiniBosses implements Listener {
     public void onFireBall2(EnderDragonFlameEvent e) {
         var cloud = e.getAreaEffectCloud();
 
-        if (instance.getGame().getDifficultyChange() < 4)
-            return;
-
         cloud.getWorld().spawnEntity(cloud.getLocation().add(chooseCoord(5), 2, chooseCoord(5)),
                 EntityType.VEX);
         cloud.getWorld().spawnEntity(cloud.getLocation().add(chooseCoord(5), 2, chooseCoord(5)),
@@ -83,7 +76,7 @@ public class MiniBosses implements Listener {
     @EventHandler
     public void bossDeath(EntityDeathEvent e) {
         var entity = e.getEntity();
-        if (entity instanceof EnderDragon && instance.getGame().getDifficultyChange() >= 4) {
+        if (entity instanceof EnderDragon) {
             var bloodScale = new ItemStack(Material.RABBIT_FOOT, random.nextInt(10)+1);
             var bloodScaleMeta = bloodScale.getItemMeta();
             bloodScaleMeta.setDisplayName(ChatColor.RED + "Blood Scale");

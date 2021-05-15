@@ -41,7 +41,8 @@ public class UnDead implements Listener {
     @EventHandler
     public void unDeadSpawns(CreatureSpawnEvent e) {
         var game = instance.getGame();
-        if (e.getEntity() instanceof Husk && game.getDifficultyChange() >= 1) {
+        var difficulty = game.getDifficultyChanges();
+        if (e.getEntity() instanceof Husk && difficulty.get("zombies")) {
             var chef = (Husk) e.getEntity();
 
             chef.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20 * 600, 0));
@@ -73,7 +74,7 @@ public class UnDead implements Listener {
             chefEquipment.setItemInMainHand(taco);
             chefEquipment.setItemInMainHandDropChance(0.1f);
 
-        } else if (e.getEntity() instanceof Skeleton && game.getDifficultyChange() >= 3) {
+        } else if (e.getEntity() instanceof Skeleton && difficulty.get("skeletons")) {
             var skeleton = (Skeleton) e.getEntity();
 
             if(skeleton.getType() == EntityType.WITHER_SKELETON){
@@ -192,8 +193,7 @@ public class UnDead implements Listener {
 
     @EventHandler
     public void impact(ProjectileHitEvent e) {
-        var difficulty = instance.getGame().getDifficultyChange();
-        if (difficulty >= 3 && e.getEntity() instanceof WitherSkull) {
+        if (e.getEntity() instanceof WitherSkull) {
             var entity = e.getHitEntity();
             if (entity != null && entity instanceof Player && !DisguiseAPI.isDisguised(entity)) {
                 var player = (Player) entity;
@@ -226,14 +226,13 @@ public class UnDead implements Listener {
     public void sounds1(EntityDamageByEntityEvent e) {
         var damager = e.getDamager();
         var entity = e.getEntity();
-        var game = instance.getGame();
 
         if (damager instanceof Husk) {
             var loc = damager.getLocation();
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
                     "playsound minecraft:burp master @a " + loc.getX() + " " + loc.getY() + " " + loc.getZ() + " 1 1");
 
-        } else if (game.getDifficultyChange() >= 3 && entity instanceof Skeleton && entity.getCustomName() != null
+        } else if (entity instanceof Skeleton && entity.getCustomName() != null
                 && entity.getCustomName().contains("Sans") && (damager instanceof Player || damager instanceof Arrow)) {
 
             var loc = damager.getLocation();

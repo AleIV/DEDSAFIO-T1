@@ -35,8 +35,8 @@ public class Raiders implements Listener {
     @EventHandler
     public void raiders(CreatureSpawnEvent e) {
         var entity = e.getEntity();
-        var difficulty = instance.getGame().getDifficultyChange();
-        if (difficulty >= 7 && entity instanceof Evoker) {
+        var difficulty = instance.getGame().getDifficultyChanges();
+        if (difficulty.get("mages") && entity instanceof Evoker) {
             var evoker = (Evoker) entity;
             switch (random.nextInt(3)) {
                 case 1: {
@@ -67,15 +67,15 @@ public class Raiders implements Listener {
                     break;
             }
 
-        } else if (difficulty >= 7 && entity instanceof Ravager) {
+        } else if (difficulty.get("raiders") && entity instanceof Ravager) {
             var ravager = (Ravager) entity;
             ravager.setCustomName(ChatColor.BLUE + "Ravager Powerful");
 
-        } else if (difficulty >= 7 && ((entity instanceof Witch) || (entity instanceof Villager))) {
+        } else if (difficulty.get("mages") && ((entity instanceof Witch) || (entity instanceof Villager))) {
             e.setCancelled(true);
             entity.getWorld().spawnEntity(entity.getLocation(), EntityType.EVOKER);
 
-        } else if (difficulty >= 6 && entity instanceof Pillager) {
+        } else if (difficulty.get("raiders") && entity instanceof Pillager) {
             var pillager = (Pillager) entity;
             var gun = new ItemStack(Material.CROSSBOW);
             var meta = (CrossbowMeta) gun.getItemMeta();
@@ -108,7 +108,7 @@ public class Raiders implements Listener {
             gun.setItemMeta(meta);
             pillager.getEquipment().setItemInMainHand(gun);
 
-        } else if (difficulty >= 6 && entity instanceof Vindicator) {
+        } else if (difficulty.get("raiders") && entity instanceof Vindicator) {
             var vindicator = (Vindicator) entity;
             vindicator.setCustomName(ChatColor.GOLD + "Mountaineer");
             vindicator.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * 300, 1));

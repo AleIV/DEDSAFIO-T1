@@ -37,8 +37,8 @@ public class Monsters implements Listener {
     public void monsterSpawns(CreatureSpawnEvent e) {
         var game = instance.getGame();
         var entity = e.getEntity();
-        var difficulty = game.getDifficultyChange();
-        if (difficulty >= 2 && entity instanceof Spider) {
+        var difficulty = game.getDifficultyChanges();
+        if (difficulty.get("spiders") && entity instanceof Spider) {
 
             var spider = (Spider) entity;
             spider.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 20 * 600, 1));
@@ -67,15 +67,15 @@ public class Monsters implements Listener {
                     break;
             }
 
-        }else if(difficulty >= 2 && entity instanceof CaveSpider){
+        }else if(difficulty.get("spiders") && entity instanceof CaveSpider){
             e.setCancelled(true);
             entity.getWorld().spawnEntity(entity.getLocation(), EntityType.SPIDER);
             
-        }else if(difficulty >= 1 && entity instanceof MagmaCube){
+        }else if(entity instanceof MagmaCube){
             var magma = (MagmaCube) entity;
             magma.setCustomName(ChatColor.DARK_RED + "Redstone Cube");
 
-        }else if (difficulty >= 10 && entity instanceof Creeper) {
+        }else if (difficulty.get("creepers") && entity instanceof Creeper) {
             var creeper = (Creeper) entity;
 
             switch (random.nextInt(5)) {

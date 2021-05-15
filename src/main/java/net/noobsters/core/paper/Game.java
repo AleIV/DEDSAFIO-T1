@@ -1,5 +1,7 @@
 package net.noobsters.core.paper;
 
+import java.util.HashMap;
+
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -11,12 +13,11 @@ import lombok.EqualsAndHashCode;
 public class Game extends BukkitRunnable{
     PERMADED instance;
     int spawnPatrolDelay = 600;
-    int damageAmplifier = 4;
-    int mobResistance = 60;
-    int difficultyChange = 10;
-    boolean combatlog = true;
+    int damageAmplifier = 1;
+    int mobResistance = 0;
+    HashMap<String, Boolean> difficultyChanges = new HashMap<>();
+    boolean gulak = false;
 
-    
     long gameTime = 0;
     long startTime = 0;
     
@@ -25,6 +26,18 @@ public class Game extends BukkitRunnable{
     public Game(PERMADED instance) {
         this.instance = instance;
         this.startTime = System.currentTimeMillis();
+
+        difficultyChanges.put("zombies", false);
+        difficultyChanges.put("spiders", false);
+        difficultyChanges.put("skeletons", false);
+        difficultyChanges.put("pigs", false);
+        difficultyChanges.put("raiders", false);
+        difficultyChanges.put("mages", false);
+        difficultyChanges.put("demons", false);
+        difficultyChanges.put("creepers", false);
+        difficultyChanges.put("raids", false);
+
+        difficultyChanges.put("lava", false);
 
     }
 

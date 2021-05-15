@@ -9,10 +9,8 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityShootBowEvent;
@@ -64,8 +62,9 @@ public class Disguise implements Listener {
 
         } else if (killer != null && killer instanceof Player && DisguiseAPI.isDisguised(killer)) {
             e.setDeathMessage(player.getName().toString() + " was tricked by artificial intelligence");
-            var disguise = DisguiseAPI.getDisguise(killer);
-            if (disguise.getDisguiseName().contains("Redstone")) {
+
+            var item = killer.getEquipment().getItemInMainHand().getItemMeta();
+            if (killer.hasPermission("mod.perm") && item.hasDisplayName() && item.getDisplayName().contains("Melee")) {
                 e.setDeathMessage(player.getName().toString() + " has been reduced to dust by the " + ChatColor.DARK_RED
                         + "Redstone Monstrosity");
             }
@@ -83,6 +82,7 @@ public class Disguise implements Listener {
             e.setCancelled(true);
 
         }
+        
     }
 
     @EventHandler
@@ -181,20 +181,6 @@ public class Disguise implements Listener {
         var num = random.nextInt(radius);
         num = random.nextBoolean() ? ~(num) : num;
         return num;
-    }
-
-    @EventHandler
-    public void onDamage(EntityDamageByEntityEvent e) {
-        var entity = e.getEntity();
-        var damager = e.getDamager();
-        if (entity instanceof Player && DisguiseAPI.isDisguised(entity)) {
-            var player = (Player) entity;
-            if (player.hasPotionEffect(PotionEffectType.SLOW) && damager instanceof Projectile) {
-                e.setCancelled(true);
-            } else if (player.hasPotionEffect(PotionEffectType.SPEED) && !(damager instanceof Projectile)) {
-                e.setCancelled(true);
-            }
-        }
     }
 
     @EventHandler

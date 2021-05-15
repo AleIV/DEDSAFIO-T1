@@ -10,12 +10,9 @@ import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Cow;
-import org.bukkit.entity.Donkey;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Horse;
 import org.bukkit.entity.Pig;
 import org.bukkit.entity.Piglin;
-import org.bukkit.entity.Sheep;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
@@ -42,11 +39,9 @@ public class Animals implements Listener {
     @EventHandler
     public void animals(CreatureSpawnEvent e) {
         var entity = e.getEntity();
-        var difficulty = instance.getGame().getDifficultyChange();
-        if (difficulty >= 5 && ((entity instanceof Sheep) || (entity instanceof Donkey) || (entity instanceof Horse))) {
-            e.setCancelled(true);
-
-        }else if (difficulty >= 5 && entity instanceof Pig) {
+        var difficulty = instance.getGame().getDifficultyChanges();
+        
+        if (difficulty.get("pigs") && entity instanceof Pig) {
 
             if (random.nextInt(20) == 1) {
                 var pig = (Pig) entity;
@@ -56,13 +51,13 @@ public class Animals implements Listener {
                 entity.getWorld().spawnEntity(entity.getLocation(), EntityType.PIGLIN);
             }
 
-        }else if(difficulty >= 5 && entity.getType() == EntityType.ZOMBIFIED_PIGLIN){
+        }else if(difficulty.get("pigs") && entity.getType() == EntityType.ZOMBIFIED_PIGLIN){
 
             if(random.nextInt(20) == 1){
                 e.setCancelled(true);
                 entity.getWorld().spawnEntity(entity.getLocation(), EntityType.PIG);
 
-            }else if(difficulty >= 9){
+            }else if(difficulty.get("demons")){
 
                 if(random.nextInt(20) == 1){
                     e.setCancelled(true);
@@ -71,7 +66,7 @@ public class Animals implements Listener {
                     e.setCancelled(true);
                 }
             }
-        }else if(difficulty >= 6 && entity instanceof Cow){
+        }else if(difficulty.get("raiders") && entity instanceof Cow){
 
             if(random.nextInt(5) != 1){
                 e.setCancelled(true);
@@ -81,7 +76,7 @@ public class Animals implements Listener {
                 cow.setCustomName(ChatColor.AQUA + "Moobloom");
             }
 
-        } else if (difficulty >= 5 && entity instanceof Piglin) {
+        } else if (difficulty.get("pigs") && entity instanceof Piglin) {
             var piglin = (Piglin) entity;
             piglin.setImmuneToZombification(true);
             piglin.setAdult();
@@ -201,14 +196,14 @@ public class Animals implements Listener {
 
     @EventHandler
     public void convert(EntityDamageByEntityEvent e){
-        var difficulty = instance.getGame().getDifficultyChange();
+        var difficulty = instance.getGame().getDifficultyChanges();
         var entity = e.getEntity();
 
-        if(difficulty >= 5 && entity instanceof Pig && entity.getCustomName() == null){
+        if(difficulty.get("pigs") && entity instanceof Pig && entity.getCustomName() == null){
             e.setCancelled(true);
             entity.getWorld().strikeLightning(entity.getLocation());
 
-        }else if(difficulty >= 6 && entity instanceof Cow && entity.getCustomName() == null){
+        }else if(difficulty.get("raiders") && entity instanceof Cow && entity.getCustomName() == null){
             var cow = (Cow) entity;
             cow.damage(100);
             e.setCancelled(true);
@@ -219,9 +214,9 @@ public class Animals implements Listener {
 
     @EventHandler
     public void onGetMilk(PlayerInteractAtEntityEvent e){
-        var difficulty = instance.getGame().getDifficultyChange();
+        var difficulty = instance.getGame().getDifficultyChanges();
         var item = e.getPlayer().getEquipment().getItemInMainHand();
-        if(difficulty >= 6 && e.getRightClicked() instanceof Cow && item.getType() == Material.BUCKET){
+        if(difficulty.get("raiders") && e.getRightClicked() instanceof Cow && item.getType() == Material.BUCKET){
             var cow = (Cow) e.getRightClicked();
             if(cow.getCustomName() != null && cow.getCustomName().toString().contains("loom")){
                 e.setCancelled(true);

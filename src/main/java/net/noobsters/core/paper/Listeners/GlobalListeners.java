@@ -66,9 +66,9 @@ public class GlobalListeners implements Listener{
     public void onDamage(EntityDamageEvent e){
         var cause = e.getCause();
         var damage = instance.getGame().getDamageAmplifier();
-        var difficulty = instance.getGame().getDifficultyChange();
+        var difficulty = instance.getGame().getDifficultyChanges();
 
-        if(difficulty >= 9 && cause == DamageCause.LAVA){
+        if(difficulty.get("lava") && cause == DamageCause.LAVA){
             e.setDamage(e.getDamage()*damage);
         }
     }
@@ -142,7 +142,7 @@ public class GlobalListeners implements Listener{
             var shooter = proj.getShooter();
 
             if(proj.getCustomName() != null && proj.getCustomName().contains("lead")){
-                e.setDamage(e.getDamage()+8);
+                e.setDamage(e.getDamage()+12);
                 if(random.nextBoolean() && shooter instanceof Pillager){
                     var pillager = (Pillager) shooter;
                     var loc = pillager.getLocation();
@@ -150,7 +150,7 @@ public class GlobalListeners implements Listener{
                         + " " + loc.getY() + " " + loc.getZ() + " 1 1");
                 }
             }else if(proj.getCustomName() != null && proj.getCustomName().contains("golden")){
-                e.setDamage(e.getDamage()+4);
+                e.setDamage(e.getDamage()+6);
             }
 
             if(shooter != null && shooter instanceof Player) return;
@@ -235,9 +235,9 @@ public class GlobalListeners implements Listener{
 
     @EventHandler
     public void customSpawns(GameTickEvent e) {
-        var difficulty = instance.getGame().getDifficultyChange();
+        var difficulty = instance.getGame().getDifficultyChanges();
         final var second = e.getSecond();
-        if (difficulty >= 10 && second % instance.getGame().getSpawnPatrolDelay() == 0) {
+        if (difficulty.get("raids") && second % instance.getGame().getSpawnPatrolDelay() == 0) {
             Bukkit.getOnlinePlayers().forEach(player -> {
                 var loc = player.getLocation();
                 Bukkit.getScheduler().runTask(instance, () -> {
