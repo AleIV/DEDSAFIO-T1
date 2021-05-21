@@ -71,7 +71,7 @@ public class Monsters implements Listener {
             e.setCancelled(true);
             entity.getWorld().spawnEntity(entity.getLocation(), EntityType.SPIDER);
             
-        }else if(entity instanceof MagmaCube){
+        }else if(entity instanceof MagmaCube && difficulty.get("redstone")){
             var magma = (MagmaCube) entity;
             magma.setCustomName(ChatColor.DARK_RED + "Redstone Cube");
 

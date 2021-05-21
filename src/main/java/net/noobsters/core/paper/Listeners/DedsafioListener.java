@@ -41,12 +41,19 @@ public class DedsafioListener implements Listener {
         this.instance = instance;
     }
 
+
     @EventHandler
     public void playerDied(PlayerDeathEvent e) {
         var player = e.getEntity();
         var game = instance.getGame();
+        var name = e.getEntity().getName();
+        
 
         if(player.getGameMode() == GameMode.SPECTATOR) e.setDeathMessage("");
+
+        if(game.getDeathPlayers().containsKey(name)){
+            game.getDeathPlayers().put(name, true);
+        }
         
         player.setHealth(20);
         player.setGameMode(GameMode.SPECTATOR);
@@ -118,6 +125,8 @@ public class DedsafioListener implements Listener {
                 }
             }
             if (p2 != null) {
+                if(p1.getUniqueId().toString() == p2.getUniqueId().toString()) return;
+
                 if(!p1.hasPermission("mod.perm") && p2.getGameMode() == GameMode.SURVIVAL && !p2.hasPermission("mod.perm")){
                     e.setCancelled(true);
                 }

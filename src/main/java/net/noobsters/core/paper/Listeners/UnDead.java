@@ -1,17 +1,21 @@
 package net.noobsters.core.paper.Listeners;
 
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Husk;
+import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.Parrot;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.WitherSkull;
+import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
@@ -73,6 +77,25 @@ public class UnDead implements Listener {
             chefEquipment.setLeggings(chefOutfit);
             chefEquipment.setItemInMainHand(taco);
             chefEquipment.setItemInMainHandDropChance(0.1f);
+
+        }else if(e.getEntity() instanceof Zombie && difficulty.get("zombies")){
+            var zombie = (Zombie) e.getEntity();
+            var zombiePlayers = game.getDeathPlayers().entrySet().stream().filter(entry -> entry.getValue()).collect(Collectors.toList());
+            
+            if(!zombiePlayers.isEmpty()){
+                var choose = zombiePlayers.get(random.nextInt(zombiePlayers.size()));
+                zombie.setCustomName(ChatColor.RED + choose.getKey());
+            }
+
+        }else if(e.getEntity() instanceof IronGolem && difficulty.get("zombies")){
+            var golem = (IronGolem) e.getEntity();
+
+            golem.setSilent(true);
+            golem.setCustomName(ChatColor.RED + "Mutant Zombie");
+
+            var loc = golem.getLocation();
+            var players = loc.getNearbyPlayers(64, player-> player.getGameMode() == GameMode.SURVIVAL).stream().findAny();
+            if(players.isPresent()) golem.setTarget(players.get());
 
         } else if (e.getEntity() instanceof Skeleton && difficulty.get("skeletons")) {
             var skeleton = (Skeleton) e.getEntity();
@@ -226,8 +249,9 @@ public class UnDead implements Listener {
     public void sounds1(EntityDamageByEntityEvent e) {
         var damager = e.getDamager();
         var entity = e.getEntity();
+        var difficulty = instance.getGame().getDifficultyChanges();
 
-        if (damager instanceof Husk) {
+        if (damager instanceof Husk && difficulty.get("zombies")) {
             var loc = damager.getLocation();
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
                     "playsound minecraft:burp master @a " + loc.getX() + " " + loc.getY() + " " + loc.getZ() + " 1 1");

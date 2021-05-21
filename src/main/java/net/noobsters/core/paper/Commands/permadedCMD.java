@@ -3,8 +3,6 @@ package net.noobsters.core.paper.Commands;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
-import org.bukkit.World.Environment;
-import org.bukkit.WorldCreator;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
@@ -26,12 +24,13 @@ import net.noobsters.core.paper.PERMADED;
 
 @RequiredArgsConstructor
 @CommandPermission("dedsafio.cmd")
-@CommandAlias("dedsafio")
+@CommandAlias("dedsafio|ded")
 public class permadedCMD extends BaseCommand {
 
     private @NonNull PERMADED instance;
 
     @Subcommand("difficulty")
+    @CommandAlias("difficulty")
     public void difficultyChange(CommandSender sender, String change, boolean bool) {
         var difficulty = instance.getGame().getDifficultyChanges();
         if(!difficulty.containsKey(change)){
@@ -41,7 +40,20 @@ public class permadedCMD extends BaseCommand {
         sender.sendMessage(ChatColor.GREEN + "Difficulty change " + change + " set to " + bool);
     }
 
+    @Subcommand("zombiePlayer")
+    @CommandAlias("zombiePlayer")
+    public void zombiePlayer(CommandSender sender, String player, boolean bool) {
+        var players = instance.getGame().getDeathPlayers();
+        if(!players.containsKey(player)){
+            sender.sendMessage(ChatColor.RED + "Player change doesn't exist.");
+        }
+        players.put(player, bool);
+        sender.sendMessage(ChatColor.GREEN + "Player zombie " + player + " set to " + bool);
+    }
+
+
     @Subcommand("gulag")
+    @CommandAlias("gulag")
     public void gulag(CommandSender sender) {
         var game = instance.getGame();
         var bool = !game.isGulak();
@@ -50,43 +62,42 @@ public class permadedCMD extends BaseCommand {
     }
 
     @Subcommand("difficulty-list")
+    @CommandAlias("difficulty-list")
     public void difList(CommandSender sender) {
         var game = instance.getGame();
         sender.sendMessage(ChatColor.AQUA + "LIST: " + game.getDifficultyChanges().toString());
     }
 
     @Subcommand("resistance")
+    @CommandAlias("resistance")
     public void resistanceChange(CommandSender sender, int change) {
         instance.getGame().setMobResistance(change);
         sender.sendMessage(ChatColor.GREEN + "Resistance set to " + change);
     }
 
     @Subcommand("damage")
+    @CommandAlias("damage")
     public void damageChange(CommandSender sender, int change) {
         instance.getGame().setDamageAmplifier(change);
         sender.sendMessage(ChatColor.GREEN + "Damage amplifier set to " + change);
     }
     @Subcommand("spawn-patrol-delay")
+    @CommandAlias("spawn-patrol-delay")
     public void patrol(CommandSender sender, int change) {
         instance.getGame().setSpawnPatrolDelay(change);
         sender.sendMessage(ChatColor.GREEN + "Spawn patrol delay set to " + change);
     }
 
-    @Subcommand("death-clown-world")
-    public void deathClownWorld(CommandSender sender) {
-        WorldCreator arenaWorld = new WorldCreator("PERMADED");
-        arenaWorld.environment(Environment.NORMAL);
-        arenaWorld.createWorld();
-    }
-
-    @Subcommand("final-fantasy")
-    public void music(Player sender) {
+    @Subcommand("music")
+    @CommandAlias("music")
+    public void music(Player sender, String music) {
         var loc = sender.getLocation();
-        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:final_fantasy master @a " + loc.getX()
-                        + " " + loc.getY() + " " + loc.getZ() + " 6 1");
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:" + music + " master @a " + loc.getX()
+                        + " " + loc.getY() + " " + loc.getZ() + " 0.3 1");
     }
 
     @Subcommand("redstone")
+    @CommandAlias("redstone")
     public void disguise(Player sender) {
 
         var name = "&4Redstone Monstrosity";

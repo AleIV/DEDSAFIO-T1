@@ -32,7 +32,7 @@ public class Demons implements Listener{
     public void demons(CreatureSpawnEvent e) {
         var entity =  e.getEntity();
         var difficulty = instance.getGame().getDifficultyChanges();
-        if (entity instanceof Vex) {
+        if (entity instanceof Vex && difficulty.get("mages")) {
             var spirit = (Vex) entity;
             spirit.setCustomName(ChatColor.DARK_PURPLE + "Spirit");
 
