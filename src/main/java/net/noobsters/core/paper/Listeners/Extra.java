@@ -6,8 +6,11 @@ import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -60,7 +63,24 @@ public class Extra implements Listener {
             });
 
         });
+    }
 
+    @EventHandler
+    public void onAttack(EntityDamageByEntityEvent e){
+        var damager = e.getDamager();
+        
+        if(damager instanceof Player){
+            var player = (Player) damager;
+            var item = player.getEquipment().getItemInMainHand();
+            var meta = item;
+            var entity = e.getEntity();
+            if(item != null && item.getItemMeta().hasCustomModelData() && !entity.isDead()){
+                var living = (LivingEntity) entity;
+                if(meta.getItemMeta().getCustomModelData() == 90){
+                    living.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 20*5, 0));
+                }
+            }
+        }
     }
 
     

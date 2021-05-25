@@ -42,7 +42,7 @@ public class Game extends BukkitRunnable{
         difficultyChanges.put("raids", false);
 
         difficultyChanges.put("redstone", false);
-        difficultyChanges.put("meteor", false);
+        difficultyChanges.put("meteor", true);
 
         difficultyChanges.put("lava", false);
 
