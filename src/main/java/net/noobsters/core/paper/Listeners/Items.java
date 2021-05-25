@@ -13,10 +13,14 @@ import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
+import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.entity.VillagerAcquireTradeEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.PrepareSmithingEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.EquipmentSlot;
@@ -27,6 +31,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import fr.mrmicky.fastinv.ItemBuilder;
 import net.md_5.bungee.api.ChatColor;
 import net.noobsters.core.paper.PERMADED;
 
@@ -55,6 +60,46 @@ public class Items implements Listener {
         Bukkit.addRecipe(leggings);
         Bukkit.addRecipe(boots);
 
+    }
+
+    @EventHandler
+    public void onDrop(ItemSpawnEvent e){
+        var item = e.getEntity().getItemStack();
+        if(item.getType() == Material.ARMOR_STAND){
+            e.setCancelled(true);
+        }else if(item.getType() == Material.NAME_TAG){
+            e.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onOpenChest(InventoryOpenEvent e){
+        if(e.getInventory().getType().toString().equals("CHEST")){
+            var items = e.getInventory().getContents();
+            for (int i = 0; i < items.length; i++) {
+                if(items[i] != null && items[i].getType() == Material.NAME_TAG){
+                    items[i].setType(Material.DIAMOND);
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onTrade(VillagerAcquireTradeEvent e){
+        if(e.getRecipe().getResult().getType() == Material.NAME_TAG){
+            e.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void redstoneAmulet(BlockBreakEvent e){
+        var difficulty = instance.getGame().getDifficultyChanges();
+        var block = e.getBlock();
+        if(difficulty.get("redstone") && block.getType() == Material.REDSTONE_BLOCK){
+            e.setDropItems(false);
+            var item = new ItemBuilder(Material.RABBIT_FOOT).name(ChatColor.DARK_RED + "Redstone Amulet").meta(ItemMeta.class, meta -> meta.setCustomModelData(142)).build();
+            block.getWorld().dropItemNaturally(block.getLocation(), item);
+        }
     }
 
     @EventHandler
@@ -279,7 +324,7 @@ public class Items implements Listener {
             e.getProjectile().setCustomName("blue orb");
             var loc = e.getEntity().getLocation();
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:magic_1 master @a " + loc.getX()
-                    + " " + loc.getY() + " " + loc.getZ() + " 1 1");
+                    + " " + loc.getY() + " " + loc.getZ() + " 0.3 1");
 
         }else if (bow.getCustomModelData() == 108) {
             //rifle

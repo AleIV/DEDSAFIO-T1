@@ -15,6 +15,7 @@ import org.bukkit.potion.PotionEffectType;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.CommandPermission;
+import co.aikar.commands.annotation.Flags;
 import co.aikar.commands.annotation.Subcommand;
 import fr.mrmicky.fastinv.ItemBuilder;
 import lombok.NonNull;
@@ -30,7 +31,6 @@ public class permadedCMD extends BaseCommand {
     private @NonNull PERMADED instance;
 
     @Subcommand("difficulty")
-    @CommandAlias("difficulty")
     public void difficultyChange(CommandSender sender, String change, boolean bool) {
         var difficulty = instance.getGame().getDifficultyChanges();
         if(!difficulty.containsKey(change)){
@@ -49,6 +49,21 @@ public class permadedCMD extends BaseCommand {
         }
         players.put(player, bool);
         sender.sendMessage(ChatColor.GREEN + "Player zombie " + player + " set to " + bool);
+    }
+
+    @Subcommand("pvp-on")
+    @CommandAlias("pvp-on")
+    public void pvp(CommandSender sender, @Flags("other") Player player, boolean bool) {
+        var pvp = instance.getGame().getPvpOn();
+        
+        if(bool){
+            pvp.add(player.getUniqueId().toString());
+            sender.sendMessage(ChatColor.GREEN + "PvP " + player + " set to " + bool);
+        }else{
+            pvp.remove(player.getUniqueId().toString());
+            sender.sendMessage(ChatColor.RED + "PvP " + player + " set to " + bool);
+        }
+
     }
 
 
@@ -94,6 +109,18 @@ public class permadedCMD extends BaseCommand {
         var loc = sender.getLocation();
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:" + music + " master @a " + loc.getX()
                         + " " + loc.getY() + " " + loc.getZ() + " 0.3 1");
+        sender.sendMessage(ChatColor.AQUA + "Music played");
+    }
+
+    @Subcommand("summon")
+    public void summon(Player sender, EntityType entity, String summon) {
+        var loc = sender.getLocation();
+        var mob = sender.getWorld().spawnEntity(loc, entity);
+        Bukkit.getScheduler().runTaskLater(instance, task ->{
+            mob.setCustomName(summon);
+        }, 2);
+        
+        sender.sendMessage(ChatColor.AQUA + "Summoned " + summon);
     }
 
     @Subcommand("redstone")

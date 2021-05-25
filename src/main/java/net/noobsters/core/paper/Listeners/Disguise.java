@@ -22,7 +22,6 @@ import org.bukkit.event.player.PlayerVelocityEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import fr.mrmicky.fastinv.ItemBuilder;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.events.UndisguiseEvent;
 import net.md_5.bungee.api.ChatColor;
@@ -48,13 +47,6 @@ public class Disguise implements Listener {
             if (killer != null && killer instanceof Player && disguise.getDisguiseName().contains("Redstone")) {
                 e.setDeathMessage(ChatColor.DARK_RED + "Redstone Monstrosity " + ChatColor.WHITE + "was destroyed by "
                         + killer.getName().toString());
-
-                var amulet = new ItemBuilder(Material.RABBIT_FOOT).name(ChatColor.DARK_RED + "Redstone Amulet").build();
-                var meta = amulet.getItemMeta();
-                meta.setCustomModelData(142);
-                amulet.setItemMeta(meta);
-
-                e.getDrops().add(amulet);
             }
             player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(20.0);
             player.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0);
@@ -193,6 +185,8 @@ public class Disguise implements Listener {
                     || cause == DamageCause.LAVA || cause == DamageCause.FIRE || cause == DamageCause.FIRE_TICK
                     || cause == DamageCause.ENTITY_EXPLOSION || cause == DamageCause.BLOCK_EXPLOSION
                     || cause == DamageCause.HOT_FLOOR || cause == DamageCause.WITHER) {
+                e.setCancelled(true);
+            }else if(cause == DamageCause.FALL){
                 e.setCancelled(true);
             }
         }

@@ -125,6 +125,9 @@ public class DedsafioListener implements Listener {
                 }
             }
             if (p2 != null) {
+                var pvp = instance.getGame().getPvpOn();
+
+                if(pvp.contains(p1.getUniqueId().toString()) && pvp.contains(p2.getUniqueId().toString())) return;
                 if(p1.getUniqueId().toString() == p2.getUniqueId().toString()) return;
 
                 if(!p1.hasPermission("mod.perm") && p2.getGameMode() == GameMode.SURVIVAL && !p2.hasPermission("mod.perm")){

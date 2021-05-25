@@ -29,14 +29,13 @@ public class PERMADED extends JavaPlugin {
     listenerManager = new ListenerManager(this);
     game = new Game(this);
 
-    
     game.runTaskTimerAsynchronously(this, 0L, 20L);
-        
-    //commands
+
+    // commands
     commandManager.registerCommand(new worldCMD(this));
     commandManager.registerCommand(new permadedCMD(this));
 
-    Bukkit.getScheduler().runTaskLater(this, task ->{
+    Bukkit.getScheduler().runTaskLater(this, task -> {
       WorldCreator arenaWorld = new WorldCreator("FINALFIGHT");
       arenaWorld.environment(Environment.NORMAL);
       arenaWorld.createWorld();
@@ -48,13 +47,20 @@ public class PERMADED extends JavaPlugin {
       WorldCreator extra = new WorldCreator("EXTRA");
       extra.environment(Environment.NORMAL);
       extra.createWorld();
-    }, 20*10);
 
-    }
-
-    @Override
-    public void onDisable() {
+      Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "scoreboard objectives add health_tab health");
+      Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "scoreboard objectives setdisplay list health_tab");
+      Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "scoreboard objectives modify health_tab rendertype integer");
+  
+      Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "scoreboard objectives setdisplay list health_name");
+      
+    }, 20 * 10);
 
   }
-    
+
+  @Override
+  public void onDisable() {
+
+  }
+
 }

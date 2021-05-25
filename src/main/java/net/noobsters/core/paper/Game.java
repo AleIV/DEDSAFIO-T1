@@ -1,8 +1,11 @@
 package net.noobsters.core.paper;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import lombok.Data;
@@ -13,35 +16,35 @@ import lombok.EqualsAndHashCode;
 public class Game extends BukkitRunnable{
     PERMADED instance;
     int spawnPatrolDelay = 600;
-    int damageAmplifier = 1;
-    int mobResistance = 0;
+    int damageAmplifier = 3;
+    int mobResistance = 40;
     HashMap<String, Boolean> difficultyChanges = new HashMap<>();
     HashMap<String, Boolean> deathPlayers = new HashMap<>();
+    List<String> pvpOn = new ArrayList<>();
+    List<Location> meteors = new ArrayList<>();
     boolean gulak = true;
 
     long gameTime = 0;
     long startTime = 0;
     
-    
-
     public Game(PERMADED instance) {
         this.instance = instance;
         this.startTime = System.currentTimeMillis();
 
-        difficultyChanges.put("zombies", false);
-        difficultyChanges.put("spiders", false);
-        difficultyChanges.put("skeletons", false);
-        difficultyChanges.put("pigs", false);
-        difficultyChanges.put("raiders", false);
-        difficultyChanges.put("mages", false);
+        difficultyChanges.put("zombies", true);
+        difficultyChanges.put("spiders", true);
+        difficultyChanges.put("skeletons", true);
+        difficultyChanges.put("pigs", true);
+        difficultyChanges.put("raiders", true);
+        difficultyChanges.put("mages", true);
         difficultyChanges.put("demons", false);
         difficultyChanges.put("creepers", false);
         difficultyChanges.put("raids", false);
 
         difficultyChanges.put("redstone", false);
+        difficultyChanges.put("meteor", false);
 
         difficultyChanges.put("lava", false);
-
 
         deathPlayers.put("0PHY", false);
         deathPlayers.put("Hasvik", false);
@@ -88,7 +91,11 @@ public class Game extends BukkitRunnable{
         deathPlayers.put("AgarioObsession", false);
         deathPlayers.put("Zilverk", false);
         deathPlayers.put("SoyBarcaGamer", false);
-
+        deathPlayers.put("Duxorethey", false);
+        deathPlayers.put("Leyville", false);
+        deathPlayers.put("D3stri", false);
+        deathPlayers.put("AkimCraft24", false);
+        deathPlayers.put("Nonigamer", false);
 
     }
 

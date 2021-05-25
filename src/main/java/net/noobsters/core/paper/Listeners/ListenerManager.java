@@ -12,16 +12,17 @@ public class ListenerManager {
     public ListenerManager(PERMADED instance) {
         this.instance = instance;
     
-        Bukkit.getPluginManager().registerEvents(new GlobalListeners(instance), instance);
-        Bukkit.getPluginManager().registerEvents(new Animals(instance), instance);
-        Bukkit.getPluginManager().registerEvents(new Raiders(instance), instance);
-        Bukkit.getPluginManager().registerEvents(new Monsters(instance), instance);
-        Bukkit.getPluginManager().registerEvents(new UnDead(instance), instance);
-        Bukkit.getPluginManager().registerEvents(new Demons(instance), instance);
-        Bukkit.getPluginManager().registerEvents(new Items(instance), instance);
-        Bukkit.getPluginManager().registerEvents(new MiniBosses(instance), instance);
-        Bukkit.getPluginManager().registerEvents(new Disguise(instance), instance);
-        Bukkit.getPluginManager().registerEvents(new DedsafioListener(instance), instance);
+        registerListener(new GlobalListeners(instance));
+        registerListener(new Animals(instance));
+        registerListener(new Raiders(instance));
+        registerListener(new Monsters(instance));
+        registerListener(new UnDead(instance));
+        registerListener(new Demons(instance));
+        registerListener(new Items(instance));
+        registerListener(new MiniBosses(instance));
+        registerListener(new Disguise(instance));
+        registerListener(new DedsafioListener(instance));
+        registerListener(new Extra(instance));
 
 
     }

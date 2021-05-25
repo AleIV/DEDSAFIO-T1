@@ -35,7 +35,7 @@ public class worldCMD extends BaseCommand {
     @CommandAlias("respawn")
     public void respawn(Player sender) {
         sender.teleport(new Location(Bukkit.getWorld("world"), 0, 92, 0));
-        Bukkit.broadcastMessage(ChatColor.ALL_CODES + sender.getName() + " respawned!");
+        Bukkit.broadcastMessage(ChatColor.GOLD + sender.getName() + " respawned!");
         sender.setGameMode(GameMode.SURVIVAL);
     }
 

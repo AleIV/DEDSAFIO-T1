@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
@@ -53,19 +54,23 @@ public class Animals implements Listener {
 
         }else if(difficulty.get("pigs") && entity.getType() == EntityType.ZOMBIFIED_PIGLIN){
 
+            //TODO: more diff
             if(random.nextInt(20) == 1){
                 e.setCancelled(true);
                 entity.getWorld().spawnEntity(entity.getLocation(), EntityType.PIG);
 
-            }else if(difficulty.get("demons")){
+            }else if(difficulty.get("demons") && random.nextInt(20) == 1){
+                e.setCancelled(true);
+                entity.getWorld().spawnEntity(entity.getLocation(), EntityType.BLAZE);
+                
+            }else if(entity.getWorld() != Bukkit.getWorld("world")){
+                e.setCancelled(true);
 
-                if(random.nextInt(20) == 1){
-                    e.setCancelled(true);
-                    entity.getWorld().spawnEntity(entity.getLocation(), EntityType.BLAZE);
-                }else{
-                    e.setCancelled(true);
-                }
+            }else{
+                e.setCancelled(true);
+                entity.getWorld().spawnEntity(entity.getLocation(), EntityType.PIG);
             }
+
         }else if(difficulty.get("raiders") && entity instanceof Cow){
 
             if(random.nextInt(5) != 1){
@@ -188,8 +193,11 @@ public class Animals implements Listener {
         if (entity.getCustomName() != null && entity.getCustomName().toString().contains("Muddy")) {
             e.getDrops().forEach(drop -> drop.setType(Material.AIR));
             e.getDrops().add(new ItemStack(Material.ENCHANTED_GOLDEN_APPLE));
+
         }else if(entity.getCustomName() != null && entity.getCustomName().toString().contains("loom")){
             e.getDrops().forEach(drop -> drop.setType(Material.AIR));
+
+            entity.getWorld().dropItemNaturally(entity.getLocation(), new ItemStack(Material.TOTEM_OF_UNDYING));
         }
 
     }

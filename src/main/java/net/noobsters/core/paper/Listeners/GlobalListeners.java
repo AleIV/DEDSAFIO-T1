@@ -18,9 +18,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityShootBowEvent;
-import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
@@ -71,6 +72,16 @@ public class GlobalListeners implements Listener{
         if(difficulty.get("lava") && cause == DamageCause.LAVA){
             e.setDamage(e.getDamage()*damage);
         }
+
+    }
+
+    @EventHandler
+    public void onDamage(PlayerDeathEvent e){
+        var cause = e.getEntity().getLastDamageCause().getCause();
+
+        if(cause == DamageCause.CUSTOM || cause == DamageCause.WITHER){
+            e.setDeathMessage(e.getEntity().getName() + " died from radiation");
+        }
     }
 
     @EventHandler
@@ -84,6 +95,7 @@ public class GlobalListeners implements Listener{
                 proj.setCustomName("Meteor");
 
                 var armorStand = (ArmorStand) player.getWorld().spawnEntity(player.getLocation(), EntityType.ARMOR_STAND);
+                armorStand.setCustomName("Meteor");
                 armorStand.setInvisible(true);
                 armorStand.setGlowing(true);
                 var meteor = new ItemStack(Material.WOODEN_HOE);
@@ -109,6 +121,7 @@ public class GlobalListeners implements Listener{
         var entity = e.getHitEntity();
         var block = e.getHitBlock();
         var projectile = e.getEntity();
+        var meteors = instance.getGame().getMeteors();
         if(projectile.getCustomName() != null && projectile.getCustomName().toString().contains("Meteor")){
             if(entity != null){
                 var loc = entity.getLocation();
@@ -118,6 +131,7 @@ public class GlobalListeners implements Listener{
                 entity.getWorld().strikeLightning(entity.getLocation());
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:meteorito_impacto master @a " + loc.getX()
                         + " " + loc.getY() + " " + loc.getZ() + " 100000 1");
+                meteors.add(loc);
             }else if(block != null){
                 var loc = block.getLocation();
                 loc.add(0, -10, 0).createExplosion(100, true);
@@ -126,6 +140,7 @@ public class GlobalListeners implements Listener{
                 block.getWorld().strikeLightning(block.getLocation());
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:meteorito_impacto master @a " + loc.getX()
                         + " " + loc.getY() + " " + loc.getZ() + " 100000 1");
+                meteors.add(loc);
             }
         }
     }

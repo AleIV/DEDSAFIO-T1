@@ -59,34 +59,22 @@ public class Demons implements Listener{
         }else if(difficulty.get("demons") && entity instanceof Enderman){
             var enderman = (Enderman) entity;
             enderman.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20 * 600, 1));
-            switch (random.nextInt(7)) {
+            switch (random.nextInt(4)) {
                 case 1:{
                     enderman.setCustomName(ChatColor.DARK_PURPLE + "Corrupted Demon");
                 }
                     break;
                 case 2:{
-                    enderman.setCustomName(ChatColor.DARK_PURPLE + "Horned Demon");
+                    enderman.setCustomName(ChatColor.DARK_PURPLE + "Old Demon");
                 }
                     break;
                 case 3:{
                     enderman.setCustomName(ChatColor.DARK_PURPLE + "Demon");
                 }
                     break;
-                case 4:{
-                    enderman.setCustomName(ChatColor.DARK_PURPLE + "Old Demon");
-                }
-                    break;
-                case 5:{
-                    enderman.setCustomName(ChatColor.DARK_PURPLE + "Wights");
-                }
-                    break;
-                case 6:{
-                    enderman.setCustomName(ChatColor.DARK_PURPLE + "Ghost");
-                }
-                    break;
             
                 default:{
-                    enderman.setCustomName(ChatColor.DARK_PURPLE + "Wendigo");
+                    enderman.setCustomName(ChatColor.DARK_PURPLE + "Ghost");
                 }
                     break;
             }
