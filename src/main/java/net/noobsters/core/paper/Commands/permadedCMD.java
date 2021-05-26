@@ -7,6 +7,7 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Horse;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -173,7 +174,7 @@ public class permadedCMD extends BaseCommand {
         sender.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(60.0);
         sender.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(60.0);
         sender.setHealth(60);
-        sender.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 100000, 14, false, false));
+        sender.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 100000, 5, false, false));
         sender.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100000, 3, false, false));
 
         sender.setGameMode(GameMode.SURVIVAL);
@@ -190,5 +191,30 @@ public class permadedCMD extends BaseCommand {
 
         sender.sendMessage(ChatColor.GOLD + "Disquised as " + name);
     }
+
+    @Subcommand("car")
+    public void disguiseCustom(Player sender, String name) {
+
+        var horse = (Horse) sender.getWorld().spawnEntity(sender.getLocation(), EntityType.HORSE);
+
+        horse.setCustomName(ChatColor.LIGHT_PURPLE + name);
+
+        horse.clearLootTable();
+        horse.setAdult();
+        horse.setJumpStrength(1);
+        horse.setDomestication(horse.getMaxDomestication());
+        horse.setSilent(true);
+        horse.setAI(false);
+        horse.getInventory().setSaddle(new ItemStack(Material.SADDLE));
+
+        horse.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(40);
+        horse.setHealth(40);
+
+        horse.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * 10000, 7));
+
+        sender.sendMessage(ChatColor.BLUE + "New car " + name);
+    }
+
+
 
 }

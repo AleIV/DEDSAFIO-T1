@@ -12,6 +12,8 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Cow;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Horse;
+import org.bukkit.entity.MushroomCow;
 import org.bukkit.entity.Pig;
 import org.bukkit.entity.Piglin;
 import org.bukkit.event.EventHandler;
@@ -44,7 +46,7 @@ public class Animals implements Listener {
         
         if (difficulty.get("pigs") && entity instanceof Pig) {
 
-            if (random.nextInt(20) == 1) {
+            if (random.nextInt(30) == 1) {
                 var pig = (Pig) entity;
                 pig.setCustomName(ChatColor.AQUA + "Muddy Pig");
             } else {
@@ -71,14 +73,15 @@ public class Animals implements Listener {
                 entity.getWorld().spawnEntity(entity.getLocation(), EntityType.PIG);
             }
 
-        }else if(difficulty.get("raiders") && entity instanceof Cow){
+        }else if(difficulty.get("raiders") && entity instanceof Cow || entity instanceof MushroomCow){
 
-            if(random.nextInt(5) != 1){
-                e.setCancelled(true);
-                entity.getWorld().spawnEntity(entity.getLocation(), EntityType.PILLAGER);
-            }else{
+            if(random.nextInt(30) == 1){
                 var cow = (Cow) entity;
                 cow.setCustomName(ChatColor.AQUA + "Moobloom");
+                
+            }else{
+                e.setCancelled(true);
+                entity.getWorld().spawnEntity(entity.getLocation(), EntityType.PILLAGER);
             }
 
         } else if (difficulty.get("pigs") && entity instanceof Piglin) {
@@ -198,6 +201,10 @@ public class Animals implements Listener {
             e.getDrops().forEach(drop -> drop.setType(Material.AIR));
 
             entity.getWorld().dropItemNaturally(entity.getLocation(), new ItemStack(Material.TOTEM_OF_UNDYING));
+
+        }else if(entity instanceof Horse && entity.getCustomName() != null && entity.isSilent()){
+            e.getDrops().forEach(drop -> drop.setType(Material.AIR));
+            //TODO:ANIMATION DEATH SOUND
         }
 
     }

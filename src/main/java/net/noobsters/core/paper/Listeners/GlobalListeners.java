@@ -10,6 +10,7 @@ import org.bukkit.World.Environment;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Hoglin;
+import org.bukkit.entity.Horse;
 import org.bukkit.entity.Pillager;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -65,13 +66,32 @@ public class GlobalListeners implements Listener{
 
     @EventHandler
     public void onDamage(EntityDamageEvent e){
+        var entity = e.getEntity();
         var cause = e.getCause();
         var damage = instance.getGame().getDamageAmplifier();
         var difficulty = instance.getGame().getDifficultyChanges();
+        var loc = entity.getLocation();
+        
+        if(entity instanceof Horse && entity.getCustomName() != null){
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:block.anvil.land master @a " + loc.getX()
+                        + " " + loc.getY() + " " + loc.getZ() + " 0.5 1");
+        } 
 
         if(difficulty.get("lava") && cause == DamageCause.LAVA){
             e.setDamage(e.getDamage()*damage);
         }
+
+        if(entity instanceof Horse && entity.getCustomName() != null && cause == DamageCause.FALL){
+            e.setCancelled(true);
+        }
+
+        if(entity instanceof Player && entity.getVehicle() != null){
+            var vehicle = entity.getVehicle();
+            if(vehicle instanceof Horse && vehicle.getCustomName() != null && cause == DamageCause.FALL){
+                e.setCancelled(true);
+            }
+        }
+
 
     }
 
@@ -150,6 +170,7 @@ public class GlobalListeners implements Listener{
         var damager = e.getDamager();
         var entity = e.getEntity();
         var damageAmplifier = instance.getGame().getDamageAmplifier();
+
         if(damager instanceof Player) return;
 
         if(damager instanceof Projectile){
@@ -184,7 +205,7 @@ public class GlobalListeners implements Listener{
         if(damager.getCustomName() != null){
             e.setDamage(e.getDamage()*damageAmplifier);
 
-        }
+        }  
 
     }
 

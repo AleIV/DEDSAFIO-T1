@@ -19,6 +19,7 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerVelocityEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -44,6 +45,8 @@ public class Disguise implements Listener {
             var disguise = DisguiseAPI.getDisguise(player);
             e.setDeathMessage("");
             e.getDrops().forEach(drop -> drop.setType(Material.AIR));
+            e.getDrops().add(new ItemStack(Material.WOODEN_PICKAXE));
+
             if (killer != null && killer instanceof Player && disguise.getDisguiseName().contains("Redstone")) {
                 e.setDeathMessage(ChatColor.DARK_RED + "Redstone Monstrosity " + ChatColor.WHITE + "was destroyed by "
                         + killer.getName().toString());
@@ -51,6 +54,10 @@ public class Disguise implements Listener {
             player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(20.0);
             player.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0);
             player.setGameMode(GameMode.SPECTATOR);
+            
+            var loc = player.getLocation();
+
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "particle minecraft:campfire_signal_smoke " + loc.getX() + " " + loc.getY() + " " + loc.getZ() + " .1 .1 .1 .1 50 force");
 
         } else if (killer != null && killer instanceof Player && DisguiseAPI.isDisguised(killer)) {
             e.setDeathMessage(player.getName().toString() + " was tricked by artificial intelligence");

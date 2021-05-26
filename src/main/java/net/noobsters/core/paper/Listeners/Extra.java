@@ -6,11 +6,8 @@ import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -32,7 +29,7 @@ public class Extra implements Listener {
         var difficulty = instance.getGame().getDifficultyChanges();
         Bukkit.getScheduler().runTask(instance, () -> {
             if(difficulty.get("meteor")){
-                meteorRefresh();
+                playersRefresh();
             }
 
         });
@@ -50,7 +47,7 @@ public class Extra implements Listener {
         return (float) Math.abs(Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(z2 - z1, 2)));
     }
 
-    public void meteorRefresh() {
+    public void playersRefresh() {
         
         Bukkit.getOnlinePlayers().parallelStream().filter(player-> player.getWorld() == Bukkit.getWorld("world")).forEach(player -> {
 
@@ -62,25 +59,22 @@ public class Extra implements Listener {
                 player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 20, 1));
             });
 
-        });
-    }
+            var equip = player.getEquipment();
+            var helmet = equip.getHelmet();
+            var chest = equip.getChestplate();
+            var legs = equip.getLeggings();
+            var boots = equip.getBoots();
 
-    @EventHandler
-    public void onAttack(EntityDamageByEntityEvent e){
-        var damager = e.getDamager();
-        
-        if(damager instanceof Player){
-            var player = (Player) damager;
-            var item = player.getEquipment().getItemInMainHand();
-            var meta = item;
-            var entity = e.getEntity();
-            if(item != null && item.getItemMeta().hasCustomModelData() && !entity.isDead()){
-                var living = (LivingEntity) entity;
-                if(meta.getItemMeta().getCustomModelData() == 90){
-                    living.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 20*5, 0));
-                }
+            if(helmet != null && helmet.getType().toString().contains("GOLD")
+                || chest != null && chest.getType().toString().contains("GOLD")
+                    || legs != null && legs.getType().toString().contains("GOLD")
+                        || boots != null && boots.getType().toString().contains("GOLD")){
+                player.damage(2);
+                player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 20, 1));
             }
-        }
+            
+
+        });
     }
 
     

@@ -12,14 +12,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Vex;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
-import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import fr.mrmicky.fastinv.ItemBuilder;
 import net.md_5.bungee.api.ChatColor;
 import net.noobsters.core.paper.PERMADED;
 
@@ -37,8 +38,28 @@ public class MiniBosses implements Listener {
         if (e.getEntity() instanceof EnderDragon) {
             var dragon = (EnderDragon) e.getEntity();
             dragon.setCustomName(ChatColor.YELLOW + "Blood Ender Dragon");
+            dragon.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100000, 1, false, false));
         }
 
+    }
+
+    @EventHandler
+    public void scaleBlock(BlockBreakEvent e){
+        var block = e.getBlock();
+        if(block.getType() == Material.STRUCTURE_VOID){
+            var item = new ItemBuilder(Material.RABBIT_FOOT).name(ChatColor.RED + "Blood Scale").meta(ItemMeta.class, meta -> meta.setCustomModelData(143)).build();
+
+            block.getWorld().dropItemNaturally(block.getLocation(), item);
+        }
+    }
+
+    @EventHandler
+    public void onDamage(EntityDamageEvent e){
+        var entity = e.getEntity();
+        var cause = e.getCause();
+        if(entity instanceof EnderDragon && cause == DamageCause.BLOCK_EXPLOSION || cause == DamageCause.ENTITY_EXPLOSION){
+            e.setCancelled(true);
+        }
     }
 
     @EventHandler
@@ -71,20 +92,6 @@ public class MiniBosses implements Listener {
                 EntityType.VEX);
         cloud.getWorld().spawnEntity(cloud.getLocation().add(chooseCoord(5), 2, chooseCoord(5)),
                 EntityType.VEX);
-    }
-
-    @EventHandler
-    public void bossDeath(EntityDeathEvent e) {
-        var entity = e.getEntity();
-        if (entity instanceof EnderDragon) {
-            var bloodScale = new ItemStack(Material.RABBIT_FOOT, random.nextInt(10)+1);
-            var bloodScaleMeta = bloodScale.getItemMeta();
-            bloodScaleMeta.setDisplayName(ChatColor.RED + "Blood Scale");
-            bloodScaleMeta.setCustomModelData(143);
-            bloodScale.setItemMeta(bloodScaleMeta);
-            e.getDrops().add(bloodScale);
-        }
-
     }
 
     @EventHandler
