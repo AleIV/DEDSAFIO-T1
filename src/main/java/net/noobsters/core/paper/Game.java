@@ -15,8 +15,8 @@ import lombok.EqualsAndHashCode;
 public class Game extends BukkitRunnable{
     PERMADED instance;
     int spawnPatrolDelay = 600;
-    int damageAmplifier = 2;
-    int mobResistance = 40;
+    int damageAmplifier = 1;
+    int mobResistance = 0;
     HashMap<String, Boolean> difficultyChanges = new HashMap<>();
     HashMap<String, Boolean> deathPlayers = new HashMap<>();
     List<String> pvpOn = new ArrayList<>();
@@ -29,18 +29,18 @@ public class Game extends BukkitRunnable{
         this.instance = instance;
         this.startTime = System.currentTimeMillis();
 
-        difficultyChanges.put("zombies", true);
-        difficultyChanges.put("spiders", true);
-        difficultyChanges.put("skeletons", true);
-        difficultyChanges.put("pigs", true);
-        difficultyChanges.put("raiders", true);
-        difficultyChanges.put("mages", true);
+        difficultyChanges.put("zombies", false);
+        difficultyChanges.put("spiders", false);
+        difficultyChanges.put("skeletons", false);
+        difficultyChanges.put("pigs", false);
+        difficultyChanges.put("raiders", false);
+        difficultyChanges.put("mages", false);
         difficultyChanges.put("demons", false);
         difficultyChanges.put("creepers", false);
         difficultyChanges.put("raids", false);
 
         difficultyChanges.put("redstone", false);
-        difficultyChanges.put("meteor", true);
+        difficultyChanges.put("meteor", false);
 
         difficultyChanges.put("lava", false);
 
@@ -80,7 +80,6 @@ public class Game extends BukkitRunnable{
         deathPlayers.put("Rubynavx", false);
         deathPlayers.put("Mariemoone", false);
         deathPlayers.put("notneekolul", false);
-        deathPlayers.put("Juanjuegajuegos", false);
         deathPlayers.put("Renooxx", false);
         deathPlayers.put("xNephtunie", false);
         deathPlayers.put("Charliitoss", false);

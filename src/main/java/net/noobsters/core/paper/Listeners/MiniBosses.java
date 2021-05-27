@@ -67,14 +67,14 @@ public class MiniBosses implements Listener {
         }
     }
 
-    @EventHandler
+    /*@EventHandler
     public void onDamage(EntityDamageEvent e){
         var entity = e.getEntity();
         var cause = e.getCause();
         if(entity instanceof EnderDragon && cause == DamageCause.BLOCK_EXPLOSION || cause == DamageCause.ENTITY_EXPLOSION){
             e.setCancelled(true);
         }
-    }
+    }*/
 
     @EventHandler
     public void onFireBall(EnderDragonFireballHitEvent e) {

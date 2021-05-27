@@ -46,14 +46,6 @@ public class PERMADED extends JavaPlugin {
       arenaWorld.environment(Environment.NORMAL);
       arenaWorld.createWorld();
 
-      WorldCreator dungeon = new WorldCreator("DUNGEON");
-      dungeon.environment(Environment.NORMAL);
-      dungeon.createWorld();
-
-      WorldCreator extra = new WorldCreator("EXTRA");
-      extra.environment(Environment.NORMAL);
-      extra.createWorld();
-
       Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "scoreboard objectives add health_tab health");
       Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "scoreboard objectives setdisplay list health_tab");
       Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "scoreboard objectives modify health_tab rendertype integer");

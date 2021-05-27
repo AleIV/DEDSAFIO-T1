@@ -48,19 +48,20 @@ public class GlobalListeners implements Listener{
          ChatColor.GREEN + "2. Pega el archivo en el resource pack folder en la carpeta de Minecraft. \n" + 
          ChatColor.GREEN + "3. Activa el texture pack en el juego y después selecciona el lenguaje custom: 'PERMADED(NIGHTMARE)' \n";
 
+    static public String NO_TXT = ChatColor.AQUA + "Necesitas el cliente para jugar!\n ";
+
     GlobalListeners(PERMADED instance){
         this.instance = instance;
     }
-
-    /*
-    @EventHandler
+    
+    /*@EventHandler
     public void onResourcePackChange(PlayerLocaleChangeEvent e){
         var player = e.getPlayer();
-
-        if(!e.getLocale().contains("NOOBSTERS")){
-            player.kickPlayer(NO_RP_ES);
-        }else if(!e.getLocale().contains("NOOBSTERS_5")){
-            player.kickPlayer(NO_RP_ES + ChatColor.RED + "\n Hay otra actualizacion del texture pack, descarga la ultima!");
+        var locale = e.getLocale().toString();
+        if(!locale.contains("NOOBSTERS")){
+            player.kickPlayer(NO_TXT);
+        }else if(!locale.contains("NOOBSTERS")){
+            player.kickPlayer(NO_TXT + ChatColor.RED + "\n Hay otra actualizacion del texture pack, descarga la ultima!");
             
         }
     }*/

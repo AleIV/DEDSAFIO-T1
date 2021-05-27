@@ -51,8 +51,8 @@ public class DedsafioListener implements Listener {
         
         Bukkit.getOnlinePlayers().forEach(p->{
             var loc = p.getLocation();
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:" + sound + " master @a " + loc.getX()
-                        + " " + loc.getY() + " " + loc.getZ() + " 100000 1");
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:" + sound + " master "+ p.getName() + " " + loc.getX()
+                        + " " + loc.getY() + " " + loc.getZ() + " 1 1");
         });
         
         while (count < number) {
@@ -63,11 +63,8 @@ public class DedsafioListener implements Listener {
             var code = right ? (charac + "uE" + id + letter) : (charac + "uE" + letter + id);
 
             chain.delay(1).sync(() -> {
-                Bukkit.getOnlinePlayers().forEach(p->{
-                    
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title @a title {\"text\":\"" + code + "\"}");
-                    
-                });
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title @a title {\"text\":\"" + code + "\"}");
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title @a actionbar {\"text\":\"" + text + "\"}");
 
             });
             count++;
@@ -95,7 +92,7 @@ public class DedsafioListener implements Listener {
 
         if (!game.isGulak()) {
             
-            animation(ChatColor.RED + "" + e.getDeathMessage(), "muerte", "D", 90, true);
+            animation(ChatColor.DARK_RED + "" + ChatColor.BOLD + "" + e.getDeathMessage(), "muerte", "D", 90, true);
 
             Bukkit.getScheduler().runTaskLater(instance, () -> {
                 if (!player.hasPermission("mod.perm"))
@@ -104,7 +101,7 @@ public class DedsafioListener implements Listener {
 
         }else if(game.getPvpOn().contains(player.getUniqueId().toString())){
 
-            animation(ChatColor.RED + "" + e.getDeathMessage(), "fatality", "E", 55, true);
+            animation(ChatColor.DARK_RED + "" + ChatColor.BOLD + "" + e.getDeathMessage(), "fatality", "E", 55, true);
         }
 
         if (!player.hasPermission("mod.perm") && !game.isGulak()) {

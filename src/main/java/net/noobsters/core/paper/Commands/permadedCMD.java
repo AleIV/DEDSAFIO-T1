@@ -6,6 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Horse.Color;
@@ -213,9 +214,19 @@ public class permadedCMD extends BaseCommand {
         horse.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(40);
         horse.setHealth(40);
 
-        horse.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * 10000, 5));
+        horse.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * 10000, 4));
 
         sender.sendMessage(ChatColor.BLUE + "New car " + name);
+    }
+
+    @Subcommand("scale")
+    public void scaleDragon(Player sender) {
+
+        var stand = (ArmorStand) sender.getWorld().spawnEntity(sender.getLocation(), EntityType.ARMOR_STAND);
+
+        stand.setCustomName(ChatColor.RED + "Dragon Scale");
+
+        sender.sendMessage(ChatColor.BLUE + "Blood Scale ");
     }
 
 

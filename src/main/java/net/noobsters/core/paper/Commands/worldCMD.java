@@ -106,7 +106,7 @@ public class worldCMD extends BaseCommand {
                 animation("", "ruedita", ruleta, 97, false);
 
                 Bukkit.getScheduler().runTaskLater(instance, task ->{
-                    animation("", "", "2", 71, false);
+                    animation("", "mistery", "2", 73, false);
 
                 }, 97);
 
@@ -116,7 +116,7 @@ public class worldCMD extends BaseCommand {
                 animation("", "ruedita", ruleta, 97, false);
 
                 Bukkit.getScheduler().runTaskLater(instance, task ->{
-                    animation("", "", "7", 71, false);
+                    animation("", "mistery", "7", 73, false);
                     
                 }, 97);
 
@@ -126,7 +126,7 @@ public class worldCMD extends BaseCommand {
                 animation("", "ruedita", ruleta, 97, false);
 
                 Bukkit.getScheduler().runTaskLater(instance, task ->{
-                    animation("", "", "B", 71, true);
+                    animation("", "mistery", "B", 73, true);
                     
                 }, 97);
 
@@ -136,7 +136,7 @@ public class worldCMD extends BaseCommand {
                 animation("", "ruedita", ruleta, 97, false);
 
                 Bukkit.getScheduler().runTaskLater(instance, task ->{
-                    animation("", "", "5", 71, false);
+                    animation("", "mistery", "5", 73, false);
                     
                 }, 97);
 
@@ -146,7 +146,7 @@ public class worldCMD extends BaseCommand {
                 animation("", "ruedita", ruleta, 97, false);
 
                 Bukkit.getScheduler().runTaskLater(instance, task ->{
-                    animation("", "", "A", 71, true);
+                    animation("", "mistery", "A", 73, true);
                     
                 }, 97);
 
@@ -156,7 +156,7 @@ public class worldCMD extends BaseCommand {
                 animation("", "ruedita", ruleta, 97, false);
 
                 Bukkit.getScheduler().runTaskLater(instance, task ->{
-                    animation("", "", "C", 71, true);
+                    animation("", "mistery", "C", 73, true);
                     
                 }, 97);
 
@@ -166,7 +166,7 @@ public class worldCMD extends BaseCommand {
                 animation("", "ruedita", ruleta, 97, false);
 
                 Bukkit.getScheduler().runTaskLater(instance, task ->{
-                    animation("", "", "8", 71, false);
+                    animation("", "mistery", "8", 73, false);
                     
                 }, 97);
 
@@ -176,7 +176,7 @@ public class worldCMD extends BaseCommand {
                 animation("", "ruedita", ruleta, 97, false);
 
                 Bukkit.getScheduler().runTaskLater(instance, task ->{
-                    animation("", "", "9", 71, false);
+                    animation("", "mistery", "9", 73, false);
                     
                 }, 97);
 
@@ -186,17 +186,17 @@ public class worldCMD extends BaseCommand {
                 animation("", "ruedita", ruleta, 97, false);
 
                 Bukkit.getScheduler().runTaskLater(instance, task ->{
-                    animation("", "", "3", 71, false);
+                    animation("", "mistery", "3", 73, false);
                     
                 }, 97);
 
             }break;
 
-            case "MYSTERY":{
+            case "MISTERY":{
                 animation("", "ruedita", ruleta, 97, false);
 
                 Bukkit.getScheduler().runTaskLater(instance, task ->{
-                    animation("", "", "F", 61, true);
+                    animation("", "mistery", "F", 62, true);
                     
                 }, 97);
 
@@ -206,7 +206,7 @@ public class worldCMD extends BaseCommand {
                 animation("", "ruedita", ruleta, 97, false);
 
                 Bukkit.getScheduler().runTaskLater(instance, task ->{
-                    animation("", "", "A", 71, true);
+                    animation("", "mistery", "A", 73, true);
                     
                 }, 97);
 
@@ -216,7 +216,7 @@ public class worldCMD extends BaseCommand {
                 animation("", "ruedita", ruleta, 97, false);
 
                 Bukkit.getScheduler().runTaskLater(instance, task ->{
-                    animation("", "", "6", 71, false);
+                    animation("", "mistery", "6", 73, false);
                     
                 }, 97);
 
@@ -238,8 +238,8 @@ public class worldCMD extends BaseCommand {
         
         Bukkit.getOnlinePlayers().forEach(p->{
             var loc = p.getLocation();
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:" + sound + " master @a " + loc.getX()
-                        + " " + loc.getY() + " " + loc.getZ() + " 100000 1");
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:" + sound + " master " + p.getName() + " " + loc.getX()
+                        + " " + loc.getY() + " " + loc.getZ() + " 1 1");
         });
         
         while (count < number) {
@@ -250,11 +250,7 @@ public class worldCMD extends BaseCommand {
             var code = right ? (charac + "uE" + id + letter) : (charac + "uE" + letter + id);
 
             chain.delay(1).sync(() -> {
-                Bukkit.getOnlinePlayers().forEach(p->{
-                    
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title @a title {\"text\":\"" + code + "\"}");
-                    
-                });
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title @a title {\"text\":\"" + code + "\"}");
 
             });
             count++;
