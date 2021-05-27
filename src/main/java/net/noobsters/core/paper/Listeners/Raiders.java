@@ -9,7 +9,6 @@ import org.bukkit.entity.Evoker;
 import org.bukkit.entity.Illusioner;
 import org.bukkit.entity.Pillager;
 import org.bukkit.entity.Ravager;
-import org.bukkit.entity.Villager;
 import org.bukkit.entity.Vindicator;
 import org.bukkit.entity.Witch;
 import org.bukkit.event.EventHandler;
@@ -71,7 +70,7 @@ public class Raiders implements Listener {
             var ravager = (Ravager) entity;
             ravager.setCustomName(ChatColor.BLUE + "Ravager Powerful");
 
-        } else if (difficulty.get("mages") && ((entity instanceof Witch) || (entity instanceof Villager))) {
+        } else if (difficulty.get("mages") && entity instanceof Witch) {
             e.setCancelled(true);
             entity.getWorld().spawnEntity(entity.getLocation(), EntityType.EVOKER);
 

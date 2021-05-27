@@ -49,15 +49,17 @@ public class Extra implements Listener {
 
     public void playersRefresh() {
         
-        Bukkit.getOnlinePlayers().parallelStream().filter(player-> player.getWorld() == Bukkit.getWorld("world")).forEach(player -> {
+        Bukkit.getOnlinePlayers().stream().forEach(player -> {
 
             var meteors = player.getNearbyEntities(32, 100, 32).stream().filter(meteor -> 
                 meteor instanceof ArmorStand && meteor.getCustomName() != null && meteor.getCustomName().contains("Meteor")).collect(Collectors.toList());
 
-            meteors.forEach(meteor ->{
-                player.damage(2);
-                player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 20, 1));
-            });
+            if(player.getWorld() == Bukkit.getWorld("world")){
+                if(!meteors.isEmpty()){
+                    player.damage(2);
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 20, 1));
+                }
+            }
 
             var equip = player.getEquipment();
             var helmet = equip.getHelmet();
@@ -75,6 +77,7 @@ public class Extra implements Listener {
             
 
         });
+
     }
 
     

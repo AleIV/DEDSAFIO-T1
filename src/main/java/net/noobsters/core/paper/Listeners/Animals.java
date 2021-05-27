@@ -172,7 +172,7 @@ public class Animals implements Listener {
                     weaponMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, damage);
 
                     final AttributeModifier attackSpeed = new AttributeModifier(UUID.randomUUID(),
-                            "GENERIC.ATTACK.SPEED", -0.60, AttributeModifier.Operation.ADD_SCALAR, EquipmentSlot.HAND);
+                            "GENERIC.ATTACK.SPEED", -0.90, AttributeModifier.Operation.ADD_SCALAR, EquipmentSlot.HAND);
                     weaponMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, attackSpeed);
 
                     weapon.setItemMeta(weaponMeta);
@@ -238,6 +238,7 @@ public class Animals implements Listener {
                 var milk = new ItemStack(Material.MILK_BUCKET);
                 var meta = milk.getItemMeta();
                 meta.setDisplayName(ChatColor.AQUA + "Magic Milk");
+                meta.setCustomModelData(1);
                 milk.setItemMeta(meta);
 
                 var count = item.getAmount();

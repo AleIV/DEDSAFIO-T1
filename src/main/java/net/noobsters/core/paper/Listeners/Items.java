@@ -244,8 +244,7 @@ public class Items implements Listener {
             e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20 * 2, 100));
         }
 
-        if (item == Material.MILK_BUCKET && itemMeta.hasDisplayName()
-                && itemMeta.getDisplayName().toString().contains("Magic")) {
+        if (item == Material.MILK_BUCKET && itemMeta.hasCustomModelData() && itemMeta.getCustomModelData() == 1) {
             Bukkit.getScheduler().runTaskLater(instance, () -> {
                 e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.HEAL, 20, 5));
             }, 20);

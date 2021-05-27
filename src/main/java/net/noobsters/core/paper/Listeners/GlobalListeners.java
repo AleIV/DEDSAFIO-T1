@@ -11,6 +11,7 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Hoglin;
 import org.bukkit.entity.Horse;
+import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.Pillager;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -75,7 +76,17 @@ public class GlobalListeners implements Listener{
         if(entity instanceof Horse && entity.getCustomName() != null){
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:block.anvil.land master @a " + loc.getX()
                         + " " + loc.getY() + " " + loc.getZ() + " 0.5 1");
-        } 
+        }
+
+        if(entity instanceof IronGolem && entity.getCustomName() != null && entity.getCustomName().toString().contains("Mutant")){
+            if(random.nextBoolean()){
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:zombie_damage1 master @a " + loc.getX()
+                + " " + loc.getY() + " " + loc.getZ() + " 1 1");
+            }else{
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:zombie_damage2 master @a " + loc.getX()
+                + " " + loc.getY() + " " + loc.getZ() + " 1 1");
+            }
+        }
 
         if(difficulty.get("lava") && cause == DamageCause.LAVA){
             e.setDamage(e.getDamage()*damage);
@@ -92,6 +103,23 @@ public class GlobalListeners implements Listener{
             }
         }
 
+
+    }
+
+    @EventHandler
+    public void mobsResistanceModifier(EntityDamageByEntityEvent e){
+        var entity = e.getEntity();
+        var damager = e.getDamager();
+        var loc = entity.getLocation();
+        if(entity.getCustomName() != null){
+            var mobResistance = instance.getGame().getMobResistance();
+            e.setDamage(e.getDamage()-((e.getDamage()/100)*mobResistance));
+
+            if(damager instanceof IronGolem && entity.getCustomName().toString().contains("Mutant") && entity instanceof Player){
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:zombie_attack master @a " + loc.getX()
+                + " " + loc.getY() + " " + loc.getZ() + " 1 1");
+            }
+        }
 
     }
 
@@ -141,7 +169,7 @@ public class GlobalListeners implements Listener{
         var entity = e.getHitEntity();
         var block = e.getHitBlock();
         var projectile = e.getEntity();
-        var meteors = instance.getGame().getMeteors();
+        
         if(projectile.getCustomName() != null && projectile.getCustomName().toString().contains("Meteor")){
             if(entity != null){
                 var loc = entity.getLocation();
@@ -151,7 +179,7 @@ public class GlobalListeners implements Listener{
                 entity.getWorld().strikeLightning(entity.getLocation());
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:meteorito_impacto master @a " + loc.getX()
                         + " " + loc.getY() + " " + loc.getZ() + " 100000 1");
-                meteors.add(loc);
+                
             }else if(block != null){
                 var loc = block.getLocation();
                 loc.add(0, -10, 0).createExplosion(100, true);
@@ -160,7 +188,7 @@ public class GlobalListeners implements Listener{
                 block.getWorld().strikeLightning(block.getLocation());
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:meteorito_impacto master @a " + loc.getX()
                         + " " + loc.getY() + " " + loc.getZ() + " 100000 1");
-                meteors.add(loc);
+                
             }
         }
     }
@@ -206,16 +234,6 @@ public class GlobalListeners implements Listener{
             e.setDamage(e.getDamage()*damageAmplifier);
 
         }  
-
-    }
-
-    @EventHandler
-    public void mobsResistanceModifier(EntityDamageByEntityEvent e){
-        var entity = e.getEntity();
-        if(entity.getCustomName() != null){
-            var mobResistance = instance.getGame().getMobResistance();
-            e.setDamage(e.getDamage()-((e.getDamage()/100)*mobResistance));
-        }
 
     }
 

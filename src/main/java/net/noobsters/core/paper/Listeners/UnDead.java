@@ -84,7 +84,7 @@ public class UnDead implements Listener {
             
             if(!zombiePlayers.isEmpty()){
                 var choose = zombiePlayers.get(random.nextInt(zombiePlayers.size()));
-                zombie.setCustomName(ChatColor.RED + choose.getKey());
+                zombie.setCustomName(ChatColor.RED + "Zombie " + choose.getKey());
             }
 
         }else if(e.getEntity() instanceof IronGolem && difficulty.get("zombies")){

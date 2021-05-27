@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import lombok.Data;
@@ -21,8 +20,7 @@ public class Game extends BukkitRunnable{
     HashMap<String, Boolean> difficultyChanges = new HashMap<>();
     HashMap<String, Boolean> deathPlayers = new HashMap<>();
     List<String> pvpOn = new ArrayList<>();
-    List<Location> meteors = new ArrayList<>();
-    boolean gulak = true;
+    boolean gulak = false;
 
     long gameTime = 0;
     long startTime = 0;
@@ -70,7 +68,7 @@ public class Game extends BukkitRunnable{
         deathPlayers.put("iTakerMetal", false);
         deathPlayers.put("domgamermc", false);
         deathPlayers.put("ElBudget", false);
-        deathPlayers.put("rociodta", false);
+        deathPlayers.put("rociodtaa", false);
         deathPlayers.put("aldo_geo", false);
         deathPlayers.put("Puji2", false);
         deathPlayers.put("Bizzza", false);
@@ -96,6 +94,13 @@ public class Game extends BukkitRunnable{
         deathPlayers.put("D3stri", false);
         deathPlayers.put("AkimCraft24", false);
         deathPlayers.put("Nonigamer", false);
+        deathPlayers.put("MYM_TUM_TUM", false);
+        deathPlayers.put("Dannespino", false);
+        deathPlayers.put("iDelt4", false);
+        deathPlayers.put("ElKomanche", false);
+        deathPlayers.put("TheRealCry", false);
+        deathPlayers.put("AriGameplays", false);
+        deathPlayers.put("ElJuaniquilador", false);
 
     }
 

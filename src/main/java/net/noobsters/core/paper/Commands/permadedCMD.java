@@ -8,6 +8,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Horse;
+import org.bukkit.entity.Horse.Color;
+import org.bukkit.entity.Horse.Style;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -67,7 +69,6 @@ public class permadedCMD extends BaseCommand {
 
     }
 
-
     @Subcommand("gulag")
     @CommandAlias("gulag")
     public void gulag(CommandSender sender) {
@@ -106,7 +107,7 @@ public class permadedCMD extends BaseCommand {
 
     @Subcommand("music")
     @CommandAlias("music")
-    public void music(Player sender, String music) {
+    public void music(Player sender, String music){
         var loc = sender.getLocation();
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:" + music + " master @a " + loc.getX()
                         + " " + loc.getY() + " " + loc.getZ() + " 0.3 1");
@@ -206,6 +207,8 @@ public class permadedCMD extends BaseCommand {
         horse.setSilent(true);
         horse.setAI(false);
         horse.getInventory().setSaddle(new ItemStack(Material.SADDLE));
+        horse.setColor(Color.BROWN);
+        horse.setStyle(Style.NONE);
 
         horse.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(40);
         horse.setHealth(40);
