@@ -95,7 +95,7 @@ public class DedsafioListener implements Listener {
 
         if (!game.isGulak()) {
             
-            animation(ChatColor.RED + "" + e.getDeathMessage(), "muerte", "D", 91, true);
+            animation(ChatColor.RED + "" + e.getDeathMessage(), "muerte", "D", 90, true);
 
             Bukkit.getScheduler().runTaskLater(instance, () -> {
                 if (!player.hasPermission("mod.perm"))
@@ -104,7 +104,7 @@ public class DedsafioListener implements Listener {
 
         }else if(game.getPvpOn().contains(player.getUniqueId().toString())){
 
-            animation(ChatColor.RED + "" + e.getDeathMessage(), "fatality", "E", 91, true);
+            animation(ChatColor.RED + "" + e.getDeathMessage(), "fatality", "E", 55, true);
         }
 
         if (!player.hasPermission("mod.perm") && !game.isGulak()) {

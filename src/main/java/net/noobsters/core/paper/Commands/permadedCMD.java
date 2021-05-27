@@ -213,7 +213,7 @@ public class permadedCMD extends BaseCommand {
         horse.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(40);
         horse.setHealth(40);
 
-        horse.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * 10000, 7));
+        horse.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * 10000, 5));
 
         sender.sendMessage(ChatColor.BLUE + "New car " + name);
     }

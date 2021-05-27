@@ -103,122 +103,122 @@ public class worldCMD extends BaseCommand {
 
         switch (type) {
             case "ZOMBIES":{
-                animation("", "ruedita", ruleta, 98, false);
+                animation("", "ruedita", ruleta, 97, false);
 
                 Bukkit.getScheduler().runTaskLater(instance, task ->{
-                    animation("", "", "2", 70, false);
+                    animation("", "", "2", 71, false);
 
-                }, 98);
+                }, 97);
 
             }break;
 
             case "MAGES":{
-                animation("", "ruedita", ruleta, 98, false);
+                animation("", "ruedita", ruleta, 97, false);
 
                 Bukkit.getScheduler().runTaskLater(instance, task ->{
-                    animation("", "", "7", 70, false);
+                    animation("", "", "7", 71, false);
                     
-                }, 98);
+                }, 97);
 
             }break;
 
             case "SPIDERS":{
-                animation("", "ruedita", ruleta, 98, false);
+                animation("", "ruedita", ruleta, 97, false);
 
                 Bukkit.getScheduler().runTaskLater(instance, task ->{
-                    animation("", "", "B", 70, true);
+                    animation("", "", "B", 71, true);
                     
-                }, 98);
+                }, 97);
 
             }break;
 
             case "SKELETONS":{
-                animation("", "ruedita", ruleta, 98, false);
+                animation("", "ruedita", ruleta, 97, false);
 
                 Bukkit.getScheduler().runTaskLater(instance, task ->{
-                    animation("", "", "5", 70, false);
+                    animation("", "", "5", 71, false);
                     
-                }, 98);
+                }, 97);
 
             }break;
 
             case "PIGS":{
-                animation("", "ruedita", ruleta, 98, false);
+                animation("", "ruedita", ruleta, 97, false);
 
                 Bukkit.getScheduler().runTaskLater(instance, task ->{
-                    animation("", "", "4", 70, false);
+                    animation("", "", "A", 71, true);
                     
-                }, 98);
+                }, 97);
 
             }break;
 
             case "RAIDERS":{
-                animation("", "ruedita", ruleta, 98, false);
+                animation("", "ruedita", ruleta, 97, false);
 
                 Bukkit.getScheduler().runTaskLater(instance, task ->{
-                    animation("", "", "C", 70, true);
+                    animation("", "", "C", 71, true);
                     
-                }, 98);
+                }, 97);
 
             }break;
 
             case "DEMONS":{
-                animation("", "ruedita", ruleta, 98, false);
+                animation("", "ruedita", ruleta, 97, false);
 
                 Bukkit.getScheduler().runTaskLater(instance, task ->{
-                    animation("", "", "8", 70, false);
+                    animation("", "", "8", 71, false);
                     
-                }, 98);
+                }, 97);
 
             }break;
 
             case "CREEPERS":{
-                animation("", "ruedita", ruleta, 98, false);
+                animation("", "ruedita", ruleta, 97, false);
 
                 Bukkit.getScheduler().runTaskLater(instance, task ->{
-                    animation("", "", "9", 70, false);
+                    animation("", "", "9", 71, false);
                     
-                }, 98);
+                }, 97);
 
             }break;
 
             case "REDSTONE":{
-                animation("", "ruedita", ruleta, 98, false);
+                animation("", "ruedita", ruleta, 97, false);
 
                 Bukkit.getScheduler().runTaskLater(instance, task ->{
-                    animation("", "", "3", 70, false);
+                    animation("", "", "3", 71, false);
                     
-                }, 98);
+                }, 97);
 
             }break;
 
             case "MYSTERY":{
-                animation("", "ruedita", ruleta, 98, false);
+                animation("", "ruedita", ruleta, 97, false);
 
                 Bukkit.getScheduler().runTaskLater(instance, task ->{
-                    animation("", "", "F", 70, true);
+                    animation("", "", "F", 61, true);
                     
-                }, 98);
+                }, 97);
 
             }break;
 
             case "MUDDY":{
-                animation("", "ruedita", ruleta, 98, false);
+                animation("", "ruedita", ruleta, 97, false);
 
                 Bukkit.getScheduler().runTaskLater(instance, task ->{
-                    animation("", "", "A", 70, true);
+                    animation("", "", "A", 71, true);
                     
-                }, 98);
+                }, 97);
 
             }break;
 
             case "MOOBLOOM":{
-                animation("", "ruedita", ruleta, 98, false);
+                animation("", "ruedita", ruleta, 97, false);
 
                 Bukkit.getScheduler().runTaskLater(instance, task ->{
-                    animation("", "", "6", 70, false);
+                    animation("", "", "6", 71, false);
                     
-                }, 98);
+                }, 97);
 
             }break;
         
