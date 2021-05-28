@@ -26,6 +26,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerLocaleChangeEvent;
 import org.bukkit.inventory.ItemStack;
 
 import net.md_5.bungee.api.ChatColor;
@@ -54,7 +55,7 @@ public class GlobalListeners implements Listener{
         this.instance = instance;
     }
     
-    /*@EventHandler
+    @EventHandler
     public void onResourcePackChange(PlayerLocaleChangeEvent e){
         var player = e.getPlayer();
         var locale = e.getLocale().toString();
@@ -64,7 +65,7 @@ public class GlobalListeners implements Listener{
             player.kickPlayer(NO_TXT + ChatColor.RED + "\n Hay otra actualizacion del texture pack, descarga la ultima!");
             
         }
-    }*/
+    }
 
     @EventHandler
     public void onDamage(EntityDamageEvent e){

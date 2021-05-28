@@ -42,6 +42,8 @@ public class Game extends BukkitRunnable{
         difficultyChanges.put("redstone", false);
         difficultyChanges.put("meteor", false);
 
+        difficultyChanges.put("blood", false);
+
         difficultyChanges.put("lava", false);
 
         deathPlayers.put("0PHY", false);

@@ -37,6 +37,9 @@ public class MiniBosses implements Listener {
 
     @EventHandler
     public void bossSpawns(CreatureSpawnEvent e) {
+        var difficulty = instance.getGame().getDifficultyChanges();
+        if(!difficulty.get("blood")) return;
+
         if (e.getEntity() instanceof EnderDragon) {
             var dragon = (EnderDragon) e.getEntity();
             dragon.setCustomName(ChatColor.YELLOW + "Blood Ender Dragon");
@@ -47,6 +50,9 @@ public class MiniBosses implements Listener {
 
     @EventHandler
     public void bossDeath(EntityDeathEvent e) {
+        var difficulty = instance.getGame().getDifficultyChanges();
+        if(!difficulty.get("blood")) return;
+
         var entity = e.getEntity();
         if (entity instanceof EnderDragon) {
             var bloodScale = new ItemBuilder(Material.RABBIT_FOOT).name(ChatColor.RED + "Blood Scale").meta(ItemMeta.class, meta -> meta.setCustomModelData(143)).amount(random.nextInt(16)).build();
@@ -80,7 +86,10 @@ public class MiniBosses implements Listener {
     public void onFireBall(EnderDragonFireballHitEvent e) {
         var cloud = e.getAreaEffectCloud();
 
-       cloud.getWorld().spawnEntity(cloud.getLocation().add(chooseCoord(5), 2, chooseCoord(5)),
+        var difficulty = instance.getGame().getDifficultyChanges();
+        if(!difficulty.get("blood")) return;
+
+        cloud.getWorld().spawnEntity(cloud.getLocation().add(chooseCoord(5), 2, chooseCoord(5)),
                 EntityType.VEX);
         cloud.getWorld().spawnEntity(cloud.getLocation().add(chooseCoord(5), 2, chooseCoord(5)),
                 EntityType.VEX);
@@ -99,6 +108,9 @@ public class MiniBosses implements Listener {
     @EventHandler
     public void onFireBall2(EnderDragonFlameEvent e) {
         var cloud = e.getAreaEffectCloud();
+
+        var difficulty = instance.getGame().getDifficultyChanges();
+        if(!difficulty.get("blood")) return;
 
         cloud.getWorld().spawnEntity(cloud.getLocation().add(chooseCoord(5), 2, chooseCoord(5)),
                 EntityType.VEX);
