@@ -13,6 +13,7 @@ import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Cow;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Horse;
+import org.bukkit.entity.Illusioner;
 import org.bukkit.entity.MushroomCow;
 import org.bukkit.entity.Pig;
 import org.bukkit.entity.Piglin;
@@ -204,7 +205,11 @@ public class Animals implements Listener {
 
         }else if(entity instanceof Horse && entity.getCustomName() != null && entity.isSilent()){
             e.getDrops().forEach(drop -> drop.setType(Material.AIR));
-            //TODO:ANIMATION DEATH SOUND
+            
+
+        }else if(entity instanceof Illusioner){
+            entity.getWorld().dropItemNaturally(entity.getLocation(), new ItemStack(Material.TOTEM_OF_UNDYING));
+            
         }
 
     }

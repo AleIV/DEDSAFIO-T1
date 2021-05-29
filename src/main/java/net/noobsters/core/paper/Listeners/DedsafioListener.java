@@ -80,7 +80,7 @@ public class DedsafioListener implements Listener {
         var name = e.getEntity().getName();
         
 
-        if (player.getGameMode() == GameMode.SPECTATOR)
+        if (player.getGameMode() == GameMode.SPECTATOR || player.hasPermission("mod.perm"))
             e.setDeathMessage("");
 
         if (game.getDeathPlayers().containsKey(name)) {
@@ -92,7 +92,9 @@ public class DedsafioListener implements Listener {
 
         if (!game.isGulak()) {
             
-            animation(ChatColor.DARK_RED + "" + ChatColor.BOLD + "" + e.getDeathMessage(), "muerte", "D", 90, true);
+            if(!player.hasPermission("mod.perm")){
+                animation(ChatColor.DARK_RED + "" + ChatColor.BOLD + "" + e.getDeathMessage(), "muerte", "D", 90, true);
+            }
 
             Bukkit.getScheduler().runTaskLater(instance, () -> {
                 if (!player.hasPermission("mod.perm"))
@@ -101,7 +103,10 @@ public class DedsafioListener implements Listener {
 
         }else if(game.getPvpOn().contains(player.getUniqueId().toString())){
 
-            animation(ChatColor.DARK_RED + "" + ChatColor.BOLD + "" + e.getDeathMessage(), "fatality", "E", 55, true);
+            if(!player.hasPermission("mod.perm")){
+                animation(ChatColor.DARK_RED + "" + ChatColor.BOLD + "" + e.getDeathMessage(), "fatality", "E", 55, true);
+            }
+            
         }
 
         if (!player.hasPermission("mod.perm") && !game.isGulak()) {
@@ -149,6 +154,7 @@ public class DedsafioListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onPVP(EntityDamageByEntityEvent e) {
+        var game = instance.getGame();
 
         if (e.getEntity() instanceof Player) {
             Player p1 = (Player) e.getEntity();
@@ -164,8 +170,11 @@ public class DedsafioListener implements Listener {
             if (p2 != null) {
                 var pvp = instance.getGame().getPvpOn();
 
+                if(game.getTrap().contains(p2.getUniqueId().toString())) e.setDamage(e.getDamage()+1);
+
                 if (pvp.contains(p1.getUniqueId().toString()) && pvp.contains(p2.getUniqueId().toString()))
                     return;
+
                 if (p1.getUniqueId().toString() == p2.getUniqueId().toString())
                     return;
 

@@ -51,6 +51,8 @@ public class GlobalListeners implements Listener{
 
     static public String NO_TXT = ChatColor.AQUA + "Necesitas el cliente para jugar!\n ";
 
+    static public String NO_JUGAR = ChatColor.AQUA + "El server esta cerrado!\n ";
+
     GlobalListeners(PERMADED instance){
         this.instance = instance;
     }
@@ -59,11 +61,14 @@ public class GlobalListeners implements Listener{
     public void onResourcePackChange(PlayerLocaleChangeEvent e){
         var player = e.getPlayer();
         var locale = e.getLocale().toString();
+        var game = instance.getGame();
         if(!locale.contains("NOOBSTERS")){
             player.kickPlayer(NO_TXT);
         }else if(!locale.contains("NOOBSTERS")){
             player.kickPlayer(NO_TXT + ChatColor.RED + "\n Hay otra actualizacion del texture pack, descarga la ultima!");
             
+        }else if(!player.hasPermission("mod.perm") && game.isClosed()){
+            player.kickPlayer(NO_JUGAR);
         }
     }
 

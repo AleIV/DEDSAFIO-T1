@@ -18,9 +18,11 @@ import org.bukkit.potion.PotionEffectType;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
+import co.aikar.commands.annotation.CommandCompletion;
 import co.aikar.commands.annotation.CommandPermission;
 import co.aikar.commands.annotation.Flags;
 import co.aikar.commands.annotation.Subcommand;
+import co.aikar.taskchain.TaskChain;
 import fr.mrmicky.fastinv.ItemBuilder;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +35,50 @@ import net.noobsters.core.paper.PERMADED;
 public class permadedCMD extends BaseCommand {
 
     private @NonNull PERMADED instance;
+    static public String KICK_MSG = ChatColor.AQUA + "GG\n";
+
+    @Subcommand("closed")
+    @CommandAlias("closed")
+    public void closed(CommandSender sender, boolean bool) {
+        var game = instance.getGame();
+
+        if(bool){
+            var chain = PERMADED.newChain();
+        
+            Bukkit.getOnlinePlayers().forEach(p->{
+                chain.delay(1).sync(() -> {
+                    p.kickPlayer(KICK_MSG);
+
+                });
+            });
+        
+
+            chain.sync(TaskChain::abort).execute();
+
+        }
+        game.setClosed(bool);
+        sender.sendMessage(ChatColor.GREEN + "Closed set to " + bool);
+    }
+
+    @Subcommand("tp-here-all")
+    @CommandAlias("tp-here-all")
+    public void here(Player sender) {
+
+        var chain = PERMADED.newChain();
+        
+            Bukkit.getOnlinePlayers().forEach(p->{
+                chain.delay(1).sync(() -> {
+                    p.teleport(sender.getLocation());
+
+                });
+            });
+        
+
+            chain.sync(TaskChain::abort).execute();
+
+        sender.sendMessage(ChatColor.GREEN + "TP ALL HERE");
+    }
+
 
     @Subcommand("difficulty")
     public void difficultyChange(CommandSender sender, String change, boolean bool) {
@@ -57,6 +103,7 @@ public class permadedCMD extends BaseCommand {
 
     @Subcommand("pvp-on")
     @CommandAlias("pvp-on")
+    @CommandCompletion("@players")
     public void pvp(CommandSender sender, @Flags("other") Player player, boolean bool) {
         var pvp = instance.getGame().getPvpOn();
         
@@ -70,11 +117,44 @@ public class permadedCMD extends BaseCommand {
 
     }
 
+    @Subcommand("trap")
+    @CommandAlias("trap")
+    @CommandCompletion("@players")
+    public void trap(CommandSender sender, @Flags("other") Player player, boolean bool) {
+        var pvp = instance.getGame().getPvpOn();
+        
+        if(bool){
+            pvp.add(player.getUniqueId().toString());
+            sender.sendMessage(ChatColor.GREEN + "Trap " + player + " set to " + bool);
+        }else{
+            pvp.remove(player.getUniqueId().toString());
+            sender.sendMessage(ChatColor.RED + "Trap " + player + " set to " + bool);
+        }
+
+    }
+
     @Subcommand("gulag")
     @CommandAlias("gulag")
     public void gulag(CommandSender sender) {
         var game = instance.getGame();
         var bool = !game.isGulak();
+
+        if(!bool){
+            var chain = PERMADED.newChain();
+        
+            Bukkit.getOnlinePlayers().forEach(p->{
+                chain.delay(1).sync(() -> {
+                    if(p.getGameMode() == GameMode.SPECTATOR && !p.hasPermission("mod.perm")){
+                        p.kickPlayer(KICK_MSG);
+                    }
+
+                });
+            });
+    
+            chain.sync(TaskChain::abort).execute();
+
+        }
+
         game.setGulak(!game.isGulak());
         sender.sendMessage(ChatColor.GREEN + "Gulag set to " + bool);
     }
