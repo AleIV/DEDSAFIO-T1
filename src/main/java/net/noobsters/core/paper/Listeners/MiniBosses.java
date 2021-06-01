@@ -66,21 +66,12 @@ public class MiniBosses implements Listener {
         
         var entity = e.getEntity();
         var damager = e.getDamager();
-        if(damager instanceof Player && entity instanceof ArmorStand && entity.getCustomName() != null){
+        if(damager instanceof Player && entity instanceof ArmorStand && entity.getCustomName() != null && entity.getCustomName().contains("Scale")){
             var item = new ItemBuilder(Material.RABBIT_FOOT).name(ChatColor.RED + "Blood Scale").meta(ItemMeta.class, meta -> meta.setCustomModelData(143)).amount(random.nextInt(3)).build();
 
             entity.getWorld().dropItemNaturally(entity.getLocation(), item);
         }
     }
-
-    /*@EventHandler
-    public void onDamage(EntityDamageEvent e){
-        var entity = e.getEntity();
-        var cause = e.getCause();
-        if(entity instanceof EnderDragon && cause == DamageCause.BLOCK_EXPLOSION || cause == DamageCause.ENTITY_EXPLOSION){
-            e.setCancelled(true);
-        }
-    }*/
 
     @EventHandler
     public void onFireBall(EnderDragonFireballHitEvent e) {

@@ -5,8 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -15,36 +14,271 @@ import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.CommandCompletion;
 import co.aikar.commands.annotation.CommandPermission;
-import co.aikar.commands.annotation.Default;
 import co.aikar.commands.annotation.Subcommand;
 import co.aikar.taskchain.TaskChain;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import net.md_5.bungee.api.ChatColor;
 import net.noobsters.core.paper.PERMADED;
 
-@RequiredArgsConstructor
-@CommandAlias("tpworld")
+@CommandAlias("ruedita")
 @CommandPermission("tpworld.cmd")
 public class worldCMD extends BaseCommand {
 
     private @NonNull PERMADED instance;
     Random random = new Random();
+    List<String> letters = new ArrayList<>();
 
-    @Default
-    @CommandPermission("tpworld.cmd")
-    @CommandCompletion("@worlds")
-    public void tpWorld(Player sender, World world) {
-        sender.teleport(world.getSpawnLocation());
-        sender.sendMessage("Teleported to world " + world);
+    String item1 = "uE0A1";
+    String item2 = "uE0A8";
+    String item3 = "uE0A6";
+
+    public worldCMD(PERMADED instance) {
+        this.instance = instance;
+        letters.add("A"); // ROJO
+        letters.add("B"); // NARANJA
+        letters.add("C"); // AMARILLO
+        letters.add("D"); // VERDE
+        letters.add("E"); // CELESTE
+        letters.add("F"); // AZUL
+        letters.add("0"); // MORADO
+        letters.add("1"); // ROSA
+
     }
 
-    @Subcommand("respawn")
-    @CommandAlias("respawn")
-    public void respawn(Player sender) {
-        sender.teleport(new Location(Bukkit.getWorld("world"), 0, 92, 0));
-        Bukkit.broadcastMessage(ChatColor.GOLD + sender.getName() + " respawned!");
-        sender.setGameMode(GameMode.SURVIVAL);
+    @Subcommand("ruedita")
+    @CommandAlias("ruedita")
+    public void ruedita(CommandSender sender, String text) {
+
+        Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&6&l[&4&lDEDSAFIO&6&l] &f" + text));
+    }
+
+    @Subcommand("say")
+    @CommandAlias("say")
+    public void say(CommandSender sender, String text) {
+        Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&6&l[&4&lDEDSAFIO&6&l] &f" + text));
+        Bukkit.getOnlinePlayers().forEach(player -> {
+            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 1, 0.5f);
+        });
+
+    }
+
+    public void ruedita() {
+        var ruleta = letters.get(random.nextInt(letters.size()));
+        instance.animation("", "ruedita", ruleta, 97, false);
+    }
+
+    @Subcommand("animation")
+    @CommandAlias("animation")
+    public void animationcmd2(Player player, String type, String textChange) {
+
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title @a times 0 1 60");
+
+        switch (type) {
+            case "ZOMBIES": {
+                ruedita();
+
+                Bukkit.getScheduler().runTaskLater(instance, task -> {
+                    instance.animation("", "mistery", "2", 73, false);
+
+                }, 97);
+
+            }
+                break;
+
+            case "MAGES": {
+                ruedita();
+
+                Bukkit.getScheduler().runTaskLater(instance, task -> {
+                    instance.animation("", "mistery", "7", 73, false);
+
+                }, 97);
+
+            }
+                break;
+
+            case "SPIDERS": {
+                ruedita();
+
+                Bukkit.getScheduler().runTaskLater(instance, task -> {
+                    instance.animation("", "mistery", "B", 73, true);
+
+                }, 97);
+
+            }
+                break;
+
+            case "SKELETONS": {
+                ruedita();
+
+                Bukkit.getScheduler().runTaskLater(instance, task -> {
+                    instance.animation("", "mistery", "5", 73, false);
+
+                }, 97);
+
+            }
+                break;
+
+            case "PIGS": {
+                ruedita();
+
+                Bukkit.getScheduler().runTaskLater(instance, task -> {
+                    instance.animation("", "mistery", "A", 73, true);
+
+                }, 97);
+
+            }
+                break;
+
+            case "RAIDERS": {
+                ruedita();
+
+                Bukkit.getScheduler().runTaskLater(instance, task -> {
+                    instance.animation("", "mistery", "C", 73, true);
+
+                }, 97);
+
+            }
+                break;
+
+            case "DEMONS": {
+                ruedita();
+
+                Bukkit.getScheduler().runTaskLater(instance, task -> {
+                    instance.animation("", "mistery", "8", 73, false);
+
+                }, 97);
+
+            }
+                break;
+
+            case "CREEPERS": {
+                ruedita();
+
+                Bukkit.getScheduler().runTaskLater(instance, task -> {
+                    instance.animation("", "mistery", "9", 73, false);
+
+                }, 97);
+
+            }
+                break;
+
+            case "REDSTONE": {
+                ruedita();
+
+                Bukkit.getScheduler().runTaskLater(instance, task -> {
+                    instance.animation("", "mistery", "3", 73, false);
+
+                }, 97);
+
+            }
+                break;
+
+            case "MISTERY": {
+                ruedita();
+
+                Bukkit.getScheduler().runTaskLater(instance, task -> {
+                    instance.animation("", "mistery", "F", 62, true);
+
+                }, 97);
+
+            }
+                break;
+
+            case "MUDDY": {
+                ruedita();
+
+                Bukkit.getScheduler().runTaskLater(instance, task -> {
+                    instance.animation("", "mistery", "A", 73, true);
+
+                }, 97);
+
+            }
+                break;
+
+            case "MOOBLOOM": {
+                ruedita();
+
+                Bukkit.getScheduler().runTaskLater(instance, task -> {
+                    instance.animation("", "mistery", "6", 73, false);
+
+                }, 97);
+
+            }
+                break;
+
+            case "CRAFT": {
+                ruedita();
+
+                Bukkit.getScheduler().runTaskLater(instance, task -> {
+
+                    var chain = PERMADED.newChain();
+
+                    var character = 92;
+                    var charac = Character.toString((char)character);
+
+                    chain.delay(20).sync(() -> {
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
+                                "title @a title {\"text\":\"" + charac + item1 + "\"}");
+
+                        Bukkit.getOnlinePlayers().forEach(p -> {
+                            p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 1, 0.5f);
+                        });
+
+                    });
+
+                    chain.delay(20).sync(() -> {
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
+                                "title @a title {\"text\":\"" + charac + item2 + "\"}");
+                        
+                        Bukkit.getOnlinePlayers().forEach(p -> {
+                            p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 1, 0.5f);
+                        });
+                    });
+
+                    chain.delay(20).sync(() -> {
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
+                                "title @a title {\"text\":\"" + charac + item3 + "\"}");
+
+                        Bukkit.broadcastMessage("");
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
+                                "tellraw @a {\"text\":\"" + charac + item1 + " x1" + "\"}");
+                        Bukkit.broadcastMessage("");
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
+                                "tellraw @a {\"text\":\"" + charac + item2 + " x4" + "\"}");
+                        Bukkit.broadcastMessage("");
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
+                                "tellraw @a {\"text\":\"" + charac + item3 + " x4" + "\"}");
+                                
+                            
+                        Bukkit.getOnlinePlayers().forEach(p -> {
+                            p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 1, 0.5f);
+                        });
+                    });
+
+
+                    chain.sync(TaskChain::abort).execute();
+
+                }, 97);
+
+            }
+                break;
+
+            default:
+                break;
+        }
+
+        Bukkit.getScheduler().runTaskLater(instance, task -> {
+            Bukkit.broadcastMessage(
+                    ChatColor.translateAlternateColorCodes('&', "&6&l[&4&lDEDSAFIO&6&l] &f" + textChange));
+
+            Bukkit.getOnlinePlayers().forEach(p -> {
+
+                player.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 1, 0.5f);
+
+            });
+
+        }, 97);
+
     }
 
     @Subcommand("jsoncreate")
@@ -52,8 +286,8 @@ public class worldCMD extends BaseCommand {
     public void json(CommandSender sender, String letter, int number, boolean right) {
 
         var character = 92;
-        var charac = Character.toString((char)character);
-        
+        var charac = Character.toString((char) character);
+
         for (int i = 0; i < number; i++) {
 
             var id = "" + (i <= 9 ? "0" + i : i);
@@ -70,195 +304,13 @@ public class worldCMD extends BaseCommand {
 
     }
 
-    @Subcommand("say")
-    @CommandAlias("say")
-    public void say(CommandSender sender, String text) {
-        Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&b[&6DEDSAFIO&b] &f" + text));
+    @Subcommand("tpworld")
+    @CommandAlias("tpworld")
+    @CommandPermission("tpworld.cmd")
+    @CommandCompletion("@worlds")
+    public void tpWorld(Player sender, World world) {
+        sender.teleport(world.getSpawnLocation());
+        sender.sendMessage("Teleported to world " + world);
     }
-
-    @Subcommand("animation-test")
-    @CommandAlias("animation-test")
-    public void animationcmd(Player player, String text, String sound, String letter, int number, boolean bool) {
-
-        animation(text, sound, letter, number, bool);
-    }
-
-    @Subcommand("animation")
-    @CommandAlias("animation")
-    public void animationcmd2(Player player, String type) {
-        List<String> letters = new ArrayList<>();
-
-        letters.add("A"); //ROJO
-        letters.add("B"); //NARANJA
-        letters.add("C"); //AMARILLO
-        letters.add("D"); //VERDE
-        letters.add("E"); //CELESTE
-        letters.add("F"); //AZUL
-        letters.add("0"); //MORADO
-        letters.add("1"); //ROSA
-
-        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title @a times 0 1 60");
-
-        var ruleta = letters.get(random.nextInt(letters.size()));
-
-        switch (type) {
-            case "ZOMBIES":{
-                animation("", "ruedita", ruleta, 97, false);
-
-                Bukkit.getScheduler().runTaskLater(instance, task ->{
-                    animation("", "mistery", "2", 73, false);
-
-                }, 97);
-
-            }break;
-
-            case "MAGES":{
-                animation("", "ruedita", ruleta, 97, false);
-
-                Bukkit.getScheduler().runTaskLater(instance, task ->{
-                    animation("", "mistery", "7", 73, false);
-                    
-                }, 97);
-
-            }break;
-
-            case "SPIDERS":{
-                animation("", "ruedita", ruleta, 97, false);
-
-                Bukkit.getScheduler().runTaskLater(instance, task ->{
-                    animation("", "mistery", "B", 73, true);
-                    
-                }, 97);
-
-            }break;
-
-            case "SKELETONS":{
-                animation("", "ruedita", ruleta, 97, false);
-
-                Bukkit.getScheduler().runTaskLater(instance, task ->{
-                    animation("", "mistery", "5", 73, false);
-                    
-                }, 97);
-
-            }break;
-
-            case "PIGS":{
-                animation("", "ruedita", ruleta, 97, false);
-
-                Bukkit.getScheduler().runTaskLater(instance, task ->{
-                    animation("", "mistery", "A", 73, true);
-                    
-                }, 97);
-
-            }break;
-
-            case "RAIDERS":{
-                animation("", "ruedita", ruleta, 97, false);
-
-                Bukkit.getScheduler().runTaskLater(instance, task ->{
-                    animation("", "mistery", "C", 73, true);
-                    
-                }, 97);
-
-            }break;
-
-            case "DEMONS":{
-                animation("", "ruedita", ruleta, 97, false);
-
-                Bukkit.getScheduler().runTaskLater(instance, task ->{
-                    animation("", "mistery", "8", 73, false);
-                    
-                }, 97);
-
-            }break;
-
-            case "CREEPERS":{
-                animation("", "ruedita", ruleta, 97, false);
-
-                Bukkit.getScheduler().runTaskLater(instance, task ->{
-                    animation("", "mistery", "9", 73, false);
-                    
-                }, 97);
-
-            }break;
-
-            case "REDSTONE":{
-                animation("", "ruedita", ruleta, 97, false);
-
-                Bukkit.getScheduler().runTaskLater(instance, task ->{
-                    animation("", "mistery", "3", 73, false);
-                    
-                }, 97);
-
-            }break;
-
-            case "MISTERY":{
-                animation("", "ruedita", ruleta, 97, false);
-
-                Bukkit.getScheduler().runTaskLater(instance, task ->{
-                    animation("", "mistery", "F", 62, true);
-                    
-                }, 97);
-
-            }break;
-
-            case "MUDDY":{
-                animation("", "ruedita", ruleta, 97, false);
-
-                Bukkit.getScheduler().runTaskLater(instance, task ->{
-                    animation("", "mistery", "A", 73, true);
-                    
-                }, 97);
-
-            }break;
-
-            case "MOOBLOOM":{
-                animation("", "ruedita", ruleta, 97, false);
-
-                Bukkit.getScheduler().runTaskLater(instance, task ->{
-                    animation("", "mistery", "6", 73, false);
-                    
-                }, 97);
-
-            }break;
-        
-            default:
-                break;
-        }
-
-    }
-
-    public void animation(String text, String sound, String letter, int number, boolean right){
-
-        var chain = PERMADED.newChain();
-
-        var count = 0;
-        var character = 92;
-        var charac = Character.toString((char)character);
-        
-        Bukkit.getOnlinePlayers().forEach(p->{
-            var loc = p.getLocation();
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:" + sound + " master " + p.getName() + " " + loc.getX()
-                        + " " + loc.getY() + " " + loc.getZ() + " 1 1");
-        });
-        
-        while (count < number) {
-
-            final var current = count;
-
-            var id = "" + (current <= 9 ? "0" + current : current);
-            var code = right ? (charac + "uE" + id + letter) : (charac + "uE" + letter + id);
-
-            chain.delay(1).sync(() -> {
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title @a title {\"text\":\"" + code + "\"}");
-
-            });
-            count++;
-        }
-
-        chain.sync(TaskChain::abort).execute();
-    }
-    
-
 
 }

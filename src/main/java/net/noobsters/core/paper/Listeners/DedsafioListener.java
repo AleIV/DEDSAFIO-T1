@@ -7,10 +7,13 @@ import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Skull;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -18,10 +21,10 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import co.aikar.taskchain.TaskChain;
 import lombok.Getter;
 import net.md_5.bungee.api.ChatColor;
 import net.noobsters.core.paper.PERMADED;
@@ -39,39 +42,26 @@ public class DedsafioListener implements Listener {
         this.instance = instance;
     }
 
-    public void animation(String text, String sound, String letter, int number, boolean right){
+    @EventHandler
+    public void onInteract(PlayerInteractAtEntityEvent e){
+        var player = e.getPlayer();
+        var entity = e.getRightClicked();
+        if(entity instanceof ArmorStand && player.getEquipment().getItemInMainHand() != null){
+            var item = player.getEquipment().getItemInMainHand();
+            //var stand = (ArmorStand) entity;
+            if(item.getItemMeta().hasCustomModelData() && 
+                item.getItemMeta().getCustomModelData() == 114){
+                    instance.getGame().getReviveList().add(item.getItemMeta().getDisplayName().toLowerCase());
+                    player.getEquipment().setItemInMainHand(null);
+                    
+                    var loc = player.getLocation();
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), 
+                        "playsound minecraft:entity.blaze.death master @a " + loc.getX() +  " " + loc.getY() + " " + loc.getZ() +  " 1 1");
+            }
 
-        var chain = PERMADED.newChain();
-
-        var count = 0;
-        var character = 92;
-        var charac = Character.toString((char)character);
-
-        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title @a times 0 1 60");
-        
-        Bukkit.getOnlinePlayers().forEach(p->{
-            var loc = p.getLocation();
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:" + sound + " master "+ p.getName() + " " + loc.getX()
-                        + " " + loc.getY() + " " + loc.getZ() + " 1 1");
-        });
-        
-        while (count < number) {
-
-            final var current = count;
-
-            var id = "" + (current <= 9 ? "0" + current : current);
-            var code = right ? (charac + "uE" + id + letter) : (charac + "uE" + letter + id);
-
-            chain.delay(1).sync(() -> {
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title @a title {\"text\":\"" + code + "\"}");
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title @a actionbar {\"text\":\"" + text + "\"}");
-
-            });
-            count++;
         }
-
-        chain.sync(TaskChain::abort).execute();
     }
+    
 
     @EventHandler
     public void playerDied(PlayerDeathEvent e) {
@@ -93,7 +83,7 @@ public class DedsafioListener implements Listener {
         if (!game.isGulak()) {
             
             if(!player.hasPermission("mod.perm")){
-                animation(ChatColor.DARK_RED + "" + ChatColor.BOLD + "" + e.getDeathMessage(), "muerte", "D", 90, true);
+                instance.animation(ChatColor.DARK_RED + "" + ChatColor.BOLD + "" + e.getDeathMessage(), "muerte", "D", 90, true);
             }
 
             Bukkit.getScheduler().runTaskLater(instance, () -> {
@@ -104,7 +94,7 @@ public class DedsafioListener implements Listener {
         }else if(game.getPvpOn().contains(player.getUniqueId().toString())){
 
             if(!player.hasPermission("mod.perm")){
-                animation(ChatColor.DARK_RED + "" + ChatColor.BOLD + "" + e.getDeathMessage(), "fatality", "E", 55, true);
+                instance.animation(ChatColor.DARK_RED + "" + ChatColor.BOLD + "" + e.getDeathMessage(), "fatality", "E", 55, true);
             }
             
         }
@@ -133,10 +123,30 @@ public class DedsafioListener implements Listener {
     public void playerJoin(PlayerJoinEvent e) {
         var player = e.getPlayer();
         var game = instance.getGame();
-        if (player.getGameMode() == GameMode.SPECTATOR && !game.isGulak() && !player.hasPermission("mod.perm")) {
+        var revive = game.getReviveList();
+        var check = revive.contains(player.getName().toLowerCase());
+
+        if(player.getGameMode() == GameMode.SPECTATOR && !check && !game.isGulak() && !player.hasPermission("mod.perm")) {
             Bukkit.getScheduler().runTaskLater(instance, () -> {
                 player.kickPlayer(deathMsg);
+
             }, 5);
+        }
+
+        if(check){
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "execute in minecraft:overworld run setblock -535 162 -220 minecraft:redstone_block");
+
+            Bukkit.getScheduler().runTaskLater(instance, task ->{
+                revive.remove(player.getName().toLowerCase());
+                player.setGameMode(GameMode.SURVIVAL);
+                player.teleport(new Location(Bukkit.getWorld("world"), -525.5, 203.5, -174.5));
+                Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&6&l[&4&lDEDSAFIO&6&l] &f" + player.getName() + " ha vuelto de la muerte."));
+
+                Bukkit.getOnlinePlayers().forEach(p ->{
+                    player.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 1, 0.5f);
+                });
+
+            }, 20*4);
         }
 
         if (player.getGameMode() == GameMode.SPECTATOR) {

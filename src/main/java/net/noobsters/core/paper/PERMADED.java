@@ -20,6 +20,7 @@ public class PERMADED extends JavaPlugin {
   private @Getter PaperCommandManager commandManager;
   private @Getter ListenerManager listenerManager;
   private @Getter Game game;
+  //private @Getter CraftingManager craftingManager;
   private static @Getter @Setter TaskChainFactory taskChainFactory;
 
   private static @Getter PERMADED instance;
@@ -33,6 +34,7 @@ public class PERMADED extends JavaPlugin {
     commandManager = new PaperCommandManager(this);
     listenerManager = new ListenerManager(this);
     game = new Game(this);
+    //craftingManager = new CraftingManager(this);
     taskChainFactory = BukkitTaskChainFactory.create(this);
 
     game.runTaskTimerAsynchronously(this, 0L, 20L);
@@ -60,6 +62,41 @@ public class PERMADED extends JavaPlugin {
   public void onDisable() {
 
   }
+
+  public void animation(String text, String sound, String letter, int number, boolean right){
+
+    var chain = PERMADED.newChain();
+
+    var count = 0;
+    var character = 92;
+    var charac = Character.toString((char)character);
+
+    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title @a times 0 1 60");
+    
+    Bukkit.getOnlinePlayers().forEach(p->{
+        var loc = p.getLocation();
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:" + sound + " master "+ p.getName() + " " + loc.getX()
+                    + " " + loc.getY() + " " + loc.getZ() + " 1 1");
+    });
+    
+    while (count < number) {
+
+        final var current = count;
+
+        var id = "" + (current <= 9 ? "0" + current : current);
+        var code = right ? (charac + "uE" + id + letter) : (charac + "uE" + letter + id);
+
+        chain.delay(1).sync(() -> {
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title @a title {\"text\":\"" + code + "\"}");
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title @a actionbar {\"text\":\"" + text + "\"}");
+
+        });
+        count++;
+    }
+
+    chain.sync(TaskChain::abort).execute();
+}
+
 
   public static <T> TaskChain<T> newChain() {
     return taskChainFactory.newChain();

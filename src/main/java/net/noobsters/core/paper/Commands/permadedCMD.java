@@ -133,6 +133,22 @@ public class permadedCMD extends BaseCommand {
 
     }
 
+    @Subcommand("revive")
+    @CommandAlias("revive")
+    @CommandCompletion("@players")
+    public void revive(CommandSender sender, @Flags("other") Player player, boolean bool) {
+        var revive = instance.getGame().getReviveList();
+        
+        if(bool){
+            revive.add(player.getName());
+            sender.sendMessage(ChatColor.GREEN + "Revive " + player + " set to " + bool);
+        }else{
+            revive.remove(player.getName());
+            sender.sendMessage(ChatColor.RED + "Revive " + player + " set to " + bool);
+        }
+
+    }
+
     @Subcommand("gulag")
     @CommandAlias("gulag")
     public void gulag(CommandSender sender) {
@@ -265,9 +281,9 @@ public class permadedCMD extends BaseCommand {
     }
 
     @Subcommand("disguise")
-    public void disguiseCustom(Player sender, EntityType entity, String name) {
+    public void disguiseCustom(Player sender, EntityType entity, String name, boolean baby) {
 
-        Bukkit.dispatchCommand(sender, "disguise " + entity + " setcustomname \""+ name +"\" setcustomnamevisible false setSelfDisguiseVisible false");
+        Bukkit.dispatchCommand(sender, "disguise " + entity + " setBaby " + baby + " setcustomname \""+ name +"\" setcustomnamevisible false setSelfDisguiseVisible false");
 
         sender.setGameMode(GameMode.SURVIVAL);
 
