@@ -5,11 +5,17 @@ import java.util.Random;
 import com.destroystokyo.paper.event.entity.EnderDragonFireballHitEvent;
 import com.destroystokyo.paper.event.entity.EnderDragonFlameEvent;
 
+import org.bukkit.Bukkit;
+import org.bukkit.DyeColor;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EnderDragon;
+import org.bukkit.entity.Enderman;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Shulker;
+import org.bukkit.entity.ShulkerBullet;
 import org.bukkit.entity.Vex;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -37,21 +43,54 @@ public class MiniBosses implements Listener {
 
     @EventHandler
     public void bossSpawns(CreatureSpawnEvent e) {
-        var difficulty = instance.getGame().getDifficultyChanges();
-        if(!difficulty.get("blood")) return;
+        var entity = e.getEntity();
 
-        if (e.getEntity() instanceof EnderDragon) {
-            var dragon = (EnderDragon) e.getEntity();
+        if (entity instanceof EnderDragon) {
+            var dragon = (EnderDragon) entity;
             dragon.setCustomName(ChatColor.YELLOW + "Blood Ender Dragon");
-            dragon.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100000, 1, false, false));
+            dragon.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(1000);
+            dragon.setHealth(1000);
+
+        }else if(random.nextInt(5) == 1 && entity.getWorld() == Bukkit.getWorld("world_the_end") && entity instanceof Enderman){
+            e.setCancelled(true);
+            var loc = entity.getLocation();
+            entity.getWorld().spawnEntity(loc, EntityType.ZOMBIE);
+
+        }
+
+    }
+
+    @EventHandler
+    public void powers(EntityDamageByEntityEvent e){
+        var entity = e.getEntity();
+        var proj = e.getDamager();
+        if(proj instanceof ShulkerBullet && entity instanceof Player){
+            var bullet = (ShulkerBullet) proj;
+            var damager = (Shulker) bullet.getShooter();
+            var player = (Player) entity;
+
+            if(damager.getCustomName() == null){
+                if(random.nextBoolean()){
+                    damager.setCustomName(ChatColor.GOLD + "Fire Shulker"); 
+                    damager.setColor(DyeColor.RED);
+                }else{
+                    damager.setCustomName(ChatColor.BLACK + "Radioactive Shulker");
+                    damager.setColor(DyeColor.BLACK);
+                }
+                
+            }else if(damager.getCustomName().contains("Fire")){
+                player.setFireTicks(20*10);
+
+            }else if(damager.getCustomName().contains("Radioactive")){
+                player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 10*20, 0));
+
+            }
         }
 
     }
 
     @EventHandler
     public void bossDeath(EntityDeathEvent e) {
-        var difficulty = instance.getGame().getDifficultyChanges();
-        if(!difficulty.get("blood")) return;
 
         var entity = e.getEntity();
         if (entity instanceof EnderDragon) {
@@ -67,7 +106,7 @@ public class MiniBosses implements Listener {
         var entity = e.getEntity();
         var damager = e.getDamager();
         if(damager instanceof Player && entity instanceof ArmorStand && entity.getCustomName() != null && entity.getCustomName().contains("Scale")){
-            var item = new ItemBuilder(Material.RABBIT_FOOT).name(ChatColor.RED + "Blood Scale").meta(ItemMeta.class, meta -> meta.setCustomModelData(143)).amount(random.nextInt(3)).build();
+            var item = new ItemBuilder(Material.RABBIT_FOOT).name(ChatColor.RED + "Blood Scale").meta(ItemMeta.class, meta -> meta.setCustomModelData(143)).build();
 
             entity.getWorld().dropItemNaturally(entity.getLocation(), item);
         }
@@ -76,9 +115,6 @@ public class MiniBosses implements Listener {
     @EventHandler
     public void onFireBall(EnderDragonFireballHitEvent e) {
         var cloud = e.getAreaEffectCloud();
-
-        var difficulty = instance.getGame().getDifficultyChanges();
-        if(!difficulty.get("blood")) return;
 
         cloud.getWorld().spawnEntity(cloud.getLocation().add(chooseCoord(5), 2, chooseCoord(5)),
                 EntityType.VEX);
@@ -99,9 +135,6 @@ public class MiniBosses implements Listener {
     @EventHandler
     public void onFireBall2(EnderDragonFlameEvent e) {
         var cloud = e.getAreaEffectCloud();
-
-        var difficulty = instance.getGame().getDifficultyChanges();
-        if(!difficulty.get("blood")) return;
 
         cloud.getWorld().spawnEntity(cloud.getLocation().add(chooseCoord(5), 2, chooseCoord(5)),
                 EntityType.VEX);

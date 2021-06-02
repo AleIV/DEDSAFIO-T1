@@ -23,6 +23,7 @@ public class ListenerManager {
         registerListener(new Disguise(instance));
         registerListener(new DedsafioListener(instance));
         registerListener(new Extra(instance));
+        registerListener(new Cancel(instance));
 
 
     }

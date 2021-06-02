@@ -61,7 +61,6 @@ public class permadedCMD extends BaseCommand {
     }
 
     @Subcommand("tp-here-all")
-    @CommandAlias("tp-here-all")
     public void here(Player sender) {
 
         var chain = PERMADED.newChain();
@@ -121,6 +120,22 @@ public class permadedCMD extends BaseCommand {
     @CommandAlias("trap")
     @CommandCompletion("@players")
     public void trap(CommandSender sender, @Flags("other") Player player, boolean bool) {
+        var pvp = instance.getGame().getPvpOn();
+        
+        if(bool){
+            pvp.add(player.getUniqueId().toString());
+            sender.sendMessage(ChatColor.GREEN + "Trap " + player + " set to " + bool);
+        }else{
+            pvp.remove(player.getUniqueId().toString());
+            sender.sendMessage(ChatColor.RED + "Trap " + player + " set to " + bool);
+        }
+
+    }
+
+    @Subcommand("random-fight")
+    @CommandAlias("random-fight")
+    @CommandCompletion("@players")
+    public void fight(CommandSender sender, @Flags("other") Player player, boolean bool) {
         var pvp = instance.getGame().getPvpOn();
         
         if(bool){

@@ -236,6 +236,7 @@ public class Animals implements Listener {
     public void onGetMilk(PlayerInteractAtEntityEvent e){
         var difficulty = instance.getGame().getDifficultyChanges();
         var item = e.getPlayer().getEquipment().getItemInMainHand();
+        
         if(difficulty.get("raiders") && e.getRightClicked() instanceof Cow && item.getType() == Material.BUCKET){
             var cow = (Cow) e.getRightClicked();
             if(cow.getCustomName() != null && cow.getCustomName().toString().contains("loom")){

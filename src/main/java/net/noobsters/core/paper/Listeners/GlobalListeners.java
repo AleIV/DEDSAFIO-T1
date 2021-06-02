@@ -15,7 +15,6 @@ import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.Pillager;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
-import org.bukkit.entity.WitherSkull;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -28,6 +27,7 @@ import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLocaleChangeEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.EulerAngle;
 
 import net.md_5.bungee.api.ChatColor;
 import net.noobsters.core.paper.GameTickEvent;
@@ -95,7 +95,13 @@ public class GlobalListeners implements Listener{
             }
         }
 
+
+
         if(difficulty.get("lava") && cause == DamageCause.LAVA){
+            e.setDamage(e.getDamage()*damage);
+        }
+
+        if(difficulty.get("meteor") && cause == DamageCause.WITHER){
             e.setDamage(e.getDamage()*damage);
         }
 
@@ -153,6 +159,7 @@ public class GlobalListeners implements Listener{
                 armorStand.setCustomName("Meteor");
                 armorStand.setInvisible(true);
                 armorStand.setGlowing(true);
+                armorStand.setBodyPose(EulerAngle.ZERO);
                 var meteor = new ItemStack(Material.WOODEN_HOE);
                 var meta =  meteor.getItemMeta();
                 meta.setDisplayName(ChatColor.BLACK + "Meteor");
@@ -165,7 +172,7 @@ public class GlobalListeners implements Listener{
 
                 var loc = entity.getLocation();
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:meteorito_cayendo master @a " + loc.getX()
-                        + " " + loc.getY() + " " + loc.getZ() + " 100000 1");
+                        + " " + loc.getY() + " " + loc.getZ() + " 1 1");
             }
         }
     }
@@ -185,7 +192,7 @@ public class GlobalListeners implements Listener{
                 entity.getWorld().strikeLightning(entity.getLocation());
                 entity.getWorld().strikeLightning(entity.getLocation());
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:meteorito_impacto master @a " + loc.getX()
-                        + " " + loc.getY() + " " + loc.getZ() + " 100000 1");
+                        + " " + loc.getY() + " " + loc.getZ() + " 1 1");
                 
             }else if(block != null){
                 var loc = block.getLocation();
@@ -194,7 +201,7 @@ public class GlobalListeners implements Listener{
                 block.getWorld().strikeLightning(block.getLocation());
                 block.getWorld().strikeLightning(block.getLocation());
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:meteorito_impacto master @a " + loc.getX()
-                        + " " + loc.getY() + " " + loc.getZ() + " 100000 1");
+                        + " " + loc.getY() + " " + loc.getZ() + " 1 1");
                 
             }
         }
@@ -203,7 +210,6 @@ public class GlobalListeners implements Listener{
     @EventHandler
     public void mobsDamageModifier(EntityDamageByEntityEvent e){
         var damager = e.getDamager();
-        var entity = e.getEntity();
         var damageAmplifier = instance.getGame().getDamageAmplifier();
 
         if(damager instanceof Player) return;
@@ -229,12 +235,6 @@ public class GlobalListeners implements Listener{
             if(shooter != null){
                 e.setDamage(e.getDamage()*damageAmplifier);
             }
-        }
-
-        if(damager instanceof WitherSkull && entity instanceof Player){
-            var player = (Player) entity;
-            
-            player.damage(4*damageAmplifier);
         }
 
         if(damager.getCustomName() != null){

@@ -22,9 +22,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.meta.ItemMeta;
 
+import fr.mrmicky.fastinv.ItemBuilder;
 import lombok.Getter;
 import net.md_5.bungee.api.ChatColor;
 import net.noobsters.core.paper.PERMADED;
@@ -38,27 +42,62 @@ public class DedsafioListener implements Listener {
             .filter(material -> material.name().contains("FENCE") && !material.name().contains("FENCE_GATE"))
             .collect(Collectors.toList());
 
+    int amount1 = 64;
+    int amount2 = 4;
+    int amount3 = 4;
+
+    Material item1 = Material.EMERALD_BLOCK;
+    Material item2 = Material.CHORUS_FRUIT;
+    Material item3 = Material.TOTEM_OF_UNDYING;
+
     DedsafioListener(PERMADED instance) {
         this.instance = instance;
     }
 
     @EventHandler
-    public void onInteract(PlayerInteractAtEntityEvent e){
+    public void interact(PlayerInteractAtEntityEvent e){
         var player = e.getPlayer();
         var entity = e.getRightClicked();
-        if(entity instanceof ArmorStand && player.getEquipment().getItemInMainHand() != null){
-            var item = player.getEquipment().getItemInMainHand();
-            //var stand = (ArmorStand) entity;
-            if(item.getItemMeta().hasCustomModelData() && 
-                item.getItemMeta().getCustomModelData() == 114){
-                    instance.getGame().getReviveList().add(item.getItemMeta().getDisplayName().toLowerCase());
-                    player.getEquipment().setItemInMainHand(null);
-                    
-                    var loc = player.getLocation();
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), 
-                        "playsound minecraft:entity.blaze.death master @a " + loc.getX() +  " " + loc.getY() + " " + loc.getZ() +  " 1 1");
+
+        if(entity instanceof ArmorStand && entity.getCustomName() != null && entity.getCustomName().contains("pilar")){
+            var inv = player.getInventory();
+
+            if(inv.contains(item1, amount1) && inv.contains(item2, amount2) && inv.contains(item3, amount3)){
+                var itemstack1 = new org.bukkit.inventory.ItemStack(item1, amount1);
+                var itemstack2 = new org.bukkit.inventory.ItemStack(item2, amount2);
+                var itemstack3 = new org.bukkit.inventory.ItemStack(item3, amount3);
+
+                inv.removeItem(itemstack1);
+                inv.removeItem(itemstack2);
+                inv.removeItem(itemstack3);
+
+                var item = new ItemBuilder(Material.WOODEN_SHOVEL).name(ChatColor.GOLD + "" + ChatColor.BOLD + "RESURRECCTION SPOON").flags(ItemFlag.HIDE_ATTRIBUTES).meta(ItemMeta.class, meta -> meta.setCustomModelData(114)).build();
+                player.getInventory().addItem(item);
+
+                player.playSound(player.getLocation(), Sound.BLOCK_FIRE_EXTINGUISH, 1, 1);
+
+            }else{
+                player.sendMessage(ChatColor.RED + "No tienes los materiales.");
             }
 
+        }
+    }
+
+    @EventHandler
+    public void onInteract(PlayerInteractEvent e){
+        var player = e.getPlayer();
+
+        var item = player.getEquipment().getItemInMainHand();
+            
+        if(item !=  null && item.getItemMeta().hasCustomModelData() && 
+            item.getItemMeta().getCustomModelData() == 114){
+
+                instance.getGame().getReviveList().add(item.getItemMeta().getDisplayName().toLowerCase());
+                player.getEquipment().setItemInMainHand(null);
+                
+                var loc = player.getLocation();
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), 
+                    "playsound minecraft:entity.blaze.death master @a " + loc.getX() +  " " + loc.getY() + " " + loc.getZ() +  " 1 1");
         }
     }
     

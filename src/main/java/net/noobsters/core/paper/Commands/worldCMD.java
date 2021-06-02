@@ -28,9 +28,9 @@ public class worldCMD extends BaseCommand {
     Random random = new Random();
     List<String> letters = new ArrayList<>();
 
-    String item1 = "uE0A1";
-    String item2 = "uE0A8";
-    String item3 = "uE0A6";
+    String item1 = "uE1A0";
+    String item2 = "uE0A0";
+    String item3 = "uE0A3";
 
     public worldCMD(PERMADED instance) {
         this.instance = instance;
@@ -74,6 +74,64 @@ public class worldCMD extends BaseCommand {
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title @a times 0 1 60");
 
         switch (type) {
+
+            case "CRAFT": {
+                ruedita();
+
+                Bukkit.getScheduler().runTaskLater(instance, task -> {
+
+                    var chain = PERMADED.newChain();
+
+                    var character = 92;
+                    var charac = Character.toString((char)character);
+
+                    chain.delay(20).sync(() -> {
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
+                                "title @a title {\"text\":\"" + charac + item1 + "\"}");
+
+                        Bukkit.getOnlinePlayers().forEach(p -> {
+                            p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 1, 0.5f);
+                        });
+
+                    });
+
+                    chain.delay(20).sync(() -> {
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
+                                "title @a title {\"text\":\"" + charac + item2 + "\"}");
+                        
+                        Bukkit.getOnlinePlayers().forEach(p -> {
+                            p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 1, 0.5f);
+                        });
+                    });
+
+                    chain.delay(20).sync(() -> {
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
+                                "title @a title {\"text\":\"" + charac + item3 + "\"}");
+
+                        Bukkit.broadcastMessage("");
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
+                                "tellraw @a {\"text\":\"" + charac + item1 + " x64" + "\"}");
+                        Bukkit.broadcastMessage("");
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
+                                "tellraw @a {\"text\":\"" + charac + item2 + " x4" + "\"}");
+                        Bukkit.broadcastMessage("");
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
+                                "tellraw @a {\"text\":\"" + charac + item3 + " x4" + "\"}");
+                                
+                            
+                        Bukkit.getOnlinePlayers().forEach(p -> {
+                            p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 1, 0.5f);
+                        });
+                    });
+
+
+                    chain.sync(TaskChain::abort).execute();
+
+                }, 97);
+
+            }
+                break;
+
             case "ZOMBIES": {
                 ruedita();
 
@@ -184,6 +242,11 @@ public class worldCMD extends BaseCommand {
             }
                 break;
 
+            case "CHANGE": {
+                ruedita();
+
+            }break;
+
             case "MUDDY": {
                 ruedita();
 
@@ -200,63 +263,6 @@ public class worldCMD extends BaseCommand {
 
                 Bukkit.getScheduler().runTaskLater(instance, task -> {
                     instance.animation("", "mistery", "6", 73, false);
-
-                }, 97);
-
-            }
-                break;
-
-            case "CRAFT": {
-                ruedita();
-
-                Bukkit.getScheduler().runTaskLater(instance, task -> {
-
-                    var chain = PERMADED.newChain();
-
-                    var character = 92;
-                    var charac = Character.toString((char)character);
-
-                    chain.delay(20).sync(() -> {
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-                                "title @a title {\"text\":\"" + charac + item1 + "\"}");
-
-                        Bukkit.getOnlinePlayers().forEach(p -> {
-                            p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 1, 0.5f);
-                        });
-
-                    });
-
-                    chain.delay(20).sync(() -> {
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-                                "title @a title {\"text\":\"" + charac + item2 + "\"}");
-                        
-                        Bukkit.getOnlinePlayers().forEach(p -> {
-                            p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 1, 0.5f);
-                        });
-                    });
-
-                    chain.delay(20).sync(() -> {
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-                                "title @a title {\"text\":\"" + charac + item3 + "\"}");
-
-                        Bukkit.broadcastMessage("");
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-                                "tellraw @a {\"text\":\"" + charac + item1 + " x1" + "\"}");
-                        Bukkit.broadcastMessage("");
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-                                "tellraw @a {\"text\":\"" + charac + item2 + " x4" + "\"}");
-                        Bukkit.broadcastMessage("");
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-                                "tellraw @a {\"text\":\"" + charac + item3 + " x4" + "\"}");
-                                
-                            
-                        Bukkit.getOnlinePlayers().forEach(p -> {
-                            p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 1, 0.5f);
-                        });
-                    });
-
-
-                    chain.sync(TaskChain::abort).execute();
 
                 }, 97);
 

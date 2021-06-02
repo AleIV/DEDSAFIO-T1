@@ -1,5 +1,6 @@
 package net.noobsters.core.paper.Listeners;
 
+import java.util.Arrays;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -35,7 +36,7 @@ public class Extra implements Listener {
         });
 
     }
-
+    
     public float getDistance(Location val1, Location val2) {
 
         double x1 = val1.getX();
@@ -52,26 +53,31 @@ public class Extra implements Listener {
         Bukkit.getOnlinePlayers().stream().forEach(player -> {
 
             var meteors = player.getNearbyEntities(32, 100, 32).stream().filter(meteor -> 
-                meteor instanceof ArmorStand && meteor.getCustomName() != null && meteor.getCustomName().contains("Meteor")).collect(Collectors.toList());
+                meteor instanceof ArmorStand && meteor.getCustomName() != null && meteor.getCustomName().contains("Meteor")).map(e -> (ArmorStand)e).collect(Collectors.toList());
 
             if(player.getWorld() == Bukkit.getWorld("world")){
                 if(!meteors.isEmpty()){
-                    player.damage(2);
+
                     player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 20, 1));
                 }
             }
 
             var equip = player.getEquipment();
+            var inv = player.getInventory();
             var helmet = equip.getHelmet();
             var chest = equip.getChestplate();
             var legs = equip.getLeggings();
             var boots = equip.getBoots();
+            
+
+            var meteorInv = Arrays.stream(inv.getArmorContents()).filter(item -> item != null && item.getItemMeta().hasCustomModelData() && item.getItemMeta().getCustomModelData() == 6).findAny();
 
             if(helmet != null && helmet.getType().toString().contains("GOLD")
                 || chest != null && chest.getType().toString().contains("GOLD")
                     || legs != null && legs.getType().toString().contains("GOLD")
-                        || boots != null && boots.getType().toString().contains("GOLD")){
-                player.damage(2);
+                        || boots != null && boots.getType().toString().contains("GOLD")
+                         || meteorInv.isPresent()){
+
                 player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 20, 1));
             }
             
