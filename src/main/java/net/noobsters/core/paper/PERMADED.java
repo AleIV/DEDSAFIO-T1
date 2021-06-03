@@ -48,11 +48,13 @@ public class PERMADED extends JavaPlugin {
       arenaWorld.environment(Environment.NORMAL);
       arenaWorld.createWorld();
 
-      Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "scoreboard objectives add health_tab health");
-      Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "scoreboard objectives setdisplay list health_tab");
-      Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "scoreboard objectives modify health_tab rendertype integer");
+      WorldCreator race = new WorldCreator("RACE");
+      race.environment(Environment.NORMAL);
+      race.createWorld();
 
-      Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "scoreboard objectives setdisplay list health_name");
+      WorldCreator test = new WorldCreator("TEST");
+      test.environment(Environment.NORMAL);
+      test.createWorld();
 
     }, 20 * 10);
 
@@ -74,9 +76,7 @@ public class PERMADED extends JavaPlugin {
     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title @a times 0 1 60");
     
     Bukkit.getOnlinePlayers().forEach(p->{
-        var loc = p.getLocation();
-        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:" + sound + " master "+ p.getName() + " " + loc.getX()
-                    + " " + loc.getY() + " " + loc.getZ() + " 1 1");
+        p.playSound(p.getLocation(), sound, 1, 1);
     });
     
     while (count < number) {

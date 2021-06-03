@@ -17,10 +17,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
-import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
-import org.bukkit.event.entity.VillagerAcquireTradeEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.PrepareSmithingEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.EquipmentSlot;
@@ -60,35 +57,6 @@ public class Items implements Listener {
         Bukkit.addRecipe(leggings);
         Bukkit.addRecipe(boots);
 
-    }
-
-    @EventHandler
-    public void onDrop(ItemSpawnEvent e){
-        var item = e.getEntity().getItemStack();
-        if(item.getType() == Material.ARMOR_STAND){
-            e.setCancelled(true);
-        }else if(item.getType() == Material.NAME_TAG){
-            e.setCancelled(true);
-        }
-    }
-
-    @EventHandler
-    public void onOpenChest(InventoryOpenEvent e){
-        if(e.getInventory().getType().toString().equals("CHEST")){
-            var items = e.getInventory().getContents();
-            for (int i = 0; i < items.length; i++) {
-                if(items[i] != null && items[i].getType() == Material.NAME_TAG){
-                    items[i].setType(Material.DIAMOND);
-                }
-            }
-        }
-    }
-
-    @EventHandler
-    public void onTrade(VillagerAcquireTradeEvent e){
-        if(e.getRecipe().getResult().getType() == Material.NAME_TAG){
-            e.setCancelled(true);
-        }
     }
 
     @EventHandler
@@ -163,7 +131,7 @@ public class Items implements Listener {
         final AttributeModifier toughness = new AttributeModifier(UUID.randomUUID(), "GENERIC.ARMOR_TOUGHNESS", 3.0,
                 AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD);
         bloodMeta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, toughness);
-        final AttributeModifier health = new AttributeModifier(UUID.randomUUID(), "GENERIC.MAX_HEALTH", 5.0,
+        final AttributeModifier health = new AttributeModifier(UUID.randomUUID(), "GENERIC.MAX_HEALTH", 2.0,
                 AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD);
         bloodMeta.addAttributeModifier(Attribute.GENERIC_MAX_HEALTH, health);
         bloodArmor.setItemMeta(bloodMeta);
@@ -184,7 +152,7 @@ public class Items implements Listener {
         final AttributeModifier toughness = new AttributeModifier(UUID.randomUUID(), "GENERIC.ARMOR_TOUGHNESS", 3.0,
                 AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.CHEST);
         bloodMeta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, toughness);
-        final AttributeModifier health = new AttributeModifier(UUID.randomUUID(), "GENERIC.MAX_HEALTH", 5.0,
+        final AttributeModifier health = new AttributeModifier(UUID.randomUUID(), "GENERIC.MAX_HEALTH", 2.0,
                 AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.CHEST);
         bloodMeta.addAttributeModifier(Attribute.GENERIC_MAX_HEALTH, health);
         bloodArmor.setItemMeta(bloodMeta);
@@ -205,7 +173,7 @@ public class Items implements Listener {
         final AttributeModifier toughness = new AttributeModifier(UUID.randomUUID(), "GENERIC.ARMOR_TOUGHNESS", 3.0,
                 AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.LEGS);
         bloodMeta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, toughness);
-        final AttributeModifier health = new AttributeModifier(UUID.randomUUID(), "GENERIC.MAX_HEALTH", 5.0,
+        final AttributeModifier health = new AttributeModifier(UUID.randomUUID(), "GENERIC.MAX_HEALTH", 2.0,
                 AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.LEGS);
         bloodMeta.addAttributeModifier(Attribute.GENERIC_MAX_HEALTH, health);
         bloodArmor.setItemMeta(bloodMeta);
@@ -226,7 +194,7 @@ public class Items implements Listener {
         final AttributeModifier toughness = new AttributeModifier(UUID.randomUUID(), "GENERIC.ARMOR_TOUGHNESS", 3.0,
                 AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.FEET);
         bloodMeta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, toughness);
-        final AttributeModifier health = new AttributeModifier(UUID.randomUUID(), "GENERIC.MAX_HEALTH", 5.0,
+        final AttributeModifier health = new AttributeModifier(UUID.randomUUID(), "GENERIC.MAX_HEALTH", 2.0,
                 AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.FEET);
         bloodMeta.addAttributeModifier(Attribute.GENERIC_MAX_HEALTH, health);
         bloodArmor.setItemMeta(bloodMeta);

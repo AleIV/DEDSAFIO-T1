@@ -15,8 +15,8 @@ import lombok.EqualsAndHashCode;
 public class Game extends BukkitRunnable{
     PERMADED instance;
     int spawnPatrolDelay = 600;
-    int damageAmplifier = 2;
-    int mobResistance = 20;
+    int damageAmplifier = 3;
+    int mobResistance = 40;
     HashMap<String, Boolean> difficultyChanges = new HashMap<>();
     HashMap<String, Boolean> deathPlayers = new HashMap<>();
     List<String> pvpOn = new ArrayList<>();
@@ -34,7 +34,7 @@ public class Game extends BukkitRunnable{
 
         difficultyChanges.put("zombies", true);
         difficultyChanges.put("spiders", false);
-        difficultyChanges.put("skeletons", false);
+        difficultyChanges.put("skeletons", true);
         difficultyChanges.put("pigs", false);
         difficultyChanges.put("raiders", false);
         difficultyChanges.put("mages", true);
@@ -43,9 +43,10 @@ public class Game extends BukkitRunnable{
         difficultyChanges.put("raids", false);
 
         difficultyChanges.put("redstone", false);
-        difficultyChanges.put("meteor", true);
+        difficultyChanges.put("meteor", false);
 
         difficultyChanges.put("lava", true);
+        difficultyChanges.put("environment", false);
 
         deathPlayers.put("0PHY", true);
         deathPlayers.put("Hasvik", true);

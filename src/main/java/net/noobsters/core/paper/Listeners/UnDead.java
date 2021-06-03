@@ -133,7 +133,7 @@ public class UnDead implements Listener {
                     skeleton.setCustomName(ChatColor.RED + "Zozo");
                     var bow = new ItemStack(Material.BOW);
                     var meta = bow.getItemMeta();
-                    meta.addEnchant(Enchantment.ARROW_DAMAGE, 3, true);
+                    meta.addEnchant(Enchantment.ARROW_DAMAGE, 5, true);
                     bow.setItemMeta(meta);
                     var skeletonEquipment = skeleton.getEquipment();
                     skeletonEquipment.setItemInMainHand(bow);
@@ -155,7 +155,7 @@ public class UnDead implements Listener {
 
                     var bow = new ItemStack(Material.BOW);
                     var meta = bow.getItemMeta();
-                    meta.addEnchant(Enchantment.ARROW_DAMAGE, 3, true);
+                    meta.addEnchant(Enchantment.ARROW_DAMAGE, 5, true);
                     bow.setItemMeta(meta);
 
                     var pirateHat = new ItemStack(Material.CARVED_PUMPKIN);
@@ -193,10 +193,6 @@ public class UnDead implements Listener {
                     skeletonEquipment.setLeggings(pirateLegs);
                     skeletonEquipment.setBoots(pirateBoots);
 
-                    if(random.nextInt(20) == 1){
-                        var parrot = skeleton.getWorld().spawnEntity(skeleton.getLocation(), EntityType.PARROT);
-                        skeleton.addPassenger(parrot);
-                    }
                 }
                     break;
             }

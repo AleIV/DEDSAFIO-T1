@@ -49,7 +49,7 @@ public class Disguise implements Listener {
 
             if (killer != null && killer instanceof Player && disguise.getDisguiseName().contains("Redstone")) {
                 e.setDeathMessage(ChatColor.DARK_RED + "Redstone Monstrosity " + ChatColor.WHITE + "was destroyed by "
-                        + killer.getName().toString());
+                        + player.getName().toString());
             }
             player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(20.0);
             player.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0);
@@ -124,8 +124,10 @@ public class Disguise implements Listener {
             var loc = player.getLocation();
             if(string.contains("Explosion")){
                 loc.createExplosion(10, false, false);
+
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:smash master @a " + loc.getX()
-                        + " " + loc.getY() + " " + loc.getZ() + " 6 1");
+                        + " " + loc.getY() + " " + loc.getZ() + " 3 1");
+
             }else if(string.contains("Walk")){
                 if(player.hasPotionEffect(PotionEffectType.SPEED)){
                     player.removePotionEffect(PotionEffectType.SPEED);
@@ -133,7 +135,8 @@ public class Disguise implements Listener {
                 player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 100000, 3, false, false));
                 //sound walk
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:steps master @a " + loc.getX()
-                        + " " + loc.getY() + " " + loc.getZ() + " 6 1");
+                        + " " + loc.getY() + " " + loc.getZ() + " 3 1");
+
             }else if(string.contains("Speed")){
                 if(player.hasPotionEffect(PotionEffectType.SLOW)){
                     player.removePotionEffect(PotionEffectType.SLOW);
@@ -141,22 +144,25 @@ public class Disguise implements Listener {
                 player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 100000, 0, false, false));
                 //sound fast walk
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:steps master @a " + loc.getX()
-                        + " " + loc.getY() + " " + loc.getZ() + " 6 1.5");
+                        + " " + loc.getY() + " " + loc.getZ() + " 3 1.5");
+
             }else if(string.contains("Jump")){
                 player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 20, 29, false, false));
                 //sound jump
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:smash master @a " + loc.getX()
-                        + " " + loc.getY() + " " + loc.getZ() + " 6 1");
+                        + " " + loc.getY() + " " + loc.getZ() + " 3 1");
+
             }else if(string.contains("Roar")){
                 loc.getNearbyPlayers(40).stream().filter(p -> DisguiseAPI.isDisguised(p))
                     .forEach(p -> p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20*3, 4, false, false)));
                 //sound roar
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:roar master @a " + loc.getX()
-                        + " " + loc.getY() + " " + loc.getZ() + " 6 1");
+                        + " " + loc.getY() + " " + loc.getZ() + " 3 1");
+
             }else if(string.contains("Laugh")){
                 //sound laugh
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:laugh master @a " + loc.getX()
-                        + " " + loc.getY() + " " + loc.getZ() + " 6 1");
+                        + " " + loc.getY() + " " + loc.getZ() + " 3 1");
             }
         }
     }
@@ -193,6 +199,7 @@ public class Disguise implements Listener {
                     || cause == DamageCause.ENTITY_EXPLOSION || cause == DamageCause.BLOCK_EXPLOSION
                     || cause == DamageCause.HOT_FLOOR || cause == DamageCause.WITHER) {
                 e.setCancelled(true);
+
             }else if(cause == DamageCause.FALL){
                 e.setCancelled(true);
             }

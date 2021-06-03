@@ -28,9 +28,9 @@ public class worldCMD extends BaseCommand {
     Random random = new Random();
     List<String> letters = new ArrayList<>();
 
-    String item1 = "uE1A0";
-    String item2 = "uE0A0";
-    String item3 = "uE0A3";
+    String item1 = "uE0A9";
+    String item2 = "uE0A3";
+    String item3 = "uE0A2";
 
     public worldCMD(PERMADED instance) {
         this.instance = instance;
@@ -45,13 +45,6 @@ public class worldCMD extends BaseCommand {
 
     }
 
-    @Subcommand("ruedita")
-    @CommandAlias("ruedita")
-    public void ruedita(CommandSender sender, String text) {
-
-        Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&6&l[&4&lDEDSAFIO&6&l] &f" + text));
-    }
-
     @Subcommand("say")
     @CommandAlias("say")
     public void say(CommandSender sender, String text) {
@@ -59,6 +52,22 @@ public class worldCMD extends BaseCommand {
         Bukkit.getOnlinePlayers().forEach(player -> {
             player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 1, 0.5f);
         });
+
+    }
+
+    @Subcommand("kill-entity")
+    @CommandAlias("kill-entity")
+    public void killent(CommandSender sender) {
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "kill @e[type=minecraft:parrot]");
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "kill @e[type=minecraft:horse]");
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "kill @e[type=minecraft:strider]");
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "kill @e[type=minecraft:sheep]");
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "kill @e[type=minecraft:chicken]");
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "kill @e[type=minecraft:pig]");
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "kill @e[type=minecraft:polar_bear]");
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "kill @e[type=minecraft:cow]");
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "kill @e[type=minecraft:llama]");
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "kill @e[type=minecraft:rabbit]");
 
     }
 
@@ -113,10 +122,10 @@ public class worldCMD extends BaseCommand {
                                 "tellraw @a {\"text\":\"" + charac + item1 + " x64" + "\"}");
                         Bukkit.broadcastMessage("");
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-                                "tellraw @a {\"text\":\"" + charac + item2 + " x4" + "\"}");
+                                "tellraw @a {\"text\":\"" + charac + item2 + " x16" + "\"}");
                         Bukkit.broadcastMessage("");
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-                                "tellraw @a {\"text\":\"" + charac + item3 + " x4" + "\"}");
+                                "tellraw @a {\"text\":\"" + charac + item3 + " x128" + "\"}");
                                 
                             
                         Bukkit.getOnlinePlayers().forEach(p -> {

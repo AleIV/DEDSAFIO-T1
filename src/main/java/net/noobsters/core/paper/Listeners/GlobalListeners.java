@@ -97,7 +97,13 @@ public class GlobalListeners implements Listener{
 
 
 
-        if(difficulty.get("lava") && cause == DamageCause.LAVA){
+        if(difficulty.get("lava") && cause == DamageCause.LAVA || cause == DamageCause.DRAGON_BREATH){
+            e.setDamage(e.getDamage()*damage);
+        }
+
+        if(difficulty.get("environment") && (cause == DamageCause.FIRE || cause == DamageCause.FIRE_TICK 
+            || cause == DamageCause.DROWNING || cause == DamageCause.HOT_FLOOR 
+                || cause == DamageCause.STARVATION || cause == DamageCause.FALL)){
             e.setDamage(e.getDamage()*damage);
         }
 
@@ -123,14 +129,14 @@ public class GlobalListeners implements Listener{
     public void mobsResistanceModifier(EntityDamageByEntityEvent e){
         var entity = e.getEntity();
         var damager = e.getDamager();
-        var loc = entity.getLocation();
         if(entity.getCustomName() != null){
             var mobResistance = instance.getGame().getMobResistance();
             e.setDamage(e.getDamage()-((e.getDamage()/100)*mobResistance));
 
             if(damager instanceof IronGolem && entity.getCustomName().toString().contains("Mutant") && entity instanceof Player){
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:zombie_attack master @a " + loc.getX()
-                + " " + loc.getY() + " " + loc.getZ() + " 1 1");
+
+                var player = (Player) entity;
+                player.playSound(player.getLocation(), "zombie_attack", 1, 1);
             }
         }
 
@@ -170,9 +176,9 @@ public class GlobalListeners implements Listener{
 
 
 
-                var loc = entity.getLocation();
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:meteorito_cayendo master @a " + loc.getX()
-                        + " " + loc.getY() + " " + loc.getZ() + " 1 1");
+                Bukkit.getOnlinePlayers().forEach(p->{
+                    p.playSound(p.getLocation(), "meteorito_cayendo", 1, 1);
+                });
             }
         }
     }
@@ -204,6 +210,8 @@ public class GlobalListeners implements Listener{
                         + " " + loc.getY() + " " + loc.getZ() + " 1 1");
                 
             }
+
+            
         }
     }
 

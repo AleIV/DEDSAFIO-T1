@@ -2,7 +2,6 @@ package net.noobsters.core.paper.Listeners;
 
 import java.util.Random;
 
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Blaze;
 import org.bukkit.entity.Enderman;
@@ -52,9 +51,6 @@ public class Demons implements Listener{
             var blaze = (Blaze) entity;
             blaze.setCustomName(ChatColor.DARK_PURPLE + "Pure Demon");
             blaze.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20 * 600, 3));
-            var loc = blaze.getLocation();
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-                    "playsound minecraft:lich master @a " + loc.getX() + " " + loc.getY() + " " + loc.getZ() + " 1 1");
 
         }else if(difficulty.get("demons") && entity instanceof Enderman){
             var enderman = (Enderman) entity;

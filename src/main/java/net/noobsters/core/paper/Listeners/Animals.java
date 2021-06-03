@@ -74,7 +74,7 @@ public class Animals implements Listener {
                 entity.getWorld().spawnEntity(entity.getLocation(), EntityType.PIG);
             }
 
-        }else if(difficulty.get("raiders") && entity instanceof Cow || entity instanceof MushroomCow){
+        }else if(difficulty.get("raiders") && (entity instanceof Cow || entity instanceof MushroomCow)){
 
             if(random.nextInt(30) == 1){
                 var cow = (Cow) entity;
@@ -197,11 +197,6 @@ public class Animals implements Listener {
         if (entity.getCustomName() != null && entity.getCustomName().toString().contains("Muddy")) {
             e.getDrops().forEach(drop -> drop.setType(Material.AIR));
             e.getDrops().add(new ItemStack(Material.ENCHANTED_GOLDEN_APPLE));
-
-        }else if(entity.getCustomName() != null && entity.getCustomName().toString().contains("loom")){
-            e.getDrops().forEach(drop -> drop.setType(Material.AIR));
-
-            entity.getWorld().dropItemNaturally(entity.getLocation(), new ItemStack(Material.TOTEM_OF_UNDYING));
 
         }else if(entity instanceof Horse && entity.getCustomName() != null && entity.isSilent()){
             e.getDrops().forEach(drop -> drop.setType(Material.AIR));

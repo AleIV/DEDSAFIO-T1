@@ -94,7 +94,7 @@ public class MiniBosses implements Listener {
 
         var entity = e.getEntity();
         if (entity instanceof EnderDragon) {
-            var bloodScale = new ItemBuilder(Material.RABBIT_FOOT).name(ChatColor.RED + "Blood Scale").meta(ItemMeta.class, meta -> meta.setCustomModelData(143)).amount(random.nextInt(16)).build();
+            var bloodScale = new ItemBuilder(Material.RABBIT_FOOT).name(ChatColor.RED + "Blood Scale").meta(ItemMeta.class, meta -> meta.setCustomModelData(143)).amount(random.nextInt(10)).build();
             e.getDrops().add(bloodScale);
         }
 

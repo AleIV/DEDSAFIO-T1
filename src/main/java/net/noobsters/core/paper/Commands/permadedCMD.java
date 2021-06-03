@@ -217,15 +217,6 @@ public class permadedCMD extends BaseCommand {
         sender.sendMessage(ChatColor.GREEN + "Spawn patrol delay set to " + change);
     }
 
-    @Subcommand("music")
-    @CommandAlias("music")
-    public void music(Player sender, String music){
-        var loc = sender.getLocation();
-        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:" + music + " master @a " + loc.getX()
-                        + " " + loc.getY() + " " + loc.getZ() + " 0.3 1");
-        sender.sendMessage(ChatColor.AQUA + "Music played");
-    }
-
     @Subcommand("summon")
     public void summon(Player sender, EntityType entity, String summon) {
         var loc = sender.getLocation();

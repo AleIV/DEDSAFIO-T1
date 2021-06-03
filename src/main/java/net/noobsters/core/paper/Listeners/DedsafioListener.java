@@ -21,8 +21,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemFlag;
@@ -43,12 +43,12 @@ public class DedsafioListener implements Listener {
             .collect(Collectors.toList());
 
     int amount1 = 64;
-    int amount2 = 4;
-    int amount3 = 4;
+    int amount2 = 16;
+    int amount3 = 128;
 
-    Material item1 = Material.EMERALD_BLOCK;
+    Material item1 = Material.DIAMOND_ORE;
     Material item2 = Material.CHORUS_FRUIT;
-    Material item3 = Material.TOTEM_OF_UNDYING;
+    Material item3 = Material.ENDER_EYE;
 
     DedsafioListener(PERMADED instance) {
         this.instance = instance;
@@ -84,20 +84,16 @@ public class DedsafioListener implements Listener {
     }
 
     @EventHandler
-    public void onInteract(PlayerInteractEvent e){
+    public void onInteract(PlayerDropItemEvent e){
         var player = e.getPlayer();
-
-        var item = player.getEquipment().getItemInMainHand();
+        var item = e.getItemDrop().getItemStack();
             
-        if(item !=  null && item.getItemMeta().hasCustomModelData() && 
+        if(item.getItemMeta().hasCustomModelData() && 
             item.getItemMeta().getCustomModelData() == 114){
 
                 instance.getGame().getReviveList().add(item.getItemMeta().getDisplayName().toLowerCase());
-                player.getEquipment().setItemInMainHand(null);
                 
-                var loc = player.getLocation();
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), 
-                    "playsound minecraft:entity.blaze.death master @a " + loc.getX() +  " " + loc.getY() + " " + loc.getZ() +  " 1 1");
+                player.playSound(player.getLocation(), Sound.ENTITY_BLAZE_DEATH, 1, 1);
         }
     }
     
