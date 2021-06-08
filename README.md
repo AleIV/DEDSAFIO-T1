@@ -1,2 +1,2 @@
-# Template
-Template for noobsters.
+# DEDSAFIO
+dedsafio plugin.
