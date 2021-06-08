@@ -303,7 +303,6 @@ public class GlobalListeners implements Listener{
 
         if(damager.getCustomName() != null){
             e.setDamage(e.getDamage()*damageAmplifier);
-
         }  
 
     }

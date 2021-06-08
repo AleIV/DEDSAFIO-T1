@@ -63,7 +63,7 @@ public class DedsafioListener implements Listener {
 
             if(inv.contains(item1, amount1) && inv.contains(item2, amount2) && inv.contains(item3, amount3)){
                 var itemstack1 = new org.bukkit.inventory.ItemStack(item1, amount1);
-                var itemstack2 = new ItemBuilder(item1).name(ChatColor.RED + "Blood Scale").meta(ItemMeta.class, meta -> meta.setCustomModelData(143)).amount(amount2).build();
+                //var itemstack2 = new ItemBuilder(item1).name(ChatColor.RED + "Blood Scale").meta(ItemMeta.class, meta -> meta.setCustomModelData(143)).amount(amount2).build();
                 var itemstack3 = new org.bukkit.inventory.ItemStack(item3, amount3);
 
                 inv.removeItem(itemstack1);
@@ -80,7 +80,6 @@ public class DedsafioListener implements Listener {
                 });
 
             }else{
-                
                 player.sendMessage(ChatColor.RED + "No tienes los materiales.");
             }
 
@@ -227,6 +226,7 @@ public class DedsafioListener implements Listener {
                 if (!p1.hasPermission("mod.perm") && p2.getGameMode() == GameMode.SURVIVAL
                         && !p2.hasPermission("mod.perm")) {
                     e.setCancelled(true);
+            
                 }
             }
         }

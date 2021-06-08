@@ -85,6 +85,7 @@ public class Demons implements Listener{
 
 
     }
+
     @EventHandler
     public void onHit(EntityDamageByEntityEvent e){
         var entity = e.getEntity();
@@ -105,7 +106,5 @@ public class Demons implements Listener{
         }
 
     }
-
-
 
 }

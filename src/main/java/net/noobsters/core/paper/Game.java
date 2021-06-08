@@ -36,7 +36,7 @@ public class Game extends BukkitRunnable{
         difficultyChanges.put("zombies", true);
         difficultyChanges.put("spiders", true);
         difficultyChanges.put("skeletons", true);
-        difficultyChanges.put("dragon", true);
+        difficultyChanges.put("dragon", false);
         difficultyChanges.put("pigs", false);
         difficultyChanges.put("raiders", false); 
         difficultyChanges.put("mages", true);
