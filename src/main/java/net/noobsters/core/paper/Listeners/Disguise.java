@@ -125,8 +125,9 @@ public class Disguise implements Listener {
             if(string.contains("Explosion")){
                 loc.createExplosion(10, false, false);
 
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:smash master @a " + loc.getX()
-                        + " " + loc.getY() + " " + loc.getZ() + " 3 1");
+                loc.getNearbyPlayers(100).stream().forEach(p ->{
+                    p.playSound(p.getLocation(), "smash", 3, 1);
+                });
 
             }else if(string.contains("Walk")){
                 if(player.hasPotionEffect(PotionEffectType.SPEED)){
@@ -134,8 +135,10 @@ public class Disguise implements Listener {
                 }
                 player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 100000, 3, false, false));
                 //sound walk
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:steps master @a " + loc.getX()
-                        + " " + loc.getY() + " " + loc.getZ() + " 3 1");
+
+                loc.getNearbyPlayers(100).stream().forEach(p ->{
+                    p.playSound(p.getLocation(), "steps", 3, 1);
+                });
 
             }else if(string.contains("Speed")){
                 if(player.hasPotionEffect(PotionEffectType.SLOW)){
@@ -143,26 +146,35 @@ public class Disguise implements Listener {
                 }
                 player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 100000, 0, false, false));
                 //sound fast walk
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:steps master @a " + loc.getX()
-                        + " " + loc.getY() + " " + loc.getZ() + " 3 1.5");
+
+                loc.getNearbyPlayers(100).stream().forEach(p ->{
+                    p.playSound(p.getLocation(), "steps", 3, 1.5f);
+                });
 
             }else if(string.contains("Jump")){
                 player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 20, 29, false, false));
                 //sound jump
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:smash master @a " + loc.getX()
-                        + " " + loc.getY() + " " + loc.getZ() + " 3 1");
+
+                loc.getNearbyPlayers(100).stream().forEach(p ->{
+                    p.playSound(p.getLocation(), "smash", 3, 1);
+                });
 
             }else if(string.contains("Roar")){
                 loc.getNearbyPlayers(40).stream().filter(p -> DisguiseAPI.isDisguised(p))
                     .forEach(p -> p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20*3, 4, false, false)));
                 //sound roar
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:roar master @a " + loc.getX()
-                        + " " + loc.getY() + " " + loc.getZ() + " 3 1");
+
+                loc.getNearbyPlayers(100).stream().forEach(p ->{
+                    p.playSound(p.getLocation(), "roar", 3, 1);
+                });
 
             }else if(string.contains("Laugh")){
                 //sound laugh
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:laugh master @a " + loc.getX()
-                        + " " + loc.getY() + " " + loc.getZ() + " 3 1");
+
+                loc.getNearbyPlayers(100).stream().forEach(p ->{
+                    p.playSound(p.getLocation(), "laugh", 3, 1);
+                });
+
             }
         }
     }

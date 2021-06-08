@@ -11,6 +11,7 @@ import co.aikar.taskchain.TaskChain;
 import co.aikar.taskchain.TaskChainFactory;
 import lombok.Getter;
 import lombok.Setter;
+import net.noobsters.core.paper.Commands.FightCMD;
 import net.noobsters.core.paper.Commands.permadedCMD;
 import net.noobsters.core.paper.Commands.worldCMD;
 import net.noobsters.core.paper.Listeners.ListenerManager;
@@ -42,6 +43,7 @@ public class PERMADED extends JavaPlugin {
     // commands
     commandManager.registerCommand(new worldCMD(this));
     commandManager.registerCommand(new permadedCMD(this));
+    commandManager.registerCommand(new FightCMD(this));
 
     Bukkit.getScheduler().runTaskLater(this, task -> {
       WorldCreator arenaWorld = new WorldCreator("FINALFIGHT");
@@ -51,10 +53,6 @@ public class PERMADED extends JavaPlugin {
       WorldCreator race = new WorldCreator("RACE");
       race.environment(Environment.NORMAL);
       race.createWorld();
-
-      WorldCreator test = new WorldCreator("TEST");
-      test.environment(Environment.NORMAL);
-      test.createWorld();
 
     }, 20 * 10);
 

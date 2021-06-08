@@ -47,7 +47,7 @@ public class Animals implements Listener {
         
         if (difficulty.get("pigs") && entity instanceof Pig) {
 
-            if (random.nextInt(30) == 1) {
+            if (random.nextInt(50) == 1 && Bukkit.getWorld("world_nether") == entity.getWorld()) {
                 var pig = (Pig) entity;
                 pig.setCustomName(ChatColor.AQUA + "Muddy Pig");
             } else {
@@ -57,7 +57,7 @@ public class Animals implements Listener {
 
         }else if(difficulty.get("pigs") && entity.getType() == EntityType.ZOMBIFIED_PIGLIN){
 
-            //TODO: more diff
+            
             if(random.nextInt(20) == 1){
                 e.setCancelled(true);
                 entity.getWorld().spawnEntity(entity.getLocation(), EntityType.PIG);

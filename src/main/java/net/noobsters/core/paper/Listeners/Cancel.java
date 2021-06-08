@@ -19,6 +19,7 @@ import org.bukkit.entity.Horse;
 import org.bukkit.entity.Llama;
 import org.bukkit.entity.MushroomCow;
 import org.bukkit.entity.Ocelot;
+import org.bukkit.entity.Panda;
 import org.bukkit.entity.Parrot;
 import org.bukkit.entity.Pig;
 import org.bukkit.entity.PolarBear;
@@ -113,8 +114,12 @@ public class Cancel implements Listener {
     @EventHandler
     public void onCreature(CreatureSpawnEvent e){
         var entity = e.getEntity();
+        final var difficulty = instance.getGame().getDifficultyChanges();
 
         if(entity instanceof Sheep){
+            e.setCancelled(true);
+
+        }else if(entity instanceof Panda){
             e.setCancelled(true);
 
         }else if(entity instanceof Horse && entity.getWorld() == Bukkit.getWorld("world")){
@@ -135,14 +140,14 @@ public class Cancel implements Listener {
         }else if(entity instanceof Squid){
             e.setCancelled(true);
 
-        }else if(entity instanceof Pig){
-            e.setCancelled(true); //TODO:CHANGE
+        }else if(entity instanceof Pig && !difficulty.get("pigs")){
+            e.setCancelled(true);
 
-        }else if(entity instanceof Cow){
-            e.setCancelled(true); //TODO:CHANGE
+        }else if(entity instanceof Cow && !difficulty.get("raiders")){
+            e.setCancelled(true); 
 
-        }else if(entity instanceof MushroomCow){
-            e.setCancelled(true); //TODO:CHANGE
+        }else if(entity instanceof MushroomCow && !difficulty.get("raiders")){
+            e.setCancelled(true); 
 
         }else if(entity instanceof Donkey){
             e.setCancelled(true);

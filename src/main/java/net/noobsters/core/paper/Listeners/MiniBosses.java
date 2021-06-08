@@ -48,8 +48,8 @@ public class MiniBosses implements Listener {
         if (entity instanceof EnderDragon) {
             var dragon = (EnderDragon) entity;
             dragon.setCustomName(ChatColor.YELLOW + "Blood Ender Dragon");
-            dragon.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(1000);
-            dragon.setHealth(1000);
+            dragon.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(400);
+            dragon.setHealth(400);
 
         }else if(random.nextInt(5) == 1 && entity.getWorld() == Bukkit.getWorld("world_the_end") && entity instanceof Enderman){
             e.setCancelled(true);
@@ -66,25 +66,40 @@ public class MiniBosses implements Listener {
         var proj = e.getDamager();
         if(proj instanceof ShulkerBullet && entity instanceof Player){
             var bullet = (ShulkerBullet) proj;
-            var damager = (Shulker) bullet.getShooter();
+            var shulker = (Shulker) bullet.getShooter();
             var player = (Player) entity;
 
-            if(damager.getCustomName() == null){
-                if(random.nextBoolean()){
-                    damager.setCustomName(ChatColor.GOLD + "Fire Shulker"); 
-                    damager.setColor(DyeColor.RED);
-                }else{
-                    damager.setCustomName(ChatColor.BLACK + "Radioactive Shulker");
-                    damager.setColor(DyeColor.BLACK);
+            if(shulker.getCustomName() == null){
+                switch (random.nextInt(3)) {
+                    case 1:{
+                        shulker.setCustomName(ChatColor.GOLD + "Fire Shulker"); 
+                        shulker.setColor(DyeColor.RED);
+                    }break;
+                        
+                    case 2:{
+                        shulker.setCustomName(ChatColor.BLACK + "Radioactive Shulker");
+                        shulker.setColor(DyeColor.BLACK);
+                    }break;
+    
+                    default:{
+                        shulker.setCustomName(ChatColor.GREEN + "Poisonous Shulker"); 
+                        shulker.setColor(DyeColor.GREEN);
+                    }break;
                 }
-                
-            }else if(damager.getCustomName().contains("Fire")){
+            }else if(shulker.getCustomName().contains("Fire")){
                 player.setFireTicks(20*10);
 
-            }else if(damager.getCustomName().contains("Radioactive")){
+            }else if(shulker.getCustomName().contains("Radioactive")){
                 player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 10*20, 0));
 
+            }else if(shulker.getCustomName().contains("Poisonous")){
+                player.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 10*20, 0));
+
             }
+
+            Bukkit.getScheduler().runTaskLater(instance, task->{
+                player.getLocation().createExplosion(2, true, true);
+            }, 5);
         }
 
     }
@@ -94,7 +109,7 @@ public class MiniBosses implements Listener {
 
         var entity = e.getEntity();
         if (entity instanceof EnderDragon) {
-            var bloodScale = new ItemBuilder(Material.RABBIT_FOOT).name(ChatColor.RED + "Blood Scale").meta(ItemMeta.class, meta -> meta.setCustomModelData(143)).amount(random.nextInt(10)).build();
+            var bloodScale = new ItemBuilder(Material.RABBIT_FOOT).name(ChatColor.RED + "Blood Scale").meta(ItemMeta.class, meta -> meta.setCustomModelData(143)).amount(random.nextInt(10)+10).build();
             e.getDrops().add(bloodScale);
         }
 

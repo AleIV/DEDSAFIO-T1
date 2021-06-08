@@ -152,7 +152,7 @@ public class Items implements Listener {
         final AttributeModifier toughness = new AttributeModifier(UUID.randomUUID(), "GENERIC.ARMOR_TOUGHNESS", 3.0,
                 AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.CHEST);
         bloodMeta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, toughness);
-        final AttributeModifier health = new AttributeModifier(UUID.randomUUID(), "GENERIC.MAX_HEALTH", 2.0,
+        final AttributeModifier health = new AttributeModifier(UUID.randomUUID(), "GENERIC.MAX_HEALTH", 4.0,
                 AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.CHEST);
         bloodMeta.addAttributeModifier(Attribute.GENERIC_MAX_HEALTH, health);
         bloodArmor.setItemMeta(bloodMeta);
@@ -173,7 +173,7 @@ public class Items implements Listener {
         final AttributeModifier toughness = new AttributeModifier(UUID.randomUUID(), "GENERIC.ARMOR_TOUGHNESS", 3.0,
                 AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.LEGS);
         bloodMeta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, toughness);
-        final AttributeModifier health = new AttributeModifier(UUID.randomUUID(), "GENERIC.MAX_HEALTH", 2.0,
+        final AttributeModifier health = new AttributeModifier(UUID.randomUUID(), "GENERIC.MAX_HEALTH", 4.0,
                 AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.LEGS);
         bloodMeta.addAttributeModifier(Attribute.GENERIC_MAX_HEALTH, health);
         bloodArmor.setItemMeta(bloodMeta);
@@ -257,8 +257,11 @@ public class Items implements Listener {
             var player = (Player) entity;
             player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 20 * 1, 70));
             var loc = e.getEntity().getLocation();
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:shootingstars master @a " + loc.getX()
-                    + " " + loc.getY() + " " + loc.getZ() + " 1 1");
+
+            loc.getNearbyPlayers(20).stream().forEach(p ->{
+                p.playSound(p.getLocation(), "shootingstars", 1, 1);
+            });
+
         }
     }
 
@@ -290,22 +293,30 @@ public class Items implements Listener {
             //magic staff
             e.getProjectile().setCustomName("blue orb");
             var loc = e.getEntity().getLocation();
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:magic_1 master @a " + loc.getX()
-                    + " " + loc.getY() + " " + loc.getZ() + " 0.3 1");
+
+            loc.getNearbyPlayers(20).stream().forEach(p ->{
+                p.playSound(p.getLocation(), "magic_1", 0.3f, 1);
+            });
 
         }else if (bow.getCustomModelData() == 108) {
             //rifle
             e.getProjectile().setCustomName("lead bullet");
             var loc = e.getEntity().getLocation();
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:rifle_shoot master @a " + loc.getX()
-                    + " " + loc.getY() + " " + loc.getZ() + " 1 1");
+
+            loc.getNearbyPlayers(20).stream().forEach(p ->{
+                p.playSound(p.getLocation(), "rifle_shoot", 1, 1);
+            });
+
                     
         }else if (bow.getCustomModelData() == 107 || bow.getCustomModelData() == 109) {
             //pistol
             e.getProjectile().setCustomName("golden bullet");
             var loc = e.getEntity().getLocation();
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:gun_1 master @a " + loc.getX()
-                    + " " + loc.getY() + " " + loc.getZ() + " 1 1");
+
+            loc.getNearbyPlayers(20).stream().forEach(p ->{
+                p.playSound(p.getLocation(), "gun_1", 1, 1);
+            });
+
         }
         
 

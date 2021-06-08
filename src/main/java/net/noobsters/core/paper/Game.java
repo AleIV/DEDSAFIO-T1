@@ -19,8 +19,9 @@ public class Game extends BukkitRunnable{
     int mobResistance = 40;
     HashMap<String, Boolean> difficultyChanges = new HashMap<>();
     HashMap<String, Boolean> deathPlayers = new HashMap<>();
+
+    List<String> fighters = new ArrayList<>();
     List<String> pvpOn = new ArrayList<>();
-    List<String> trap = new ArrayList<>();
     List<String> reviveList = new ArrayList<>();
     boolean gulak = false;
     boolean closed = true;
@@ -33,10 +34,11 @@ public class Game extends BukkitRunnable{
         this.startTime = System.currentTimeMillis();
 
         difficultyChanges.put("zombies", true);
-        difficultyChanges.put("spiders", false);
+        difficultyChanges.put("spiders", true);
         difficultyChanges.put("skeletons", true);
+        difficultyChanges.put("dragon", true);
         difficultyChanges.put("pigs", false);
-        difficultyChanges.put("raiders", false);
+        difficultyChanges.put("raiders", false); 
         difficultyChanges.put("mages", true);
         difficultyChanges.put("demons", false);
         difficultyChanges.put("creepers", false);

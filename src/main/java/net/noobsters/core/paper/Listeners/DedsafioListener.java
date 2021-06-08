@@ -29,7 +29,6 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import fr.mrmicky.fastinv.ItemBuilder;
-import lombok.Getter;
 import net.md_5.bungee.api.ChatColor;
 import net.noobsters.core.paper.PERMADED;
 
@@ -38,17 +37,17 @@ public class DedsafioListener implements Listener {
     PERMADED instance;
     Random random = new Random();
     String deathMsg = ChatColor.DARK_RED + "" + ChatColor.BOLD + "YOU ARE DEAD";
-    private @Getter List<Material> possibleFence = Arrays.stream(Material.values())
+    private List<Material> possibleFence = Arrays.stream(Material.values())
             .filter(material -> material.name().contains("FENCE") && !material.name().contains("FENCE_GATE"))
             .collect(Collectors.toList());
 
-    int amount1 = 64;
-    int amount2 = 16;
-    int amount3 = 128;
+    int amount1 = 1;
+    int amount2 = 4;
+    int amount3 = 4;
 
-    Material item1 = Material.DIAMOND_ORE;
-    Material item2 = Material.CHORUS_FRUIT;
-    Material item3 = Material.ENDER_EYE;
+    Material item1 = Material.NETHER_STAR;
+    Material item2 = Material.RABBIT_FOOT;
+    Material item3 = Material.DRAGON_BREATH;
 
     DedsafioListener(PERMADED instance) {
         this.instance = instance;
@@ -64,19 +63,24 @@ public class DedsafioListener implements Listener {
 
             if(inv.contains(item1, amount1) && inv.contains(item2, amount2) && inv.contains(item3, amount3)){
                 var itemstack1 = new org.bukkit.inventory.ItemStack(item1, amount1);
-                var itemstack2 = new org.bukkit.inventory.ItemStack(item2, amount2);
+                var itemstack2 = new ItemBuilder(item1).name(ChatColor.RED + "Blood Scale").meta(ItemMeta.class, meta -> meta.setCustomModelData(143)).amount(amount2).build();
                 var itemstack3 = new org.bukkit.inventory.ItemStack(item3, amount3);
 
                 inv.removeItem(itemstack1);
-                inv.removeItem(itemstack2);
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "clear " + player.getName() + " minecraft:rabbit_foot 4");
                 inv.removeItem(itemstack3);
 
                 var item = new ItemBuilder(Material.WOODEN_SHOVEL).name(ChatColor.GOLD + "" + ChatColor.BOLD + "RESURRECCTION SPOON").flags(ItemFlag.HIDE_ATTRIBUTES).meta(ItemMeta.class, meta -> meta.setCustomModelData(114)).build();
                 player.getInventory().addItem(item);
 
-                player.playSound(player.getLocation(), Sound.BLOCK_FIRE_EXTINGUISH, 1, 1);
+                var loc = entity.getLocation();
+            
+                loc.getNearbyPlayers(20).stream().forEach(p ->{
+                    p.playSound(p.getLocation(), Sound.BLOCK_FIRE_EXTINGUISH, 1, 1);
+                });
 
             }else{
+                
                 player.sendMessage(ChatColor.RED + "No tienes los materiales.");
             }
 
@@ -199,7 +203,6 @@ public class DedsafioListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onPVP(EntityDamageByEntityEvent e) {
-        var game = instance.getGame();
 
         if (e.getEntity() instanceof Player) {
             Player p1 = (Player) e.getEntity();
@@ -215,8 +218,6 @@ public class DedsafioListener implements Listener {
             if (p2 != null) {
                 var pvp = instance.getGame().getPvpOn();
 
-                if(game.getTrap().contains(p2.getUniqueId().toString())) e.setDamage(e.getDamage()+1);
-
                 if (pvp.contains(p1.getUniqueId().toString()) && pvp.contains(p2.getUniqueId().toString()))
                     return;
 
@@ -229,6 +230,17 @@ public class DedsafioListener implements Listener {
                 }
             }
         }
+    }
+
+    @EventHandler
+    public void onDeath(PlayerDeathEvent e) {
+        var game = instance.getGame();
+
+        if(game.isGulak()){
+           game.getPvpOn().clear(); 
+        }
+
+        
     }
 
 }

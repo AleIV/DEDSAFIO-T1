@@ -28,9 +28,9 @@ public class worldCMD extends BaseCommand {
     Random random = new Random();
     List<String> letters = new ArrayList<>();
 
-    String item1 = "uE0A9";
-    String item2 = "uE0A3";
-    String item3 = "uE0A2";
+    String item1 = "uE2A5";
+    String item2 = "uE1A6";
+    String item3 = "uE3A0";
 
     public worldCMD(PERMADED instance) {
         this.instance = instance;
@@ -119,13 +119,13 @@ public class worldCMD extends BaseCommand {
 
                         Bukkit.broadcastMessage("");
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-                                "tellraw @a {\"text\":\"" + charac + item1 + " x64" + "\"}");
+                                "tellraw @a {\"text\":\"" + charac + item1 + " x1" + "\"}");
                         Bukkit.broadcastMessage("");
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-                                "tellraw @a {\"text\":\"" + charac + item2 + " x16" + "\"}");
+                                "tellraw @a {\"text\":\"" + charac + item2 + " x4" + "\"}");
                         Bukkit.broadcastMessage("");
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-                                "tellraw @a {\"text\":\"" + charac + item3 + " x128" + "\"}");
+                                "tellraw @a {\"text\":\"" + charac + item3 + " x4" + "\"}");
                                 
                             
                         Bukkit.getOnlinePlayers().forEach(p -> {
@@ -189,7 +189,7 @@ public class worldCMD extends BaseCommand {
                 ruedita();
 
                 Bukkit.getScheduler().runTaskLater(instance, task -> {
-                    instance.animation("", "mistery", "A", 73, true);
+                    instance.animation("", "mistery", "4", 73, true);
 
                 }, 97);
 
@@ -287,7 +287,6 @@ public class worldCMD extends BaseCommand {
                     ChatColor.translateAlternateColorCodes('&', "&6&l[&4&lDEDSAFIO&6&l] &f" + textChange));
 
             Bukkit.getOnlinePlayers().forEach(p -> {
-
                 player.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 1, 0.5f);
 
             });

@@ -1,6 +1,5 @@
 package net.noobsters.core.paper.Listeners;
 
-import java.util.Arrays;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -52,17 +51,16 @@ public class Extra implements Listener {
         
         Bukkit.getOnlinePlayers().stream().forEach(player -> {
 
-            var meteors = player.getNearbyEntities(32, 100, 32).stream().filter(meteor -> 
-                meteor instanceof ArmorStand && meteor.getCustomName() != null && meteor.getCustomName().contains("Meteor")).map(e -> (ArmorStand)e).collect(Collectors.toList());
-
             if(player.getWorld() == Bukkit.getWorld("world")){
+                var meteors = player.getNearbyEntities(32, 100, 32).stream().filter(meteor -> 
+                    meteor instanceof ArmorStand && meteor.getCustomName() != null && meteor.getCustomName().contains("Meteor")).map(e -> (ArmorStand)e).collect(Collectors.toList());
                 if(!meteors.isEmpty()){
 
                     player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 20, 1));
                 }
             }
 
-            var equip = player.getEquipment();
+            /*var equip = player.getEquipment();
             var inv = player.getInventory();
             var helmet = equip.getHelmet();
             var chest = equip.getChestplate();
@@ -79,7 +77,7 @@ public class Extra implements Listener {
                          || meteorInv.isPresent()){
 
                 player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 20, 1));
-            }
+            }*/
             
 
         });

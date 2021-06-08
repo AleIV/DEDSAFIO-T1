@@ -1,5 +1,8 @@
 package net.noobsters.core.paper.Commands;
 
+import java.util.Random;
+import java.util.stream.Collectors;
+
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -11,6 +14,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Horse.Color;
 import org.bukkit.entity.Horse.Style;
+import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -36,6 +40,7 @@ public class permadedCMD extends BaseCommand {
 
     private @NonNull PERMADED instance;
     static public String KICK_MSG = ChatColor.AQUA + "GG\n";
+    Random random = new Random();
 
     @Subcommand("closed")
     @CommandAlias("closed")
@@ -78,7 +83,6 @@ public class permadedCMD extends BaseCommand {
         sender.sendMessage(ChatColor.GREEN + "TP ALL HERE");
     }
 
-
     @Subcommand("difficulty")
     public void difficultyChange(CommandSender sender, String change, boolean bool) {
         var difficulty = instance.getGame().getDifficultyChanges();
@@ -89,63 +93,19 @@ public class permadedCMD extends BaseCommand {
         sender.sendMessage(ChatColor.GREEN + "Difficulty change " + change + " set to " + bool);
     }
 
-    @Subcommand("zombiePlayer")
-    @CommandAlias("zombiePlayer")
-    public void zombiePlayer(CommandSender sender, String player, boolean bool) {
-        var players = instance.getGame().getDeathPlayers();
-        if(!players.containsKey(player)){
-            sender.sendMessage(ChatColor.RED + "Player change doesn't exist.");
-        }
-        players.put(player, bool);
-        sender.sendMessage(ChatColor.GREEN + "Player zombie " + player + " set to " + bool);
-    }
+    @Subcommand("refresh")
+    public void refresh(Player player) {
+        var golems = player.getNearbyEntities(32, 100, 32).stream().filter(golem -> 
+        golem instanceof IronGolem).map(e -> (IronGolem)e).collect(Collectors.toList());
 
-    @Subcommand("pvp-on")
-    @CommandAlias("pvp-on")
-    @CommandCompletion("@players")
-    public void pvp(CommandSender sender, @Flags("other") Player player, boolean bool) {
-        var pvp = instance.getGame().getPvpOn();
+        var loc = player.getLocation();
+        var players = loc.getNearbyPlayers(64, p-> p.getGameMode() == GameMode.SURVIVAL).stream().collect(Collectors.toList());
         
-        if(bool){
-            pvp.add(player.getUniqueId().toString());
-            sender.sendMessage(ChatColor.GREEN + "PvP " + player + " set to " + bool);
-        }else{
-            pvp.remove(player.getUniqueId().toString());
-            sender.sendMessage(ChatColor.RED + "PvP " + player + " set to " + bool);
+        if(!players.isEmpty() && !golems.isEmpty()) {
+            golems.forEach(golem ->{
+                golem.setTarget(players.get(random.nextInt(players.size()-1)));
+            });
         }
-
-    }
-
-    @Subcommand("trap")
-    @CommandAlias("trap")
-    @CommandCompletion("@players")
-    public void trap(CommandSender sender, @Flags("other") Player player, boolean bool) {
-        var pvp = instance.getGame().getPvpOn();
-        
-        if(bool){
-            pvp.add(player.getUniqueId().toString());
-            sender.sendMessage(ChatColor.GREEN + "Trap " + player + " set to " + bool);
-        }else{
-            pvp.remove(player.getUniqueId().toString());
-            sender.sendMessage(ChatColor.RED + "Trap " + player + " set to " + bool);
-        }
-
-    }
-
-    @Subcommand("random-fight")
-    @CommandAlias("random-fight")
-    @CommandCompletion("@players")
-    public void fight(CommandSender sender, @Flags("other") Player player, boolean bool) {
-        var pvp = instance.getGame().getPvpOn();
-        
-        if(bool){
-            pvp.add(player.getUniqueId().toString());
-            sender.sendMessage(ChatColor.GREEN + "Trap " + player + " set to " + bool);
-        }else{
-            pvp.remove(player.getUniqueId().toString());
-            sender.sendMessage(ChatColor.RED + "Trap " + player + " set to " + bool);
-        }
-
     }
 
     @Subcommand("revive")
@@ -162,32 +122,6 @@ public class permadedCMD extends BaseCommand {
             sender.sendMessage(ChatColor.RED + "Revive " + player + " set to " + bool);
         }
 
-    }
-
-    @Subcommand("gulag")
-    @CommandAlias("gulag")
-    public void gulag(CommandSender sender) {
-        var game = instance.getGame();
-        var bool = !game.isGulak();
-
-        if(!bool){
-            var chain = PERMADED.newChain();
-        
-            Bukkit.getOnlinePlayers().forEach(p->{
-                chain.delay(1).sync(() -> {
-                    if(p.getGameMode() == GameMode.SPECTATOR && !p.hasPermission("mod.perm")){
-                        p.kickPlayer(KICK_MSG);
-                    }
-
-                });
-            });
-    
-            chain.sync(TaskChain::abort).execute();
-
-        }
-
-        game.setGulak(!game.isGulak());
-        sender.sendMessage(ChatColor.GREEN + "Gulag set to " + bool);
     }
 
     @Subcommand("difficulty-list")

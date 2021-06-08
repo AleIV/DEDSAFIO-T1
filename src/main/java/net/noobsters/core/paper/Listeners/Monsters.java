@@ -2,7 +2,6 @@ package net.noobsters.core.paper.Listeners;
 
 import java.util.Random;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.CaveSpider;
@@ -152,21 +151,33 @@ public class Monsters implements Listener {
             var loc = entity.getLocation();
             switch (random.nextInt(4)) {
                 case 1:
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:pollo master @a "
-                            + loc.getX() + " " + loc.getY() + " " + loc.getZ() + " 1 1");
+
+                    loc.getNearbyPlayers(20).stream().forEach(p ->{
+                        p.playSound(p.getLocation(), "pollo", 1, 1);
+                    });
+
                     break;
                 case 2:
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:pollo_2 master @a "
-                            + loc.getX() + " " + loc.getY() + " " + loc.getZ() + " 1 1");
+
+                    loc.getNearbyPlayers(20).stream().forEach(p ->{
+                        p.playSound(p.getLocation(), "pollo_2", 1, 1);
+                    });
+
                     break;
                 case 3:
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:pollo_3 master @a "
-                            + loc.getX() + " " + loc.getY() + " " + loc.getZ() + " 1 1");
+
+                    loc.getNearbyPlayers(20).stream().forEach(p ->{
+                        p.playSound(p.getLocation(), "pollo_3", 1, 1);
+                    });
+
                     break;
 
                 default:
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:pollo_4 master @a "
-                            + loc.getX() + " " + loc.getY() + " " + loc.getZ() + " 1 1");
+
+                    loc.getNearbyPlayers(20).stream().forEach(p ->{
+                        p.playSound(p.getLocation(), "pollo_4", 1, 1);
+                    });
+
                     break;
             }
         }
@@ -183,21 +194,33 @@ public class Monsters implements Listener {
                 var loc = damager.getLocation();
                 switch (random.nextInt(4)) {
                     case 1:
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:pollo master @a "
-                                + loc.getX() + " " + loc.getY() + " " + loc.getZ() + " 1 1");
+    
+                        loc.getNearbyPlayers(20).stream().forEach(p ->{
+                            p.playSound(p.getLocation(), "pollo", 1, 1);
+                        });
+    
                         break;
                     case 2:
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:pollo_2 master @a "
-                                + loc.getX() + " " + loc.getY() + " " + loc.getZ() + " 1 1");
+    
+                        loc.getNearbyPlayers(20).stream().forEach(p ->{
+                            p.playSound(p.getLocation(), "pollo_2", 1, 1);
+                        });
+    
                         break;
                     case 3:
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:pollo_3 master @a "
-                                + loc.getX() + " " + loc.getY() + " " + loc.getZ() + " 1 1");
+    
+                        loc.getNearbyPlayers(20).stream().forEach(p ->{
+                            p.playSound(p.getLocation(), "pollo_3", 1, 1);
+                        });
+    
                         break;
-
+    
                     default:
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:pollo_4 master @a "
-                                + loc.getX() + " " + loc.getY() + " " + loc.getZ() + " 1 1");
+    
+                        loc.getNearbyPlayers(20).stream().forEach(p ->{
+                            p.playSound(p.getLocation(), "pollo_4", 1, 1);
+                        });
+    
                         break;
                 }
             }

@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.World.Environment;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
@@ -64,7 +65,7 @@ public class GlobalListeners implements Listener{
         var game = instance.getGame();
         if(!locale.contains("NOOBSTERS")){
             player.kickPlayer(NO_TXT);
-        }else if(!locale.contains("NOOBSTERS_1")){
+        }else if(!locale.contains("NOOBSTERS_2")){
             player.kickPlayer(NO_TXT + ChatColor.RED + "\n Hay otra actualizacion del texture pack, descarga la ultima!");
             
         }else if(!player.hasPermission("mod.perm") && game.isClosed()){
@@ -81,20 +82,32 @@ public class GlobalListeners implements Listener{
         var loc = entity.getLocation();
         
         if(entity instanceof Horse && entity.getCustomName() != null){
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:block.anvil.land master @a " + loc.getX()
-                        + " " + loc.getY() + " " + loc.getZ() + " 0.5 1");
+
+            loc.getNearbyPlayers(10).stream().forEach(p ->{
+                p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_LAND, 0.5f, 1);
+            });
+            
         }
 
         if(entity instanceof IronGolem && entity.getCustomName() != null && entity.getCustomName().toString().contains("Mutant")){
             if(random.nextBoolean()){
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:zombie_damage1 master @a " + loc.getX()
-                + " " + loc.getY() + " " + loc.getZ() + " 1 1");
+                loc.getNearbyPlayers(10).stream().forEach(p ->{
+                    p.playSound(p.getLocation(), "zombie_damage1", 0.5f, 1);
+                });
+
             }else{
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:zombie_damage2 master @a " + loc.getX()
-                + " " + loc.getY() + " " + loc.getZ() + " 1 1");
+                loc.getNearbyPlayers(10).stream().forEach(p ->{
+                    p.playSound(p.getLocation(), "zombie_damage2", 0.5f, 1);
+                });
             }
         }
 
+        if(entity instanceof Player){
+            var player = (Player) entity;
+            if(player.getGameMode() == GameMode.SPECTATOR && cause == DamageCause.VOID){
+                e.setCancelled(true);
+            }
+        }
 
 
         if(difficulty.get("lava") && cause == DamageCause.LAVA || cause == DamageCause.DRAGON_BREATH){
@@ -107,7 +120,7 @@ public class GlobalListeners implements Listener{
             e.setDamage(e.getDamage()*damage);
         }
 
-        if(difficulty.get("meteor") && cause == DamageCause.WITHER){
+        if(difficulty.get("meteor") && (cause == DamageCause.WITHER || cause == DamageCause.DRAGON_BREATH || cause == DamageCause.MAGIC)){
             e.setDamage(e.getDamage()*damage);
         }
 
@@ -125,6 +138,37 @@ public class GlobalListeners implements Listener{
 
     }
 
+    /*@EventHandler
+    public void onDrownedDeath(EntityDeathEvent e) {
+        var entity = e.getEntity();
+        if(entity instanceof Drowned){
+            var drowned = (Drowned) e.getEntity();
+            var equipment = drowned.getEquipment();
+            var mainHand = drowned.getEquipment().getItemInMainHand().clone();
+            var offHand = drowned.getEquipment().getItemInOffHand().clone();
+            equipment.clear();
+    
+            if (mainHand.getType() != Material.AIR) {
+                if (mainHand.getType() == Material.TRIDENT) {
+                    Damageable dmg = (Damageable) mainHand.getItemMeta();
+                    dmg.setDamage(new Random().nextInt(125));
+                    mainHand.setItemMeta((ItemMeta) dmg);
+    
+                }
+                drowned.getLocation().getWorld().dropItemNaturally(drowned.getLocation(), mainHand);
+    
+            }
+            if (offHand.getType() != Material.AIR) {
+                if (offHand.getType() == Material.TRIDENT) {
+                    Damageable dmg = (Damageable) offHand.getItemMeta();
+                    dmg.setDamage(new Random().nextInt(125));
+                    offHand.setItemMeta((ItemMeta) dmg);
+                }
+                drowned.getLocation().getWorld().dropItemNaturally(drowned.getLocation(), offHand);
+            }
+        }
+    }*/
+
     @EventHandler
     public void mobsResistanceModifier(EntityDamageByEntityEvent e){
         var entity = e.getEntity();
@@ -135,8 +179,12 @@ public class GlobalListeners implements Listener{
 
             if(damager instanceof IronGolem && entity.getCustomName().toString().contains("Mutant") && entity instanceof Player){
 
-                var player = (Player) entity;
-                player.playSound(player.getLocation(), "zombie_attack", 1, 1);
+                var loc = entity.getLocation();
+
+                loc.getNearbyPlayers(20).stream().forEach(p ->{
+                    p.playSound(p.getLocation(), "zombie_attack", 1, 1);
+                });
+
             }
         }
 
@@ -183,6 +231,7 @@ public class GlobalListeners implements Listener{
         }
     }
 
+
     
     @EventHandler
     public void impact(ProjectileHitEvent e) {
@@ -197,8 +246,10 @@ public class GlobalListeners implements Listener{
                 entity.getWorld().strikeLightning(entity.getLocation());
                 entity.getWorld().strikeLightning(entity.getLocation());
                 entity.getWorld().strikeLightning(entity.getLocation());
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:meteorito_impacto master @a " + loc.getX()
-                        + " " + loc.getY() + " " + loc.getZ() + " 1 1");
+
+                Bukkit.getOnlinePlayers().forEach(p ->{
+                    p.playSound(p.getLocation(), "meteorito_impacto", 1, 1);
+                });
                 
             }else if(block != null){
                 var loc = block.getLocation();
@@ -206,8 +257,10 @@ public class GlobalListeners implements Listener{
                 block.getWorld().strikeLightning(block.getLocation());
                 block.getWorld().strikeLightning(block.getLocation());
                 block.getWorld().strikeLightning(block.getLocation());
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:meteorito_impacto master @a " + loc.getX()
-                        + " " + loc.getY() + " " + loc.getZ() + " 1 1");
+
+                Bukkit.getOnlinePlayers().forEach(p ->{
+                    p.playSound(p.getLocation(), "meteorito_impacto", 1, 1);
+                });
                 
             }
 
@@ -231,8 +284,11 @@ public class GlobalListeners implements Listener{
                 if(random.nextBoolean() && shooter instanceof Pillager){
                     var pillager = (Pillager) shooter;
                     var loc = pillager.getLocation();
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:boomheadshot master @a " + loc.getX()
-                        + " " + loc.getY() + " " + loc.getZ() + " 1 1");
+
+                    loc.getNearbyPlayers(20).stream().forEach(p ->{
+                        p.playSound(p.getLocation(), "boomheadshot", 1, 1);
+                    });
+
                 }
             }else if(proj.getCustomName() != null && proj.getCustomName().contains("golden")){
                 e.setDamage(e.getDamage()+6);

@@ -8,6 +8,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Drowned;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Husk;
 import org.bukkit.entity.IronGolem;
@@ -16,6 +17,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.WitherSkull;
 import org.bukkit.entity.Zombie;
+import org.bukkit.entity.ZombieVillager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
@@ -46,8 +48,9 @@ public class UnDead implements Listener {
     public void unDeadSpawns(CreatureSpawnEvent e) {
         var game = instance.getGame();
         var difficulty = game.getDifficultyChanges();
-        if (e.getEntity() instanceof Husk && difficulty.get("zombies")) {
-            var chef = (Husk) e.getEntity();
+        var entity = e.getEntity();
+        if (entity instanceof Husk && difficulty.get("zombies")) {
+            var chef = (Husk) entity;
 
             chef.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20 * 600, 0));
 
@@ -78,8 +81,12 @@ public class UnDead implements Listener {
             chefEquipment.setItemInMainHand(taco);
             chefEquipment.setItemInMainHandDropChance(0.1f);
 
-        }else if(e.getEntity() instanceof Zombie && difficulty.get("zombies")){
-            var zombie = (Zombie) e.getEntity();
+        }else if(entity instanceof Zombie && difficulty.get("zombies")){
+
+            if(entity instanceof Drowned || entity.getType() == EntityType.ZOMBIFIED_PIGLIN || entity instanceof ZombieVillager)
+                return;
+            
+            var zombie = (Zombie) entity;
             var zombiePlayers = game.getDeathPlayers().entrySet().stream().filter(entry -> entry.getValue()).collect(Collectors.toList());
             
             if(!zombiePlayers.isEmpty()){
@@ -87,8 +94,8 @@ public class UnDead implements Listener {
                 zombie.setCustomName(ChatColor.RED + "Zombie " + choose.getKey());
             }
 
-        }else if(e.getEntity() instanceof IronGolem && difficulty.get("zombies")){
-            var golem = (IronGolem) e.getEntity();
+        }else if(entity instanceof IronGolem && difficulty.get("zombies")){
+            var golem = (IronGolem) entity;
 
             golem.setSilent(true);
             golem.setCustomName(ChatColor.RED + "Mutant Zombie");
@@ -97,8 +104,8 @@ public class UnDead implements Listener {
             var players = loc.getNearbyPlayers(64, player-> player.getGameMode() == GameMode.SURVIVAL).stream().findAny();
             if(players.isPresent()) golem.setTarget(players.get());
 
-        } else if (e.getEntity() instanceof Skeleton && difficulty.get("skeletons")) {
-            var skeleton = (Skeleton) e.getEntity();
+        } else if (entity instanceof Skeleton && difficulty.get("skeletons")) {
+            var skeleton = (Skeleton) entity;
 
             if(skeleton.getType() == EntityType.WITHER_SKELETON){
 
@@ -227,8 +234,11 @@ public class UnDead implements Listener {
         if (entity instanceof Skeleton && entity.getCustomName() != null
                 && entity.getCustomName().contains("Sans")) {
             var loc = entity.getLocation();
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:sans_talking master @a "
-                    + loc.getX() + " " + loc.getY() + " " + loc.getZ() + " 1 1");
+            
+            loc.getNearbyPlayers(20).stream().forEach(player ->{
+                player.playSound(player.getLocation(), "sans_talking", 1, 1);
+            });
+
         }
     }
 
@@ -248,16 +258,20 @@ public class UnDead implements Listener {
         var difficulty = instance.getGame().getDifficultyChanges();
 
         if (damager instanceof Husk && difficulty.get("zombies")) {
+
             var loc = damager.getLocation();
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-                    "playsound minecraft:burp master @a " + loc.getX() + " " + loc.getY() + " " + loc.getZ() + " 1 1");
+            loc.getNearbyPlayers(20).stream().forEach(player ->{
+                player.playSound(player.getLocation(), "burp", 1, 1);
+            });
 
         } else if (entity instanceof Skeleton && entity.getCustomName() != null
                 && entity.getCustomName().contains("Sans") && (damager instanceof Player || damager instanceof Arrow)) {
 
             var loc = damager.getLocation();
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:sans_song master @a " + loc.getX()
-                    + " " + loc.getY() + " " + loc.getZ() + " 1 1");
+            loc.getNearbyPlayers(20).stream().forEach(player ->{
+                player.playSound(player.getLocation(), "sans_song", 1, 1);
+            });
+
         }
 
     }
