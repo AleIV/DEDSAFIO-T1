@@ -23,19 +23,18 @@ public class Extra implements Listener {
         this.instance = instance;
     }
 
-
     @EventHandler
-    public void onTick(GameTickEvent e){
+    public void onTick(GameTickEvent e) {
         var difficulty = instance.getGame().getDifficultyChanges();
         Bukkit.getScheduler().runTask(instance, () -> {
-            if(difficulty.get("meteor")){
+            if (difficulty.get("meteor")) {
                 playersRefresh();
             }
 
         });
 
     }
-    
+
     public float getDistance(Location val1, Location val2) {
 
         double x1 = val1.getX();
@@ -49,41 +48,38 @@ public class Extra implements Listener {
 
     public void playersRefresh() {
         var difficulty = instance.getGame().getDifficultyChanges();
-        
+
         Bukkit.getOnlinePlayers().stream().forEach(player -> {
 
-            if(player.getWorld() == Bukkit.getWorld("world")){
-                var meteors = player.getNearbyEntities(32, 100, 32).stream().filter(meteor -> 
-                    meteor instanceof ArmorStand && meteor.getCustomName() != null && meteor.getCustomName().contains("Meteor")).map(e -> (ArmorStand)e).collect(Collectors.toList());
-                if(!meteors.isEmpty()){
+            if (player.getWorld() == Bukkit.getWorld("world")) {
+                var meteors = player.getNearbyEntities(32, 100, 32).stream()
+                        .filter(meteor -> meteor instanceof ArmorStand && meteor.getCustomName() != null
+                                && meteor.getCustomName().contains("Meteor"))
+                        .map(e -> (ArmorStand) e).collect(Collectors.toList());
+                if (!meteors.isEmpty()) {
 
                     player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 20, 1));
                 }
             }
 
-            var equip = player.getEquipment();
-            var helmet = equip.getHelmet();
-            var chest = equip.getChestplate();
-            var legs = equip.getLeggings();
-            var boots = equip.getBoots();
-            
-            if(difficulty.get("environment") && player.getWorld() == Bukkit.getWorld("world_nether")){
-                if(helmet == null || 
-                    chest == null ||
-                    chest.getType().toString().contains("ELYTRA")
-                        || legs == null 
-                        || boots == null){
+            if (difficulty.get("environment") && player.getWorld() == Bukkit.getWorld("world_nether")) {
+
+                var equip = player.getEquipment();
+                var helmet = equip.getHelmet();
+                var chest = equip.getChestplate();
+                var legs = equip.getLeggings();
+                var boots = equip.getBoots();
+
+                if (helmet == null || chest == null || chest.getType().toString().contains("ELYTRA") || legs == null
+                        || boots == null) {
 
                     player.removePotionEffect(PotionEffectType.FIRE_RESISTANCE);
-                    player.setFireTicks(20*30);
+                    player.setFireTicks(20 * 30);
                 }
             }
-            
 
         });
 
     }
-
-    
 
 }
