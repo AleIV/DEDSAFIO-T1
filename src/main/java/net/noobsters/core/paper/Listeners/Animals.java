@@ -52,7 +52,7 @@ public class Animals implements Listener {
 
             if(Bukkit.getWorld("world_nether") == entity.getWorld()){
 
-                if (random.nextInt(100) == 1) {
+                if (random.nextInt(175) == 1) {
                     var pig = (Pig) entity;
                     pig.setCustomName(ChatColor.AQUA + "Muddy Pig");
                     pig.setRemoveWhenFarAway(true);
@@ -65,7 +65,7 @@ public class Animals implements Listener {
                     e.setCancelled(true);
                 }
 
-            }else if(pigCap && random.nextInt(80) == 1){
+            }else if(pigCap && random.nextInt(70) == 1){
                 e.setCancelled(true);
                 entity.getWorld().spawnEntity(entity.getLocation(), EntityType.PIGLIN);
 
@@ -178,7 +178,7 @@ public class Animals implements Listener {
                     weaponMeta.setDisplayName(ChatColor.LIGHT_PURPLE + "Great Hammer");
 
                     final AttributeModifier damage = new AttributeModifier(UUID.randomUUID(), "GENERIC.ATTACK.DAMAGE",
-                            12.0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
+                            11.0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
                     weaponMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, damage);
 
                     final AttributeModifier attackSpeed = new AttributeModifier(UUID.randomUUID(),

@@ -71,7 +71,8 @@ public class DamageListener implements Listener {
 
         if(difficulty.get("environment") && (cause == DamageCause.FIRE || cause == DamageCause.FIRE_TICK 
             || cause == DamageCause.DROWNING || cause == DamageCause.HOT_FLOOR 
-                || cause == DamageCause.STARVATION || cause == DamageCause.FALL)){
+                || cause == DamageCause.STARVATION || cause == DamageCause.FALL || cause == DamageCause.CONTACT 
+                    || cause == DamageCause.FLY_INTO_WALL || cause == DamageCause.SUFFOCATION)){
             e.setDamage(e.getDamage()*damage);
         }
 

@@ -36,6 +36,7 @@ public class Game extends BukkitRunnable{
 
         difficultyChanges.put("pigcap", true);
         difficultyChanges.put("pigcapenable", false);
+        difficultyChanges.put("villager", false);
 
         difficultyChanges.put("zombies", true);
         difficultyChanges.put("spiders", true);

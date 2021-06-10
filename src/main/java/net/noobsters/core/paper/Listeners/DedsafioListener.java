@@ -44,10 +44,14 @@ public class DedsafioListener implements Listener {
     int amount1 = 1;
     int amount2 = 64;
     int amount3 = 64;
+    int amount4 = 64;
+    int amount5 = 64;
 
-    Material item1 = Material.TURTLE_HELMET;
-    Material item2 = Material.NAUTILUS_SHELL;
-    Material item3 = Material.PHANTOM_MEMBRANE;
+    Material item1 = Material.MUSIC_DISC_PIGSTEP;
+    Material item2 = Material.EMERALD_BLOCK;
+    Material item3 = Material.DIAMOND_ORE;
+    Material item4 = Material.CHORUS_FRUIT;
+    Material item5 = Material.END_CRYSTAL;
 
     DedsafioListener(PERMADED instance) {
         this.instance = instance;
@@ -61,15 +65,19 @@ public class DedsafioListener implements Listener {
         if(entity instanceof ArmorStand && entity.getCustomName() != null && entity.getCustomName().contains("pilar")){
             var inv = player.getInventory();
 
-            if(inv.contains(item1, amount1) && inv.contains(item2, amount2) && inv.contains(item3, amount3)){
+            if(inv.contains(item1, amount1) && inv.contains(item2, amount2) && inv.contains(item3, amount3) && inv.contains(item4, amount4) && inv.contains(item4, amount4)){
                 var itemstack1 = new org.bukkit.inventory.ItemStack(item1, amount1);
                 var itemstack2 = new org.bukkit.inventory.ItemStack(item2, amount2);
                 var itemstack3 = new org.bukkit.inventory.ItemStack(item3, amount3);
+                //var itemstack4 = new org.bukkit.inventory.ItemStack(item4, amount4);
+                var itemstack5 = new org.bukkit.inventory.ItemStack(item5, amount5);
 
                 inv.removeItem(itemstack1);
-                //Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "clear " + player.getName() + " minecraft:rabbit_foot 4");
                 inv.removeItem(itemstack2);
                 inv.removeItem(itemstack3);
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "clear " + player.getName() + " minecraft:chorus_fruit 64");
+                //inv.removeItem(itemstack4);
+                inv.removeItem(itemstack5);
 
                 var item = new ItemBuilder(Material.WOODEN_SHOVEL).name(ChatColor.GOLD + "" + ChatColor.BOLD + "RESURRECCTION SPOON").flags(ItemFlag.HIDE_ATTRIBUTES).meta(ItemMeta.class, meta -> meta.setCustomModelData(114)).build();
                 player.getInventory().addItem(item);

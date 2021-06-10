@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Bat;
 import org.bukkit.entity.Bee;
 import org.bukkit.entity.Cat;
@@ -40,6 +41,7 @@ import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.entity.VillagerAcquireTradeEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 
 import net.noobsters.core.paper.PERMADED;
@@ -166,7 +168,7 @@ public class Cancel implements Listener {
         }else if(entity instanceof Strider){
             e.setCancelled(true);
 
-        }else if(entity instanceof WanderingTrader){
+        }else if(entity instanceof WanderingTrader && !difficulty.get("villager")){
             e.setCancelled(true);
 
         }else if(entity instanceof Llama){
@@ -187,7 +189,7 @@ public class Cancel implements Listener {
         }else if(entity instanceof PufferFish){
             e.setCancelled(true);
 
-        }else if(entity instanceof Villager){
+        }else if(entity instanceof Villager && !difficulty.get("villager")){
             e.setCancelled(true);
 
         }else if(entity instanceof Chicken){
@@ -199,6 +201,13 @@ public class Cancel implements Listener {
         }else if(entity instanceof Rabbit){
             e.setCancelled(true);
         }
+    }
+
+    @EventHandler
+    public void onDrop(PlayerJoinEvent e){
+        var player = e.getPlayer();
+        player.getAttribute(Attribute.GENERIC_LUCK).setBaseValue(0);
+
     }
 
 }

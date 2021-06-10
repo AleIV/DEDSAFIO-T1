@@ -28,9 +28,11 @@ public class worldCMD extends BaseCommand {
     Random random = new Random();
     List<String> letters = new ArrayList<>();
 
-    String item1 = "uE2A9";
-    String item2 = "uE2A3";
-    String item3 = "uE2A6";
+    String item1 = "uE2A4";
+    String item2 = "uE1A0";
+    String item3 = "uE0A9";
+    String item4 = "uE0A3";
+    String item5 = "uE1A3";
 
     public worldCMD(PERMADED instance) {
         this.instance = instance;
@@ -116,7 +118,25 @@ public class worldCMD extends BaseCommand {
                     chain.delay(20).sync(() -> {
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
                                 "title @a title {\"text\":\"" + charac + item3 + "\"}");
+                        
+                        Bukkit.getOnlinePlayers().forEach(p -> {
+                            p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 1, 0.5f);
+                        });
+                    });
 
+                    chain.delay(20).sync(() -> {
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
+                                "title @a title {\"text\":\"" + charac + item4 + "\"}");
+                        
+                        Bukkit.getOnlinePlayers().forEach(p -> {
+                            p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 1, 0.5f);
+                        });
+                    });
+
+                    chain.delay(20).sync(() -> {
+
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
+                                "title @a title {\"text\":\"" + charac + item5 + "\"}");
                         Bukkit.broadcastMessage("");
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
                                 "tellraw @a {\"text\":\"" + charac + item1 + " x1" + "\"}");
@@ -126,6 +146,12 @@ public class worldCMD extends BaseCommand {
                         Bukkit.broadcastMessage("");
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
                                 "tellraw @a {\"text\":\"" + charac + item3 + " x64" + "\"}");
+                        Bukkit.broadcastMessage("");
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
+                                "tellraw @a {\"text\":\"" + charac + item4 + " x64" + "\"}");
+                        Bukkit.broadcastMessage("");
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
+                                "tellraw @a {\"text\":\"" + charac + item5 + " x64" + "\"}");
                                 
                             
                         Bukkit.getOnlinePlayers().forEach(p -> {
