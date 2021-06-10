@@ -28,9 +28,9 @@ public class worldCMD extends BaseCommand {
     Random random = new Random();
     List<String> letters = new ArrayList<>();
 
-    String item1 = "uE2A5";
-    String item2 = "uE1A6";
-    String item3 = "uE3A0";
+    String item1 = "uE2A9";
+    String item2 = "uE2A3";
+    String item3 = "uE2A6";
 
     public worldCMD(PERMADED instance) {
         this.instance = instance;
@@ -122,10 +122,10 @@ public class worldCMD extends BaseCommand {
                                 "tellraw @a {\"text\":\"" + charac + item1 + " x1" + "\"}");
                         Bukkit.broadcastMessage("");
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-                                "tellraw @a {\"text\":\"" + charac + item2 + " x4" + "\"}");
+                                "tellraw @a {\"text\":\"" + charac + item2 + " x64" + "\"}");
                         Bukkit.broadcastMessage("");
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-                                "tellraw @a {\"text\":\"" + charac + item3 + " x4" + "\"}");
+                                "tellraw @a {\"text\":\"" + charac + item3 + " x64" + "\"}");
                                 
                             
                         Bukkit.getOnlinePlayers().forEach(p -> {
@@ -189,7 +189,7 @@ public class worldCMD extends BaseCommand {
                 ruedita();
 
                 Bukkit.getScheduler().runTaskLater(instance, task -> {
-                    instance.animation("", "mistery", "4", 73, true);
+                    instance.animation("", "mistery", "4", 73, false);
 
                 }, 97);
 

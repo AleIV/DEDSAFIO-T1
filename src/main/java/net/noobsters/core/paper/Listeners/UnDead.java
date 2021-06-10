@@ -99,6 +99,7 @@ public class UnDead implements Listener {
 
             golem.setSilent(true);
             golem.setCustomName(ChatColor.RED + "Mutant Zombie");
+            golem.setRemoveWhenFarAway(true);
 
             var loc = golem.getLocation();
             var players = loc.getNearbyPlayers(64, player-> player.getGameMode() == GameMode.SURVIVAL).stream().findAny();

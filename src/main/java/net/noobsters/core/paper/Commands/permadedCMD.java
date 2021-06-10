@@ -209,9 +209,6 @@ public class permadedCMD extends BaseCommand {
         equip.setLeggings(leggings);
         equip.setBoots(boots);
 
-        sender.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(60.0);
-        sender.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(60.0);
-        sender.setHealth(60);
         sender.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 100000, 5, false, false));
         sender.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100000, 3, false, false));
 

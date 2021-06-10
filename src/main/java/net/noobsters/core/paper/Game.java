@@ -26,6 +26,7 @@ public class Game extends BukkitRunnable{
     boolean gulak = false;
     boolean closed = true;
 
+
     long gameTime = 0;
     long startTime = 0;
     
@@ -33,11 +34,14 @@ public class Game extends BukkitRunnable{
         this.instance = instance;
         this.startTime = System.currentTimeMillis();
 
+        difficultyChanges.put("pigcap", true);
+        difficultyChanges.put("pigcapenable", false);
+
         difficultyChanges.put("zombies", true);
         difficultyChanges.put("spiders", true);
         difficultyChanges.put("skeletons", true);
-        difficultyChanges.put("dragon", false);
-        difficultyChanges.put("pigs", false);
+        difficultyChanges.put("dragon", true);
+        difficultyChanges.put("pigs", true);
         difficultyChanges.put("raiders", false); 
         difficultyChanges.put("mages", true);
         difficultyChanges.put("demons", false);
@@ -45,7 +49,7 @@ public class Game extends BukkitRunnable{
         difficultyChanges.put("raids", false);
 
         difficultyChanges.put("redstone", false);
-        difficultyChanges.put("meteor", false);
+        difficultyChanges.put("meteor", true);
 
         difficultyChanges.put("lava", true);
         difficultyChanges.put("environment", false);

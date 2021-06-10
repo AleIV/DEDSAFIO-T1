@@ -79,15 +79,6 @@ public class FightCMD extends BaseCommand {
         addKit(player);
     }
 
-    @Subcommand("music")
-    @CommandAlias("music")
-    public void music(Player sender, String name, int blocks) {
-        var loc = sender.getLocation();
-        loc.getNearbyPlayers(blocks).stream().forEach(p ->{
-            p.playSound(p.getLocation(), name, 1000, 1);
-        });
-    }
-
     @Subcommand("fight-list")
     @CommandAlias("fight-list")
     public void list(CommandSender sender) {

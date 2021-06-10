@@ -53,7 +53,6 @@ public class Cancel implements Listener {
         this.instance = instance;
 
         //CANCEL CRAFTS
-        items.add(Material.DRIED_KELP_BLOCK);
         items.add(Material.CRACKED_NETHER_BRICKS);
         items.add(Material.RED_NETHER_BRICKS);
 

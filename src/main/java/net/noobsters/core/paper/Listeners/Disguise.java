@@ -24,7 +24,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import me.libraryaddict.disguise.DisguiseAPI;
-import me.libraryaddict.disguise.events.UndisguiseEvent;
 import net.md_5.bungee.api.ChatColor;
 import net.noobsters.core.paper.PERMADED;
 
@@ -90,18 +89,6 @@ public class Disguise implements Listener {
         if (DisguiseAPI.isDisguised(player)) {
             e.setQuitMessage("");
         }
-    }
-
-    @EventHandler
-    public void undisguise(UndisguiseEvent e) {
-        var entity = e.getEntity();
-        if (entity instanceof Player) {
-            var player = (Player) entity;
-            player.setGameMode(GameMode.SPECTATOR);
-            player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(20.0);
-            player.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.0);
-        }
-
     }
 
     @EventHandler

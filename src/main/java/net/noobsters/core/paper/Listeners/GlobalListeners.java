@@ -359,8 +359,15 @@ public class GlobalListeners implements Listener{
 
     @EventHandler
     public void customSpawns(GameTickEvent e) {
-        var difficulty = instance.getGame().getDifficultyChanges();
+        var game = instance.getGame();
+        var difficulty = game.getDifficultyChanges();
         final var second = e.getSecond();
+
+        if(difficulty.get("pigcapenable") && second % 300 == 0){
+            difficulty.put("pigcap", !difficulty.get("pigcap"));
+        }
+
+
         if (difficulty.get("raids") && second % instance.getGame().getSpawnPatrolDelay() == 0) {
             Bukkit.getOnlinePlayers().forEach(player -> {
                 var loc = player.getLocation();

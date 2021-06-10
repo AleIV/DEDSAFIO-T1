@@ -38,6 +38,11 @@ public class Monsters implements Listener {
         var entity = e.getEntity();
         var difficulty = game.getDifficultyChanges();
         if (difficulty.get("spiders") && entity instanceof Spider) {
+            if(entity instanceof CaveSpider){
+                e.setCancelled(true);
+                entity.getWorld().spawnEntity(entity.getLocation(), EntityType.SPIDER);
+                return;
+            }
 
             var spider = (Spider) entity;
             spider.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 20 * 600, 1));

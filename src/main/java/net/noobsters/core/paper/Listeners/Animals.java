@@ -43,40 +43,49 @@ public class Animals implements Listener {
     @EventHandler
     public void animals(CreatureSpawnEvent e) {
         var entity = e.getEntity();
-        var difficulty = instance.getGame().getDifficultyChanges();
+        var game = instance.getGame();
+        var difficulty = game.getDifficultyChanges();
+        var pigCap = difficulty.get("pigcap");
         
         if (difficulty.get("pigs") && entity instanceof Pig) {
 
-            if (random.nextInt(50) == 1 && Bukkit.getWorld("world_nether") == entity.getWorld()) {
-                var pig = (Pig) entity;
-                pig.setCustomName(ChatColor.AQUA + "Muddy Pig");
-            } else {
+
+            if(Bukkit.getWorld("world_nether") == entity.getWorld()){
+
+                if (random.nextInt(100) == 1) {
+                    var pig = (Pig) entity;
+                    pig.setCustomName(ChatColor.AQUA + "Muddy Pig");
+                    pig.setRemoveWhenFarAway(true);
+    
+                }else if(random.nextInt(8) == 1){
+                    e.setCancelled(true);
+                    entity.getWorld().spawnEntity(entity.getLocation(), EntityType.PIGLIN);
+
+                }else{
+                    e.setCancelled(true);
+                }
+
+            }else if(pigCap && random.nextInt(80) == 1){
                 e.setCancelled(true);
                 entity.getWorld().spawnEntity(entity.getLocation(), EntityType.PIGLIN);
+
+            }else{
+                e.setCancelled(true);
             }
 
         }else if(difficulty.get("pigs") && entity.getType() == EntityType.ZOMBIFIED_PIGLIN){
 
-            
-            if(random.nextInt(20) == 1){
-                e.setCancelled(true);
-                entity.getWorld().spawnEntity(entity.getLocation(), EntityType.PIG);
-
-            }else if(difficulty.get("demons") && random.nextInt(20) == 1){
-                e.setCancelled(true);
+            e.setCancelled(true);
+            if(difficulty.get("demons") && random.nextInt(30) == 1){
                 entity.getWorld().spawnEntity(entity.getLocation(), EntityType.BLAZE);
                 
-            }else if(entity.getWorld() != Bukkit.getWorld("world")){
-                e.setCancelled(true);
-
             }else{
-                e.setCancelled(true);
                 entity.getWorld().spawnEntity(entity.getLocation(), EntityType.PIG);
             }
 
         }else if(difficulty.get("raiders") && (entity instanceof Cow || entity instanceof MushroomCow)){
 
-            if(random.nextInt(30) == 1){
+            if(random.nextInt(30) == 1 && !(entity instanceof MushroomCow)){
                 var cow = (Cow) entity;
                 cow.setCustomName(ChatColor.AQUA + "Moobloom");
                 
