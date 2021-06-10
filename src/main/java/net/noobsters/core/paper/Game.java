@@ -53,7 +53,7 @@ public class Game extends BukkitRunnable{
         difficultyChanges.put("meteor", true);
 
         difficultyChanges.put("lava", true);
-        difficultyChanges.put("environment", false);
+        difficultyChanges.put("environment", true);
 
         deathPlayers.put("0PHY", true);
         deathPlayers.put("Hasvik", true);

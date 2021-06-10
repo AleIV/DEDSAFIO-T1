@@ -153,11 +153,18 @@ public class DamageListener implements Listener {
 
             }
 
-        }else{
-            var mobResistance = instance.getGame().getMobResistance();
-            e.setDamage(e.getDamage()-((e.getDamage()/100)*mobResistance));
         }
 
+    }
+
+    @EventHandler
+    public void resistance(EntityDamageEvent e){
+        var entity = e.getEntity();
+        if(!(entity instanceof Player)){
+            var mobResistance = instance.getGame().getMobResistance();
+            e.setDamage(e.getDamage()-((e.getDamage()/100)*mobResistance));
+            
+        }
     }
 
     
