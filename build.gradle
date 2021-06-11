@@ -44,7 +44,7 @@ dependencies {
     compile 'fr.mrmicky:FastInv:3.0.2'
     compile 'co.aikar:taskchain-bukkit:3.7.2'
     //libs disguise
-    compileOnly 'LibsDisguises:LibsDisguises:10.0.21'
+    compileOnly 'LibsDisguises:LibsDisguises:10.0.25'
     compileOnly group: "com.comphenix.protocol", name: "ProtocolLib", version: "4.6.0";
 }
 

@@ -9,6 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.World.Environment;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Drowned;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Hoglin;
 import org.bukkit.entity.Horse;
@@ -21,6 +22,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
@@ -28,6 +30,8 @@ import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLocaleChangeEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.EulerAngle;
 
 import net.md_5.bungee.api.ChatColor;
@@ -138,10 +142,12 @@ public class GlobalListeners implements Listener{
 
     }
 
-    /*@EventHandler
+    @EventHandler
     public void onDrownedDeath(EntityDeathEvent e) {
         var entity = e.getEntity();
+
         if(entity instanceof Drowned){
+
             var drowned = (Drowned) e.getEntity();
             var equipment = drowned.getEquipment();
             var mainHand = drowned.getEquipment().getItemInMainHand().clone();
@@ -153,8 +159,11 @@ public class GlobalListeners implements Listener{
                     Damageable dmg = (Damageable) mainHand.getItemMeta();
                     dmg.setDamage(new Random().nextInt(125));
                     mainHand.setItemMeta((ItemMeta) dmg);
+
+                    if(random.nextBoolean()) return;
     
                 }
+
                 drowned.getLocation().getWorld().dropItemNaturally(drowned.getLocation(), mainHand);
     
             }
@@ -163,11 +172,14 @@ public class GlobalListeners implements Listener{
                     Damageable dmg = (Damageable) offHand.getItemMeta();
                     dmg.setDamage(new Random().nextInt(125));
                     offHand.setItemMeta((ItemMeta) dmg);
+
+                    if(random.nextBoolean()) return;
                 }
+
                 drowned.getLocation().getWorld().dropItemNaturally(drowned.getLocation(), offHand);
             }
         }
-    }*/
+    }
 
     @EventHandler
     public void mobsResistanceModifier(EntityDamageByEntityEvent e){
@@ -211,7 +223,6 @@ public class GlobalListeners implements Listener{
 
                 var armorStand = (ArmorStand) player.getWorld().spawnEntity(player.getLocation(), EntityType.ARMOR_STAND);
                 armorStand.setCustomName("Meteor");
-                armorStand.setInvisible(true);
                 armorStand.setGlowing(true);
                 armorStand.setBodyPose(EulerAngle.ZERO);
                 var meteor = new ItemStack(Material.WOODEN_HOE);

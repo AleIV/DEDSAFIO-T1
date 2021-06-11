@@ -5,10 +5,14 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import fr.mrmicky.fastinv.ItemBuilder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import net.md_5.bungee.api.ChatColor;
 
 @Data
 @EqualsAndHashCode(callSuper=false)
@@ -29,10 +33,15 @@ public class Game extends BukkitRunnable{
 
     long gameTime = 0;
     long startTime = 0;
+
+    ItemStack tnt = new ItemBuilder(Material.TNT).name(ChatColor.DARK_RED + "TNT").build();
     
     public Game(PERMADED instance) {
         this.instance = instance;
         this.startTime = System.currentTimeMillis();
+
+        difficultyChanges.put("race", false);
+        difficultyChanges.put("tnt", false);
 
         difficultyChanges.put("pigcap", true);
         difficultyChanges.put("pigcapenable", false);

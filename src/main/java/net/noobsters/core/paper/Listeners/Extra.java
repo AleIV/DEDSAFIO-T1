@@ -5,9 +5,13 @@ import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.ItemSpawnEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -21,6 +25,29 @@ public class Extra implements Listener {
 
     Extra(PERMADED instance) {
         this.instance = instance;
+    }
+
+    @EventHandler
+    public void onDrop(ItemSpawnEvent e){
+        var item = e.getEntity().getItemStack();
+        var game = instance.getGame();
+        if(game.isGulak() && item.getType() == Material.TNT){
+            e.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent e){
+        ItemStack item = e.getCurrentItem();
+        var game = instance.getGame();
+
+        if (item == null){
+            return;
+        }
+
+        if (item.equals(game.getTnt())){
+            e.setCancelled(true);
+        }
     }
 
     @EventHandler

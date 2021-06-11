@@ -43,15 +43,64 @@ public class FightCMD extends BaseCommand {
     @CommandCompletion("@players")
     public void pvp(CommandSender sender, @Flags("other") Player player, boolean bool) {
         var pvp = instance.getGame().getPvpOn();
-        
-        if(bool){
+
+        if (bool) {
             pvp.add(player.getUniqueId().toString());
             sender.sendMessage(ChatColor.GREEN + "PvP " + player + " set to " + bool);
-        }else{
+        } else {
             pvp.remove(player.getUniqueId().toString());
             sender.sendMessage(ChatColor.RED + "PvP " + player + " set to " + bool);
         }
 
+    }
+
+    @Subcommand("pvp-all")
+    @CommandAlias("pvp-all")
+    public void pvpall(CommandSender sender) {
+        var fight = instance.getGame().getFighters();
+        var pvp = instance.getGame().getPvpOn();
+
+        pvp.clear();
+        Bukkit.getOnlinePlayers().forEach(player -> {
+            var uuid = player.getUniqueId().toString();
+            if (fight.contains(uuid)) {
+                pvp.add(uuid);
+            }
+        });
+
+        sender.sendMessage(ChatColor.BLUE + "" + fight.size() + " Fighters pvp enabled.");
+    }
+
+    @Subcommand("spec-fighters")
+    @CommandAlias("spec-fighters")
+    public void specfighters(CommandSender sender) {
+        var fight = instance.getGame().getFighters();
+        var pvp = instance.getGame().getPvpOn();
+
+        pvp.clear();
+        Bukkit.getOnlinePlayers().forEach(player -> {
+            var uuid = player.getUniqueId().toString();
+            if (fight.contains(uuid)) {
+                player.setGameMode(GameMode.SPECTATOR);
+            }
+        });
+
+        sender.sendMessage(ChatColor.BLUE + "" + fight.size() + " Fighters spec enabled.");
+    }
+
+    @Subcommand("tpall-fighters")
+    @CommandAlias("tpall-fighters")
+    public void tp(Player sender) {
+        var fight = instance.getGame().getFighters();
+
+        Bukkit.getOnlinePlayers().forEach(player -> {
+            var uuid = player.getUniqueId().toString();
+            if (fight.contains(uuid)) {
+                player.teleport(sender.getLocation());
+            }
+        });
+
+        sender.sendMessage(ChatColor.BLUE + "" + fight.size() + " Fighters teleport.");
     }
 
     @Subcommand("fighter-add")
@@ -59,16 +108,78 @@ public class FightCMD extends BaseCommand {
     @CommandCompletion("@players")
     public void fighteradd(CommandSender sender, @Flags("other") Player player, boolean bool) {
         var fight = instance.getGame().getFighters();
-        
-        if(bool){
+
+        if (bool) {
             fight.add(player.getUniqueId().toString());
             sender.sendMessage(ChatColor.GREEN + "Fighter " + player + " set to " + bool);
-        }else{
+        } else {
             fight.remove(player.getUniqueId().toString());
             sender.sendMessage(ChatColor.RED + "Fighter " + player + " set to " + bool);
         }
 
-        sender.sendMessage(ChatColor.YELLOW + fight.toString() + " Fighters added.");
+        sender.sendMessage(ChatColor.YELLOW + "" + fight.size() + " Fighters added.");
+
+    }
+
+    @Subcommand("tnt-head")
+    @CommandAlias("tnt-head")
+    @CommandCompletion("@players")
+    public void fighteradd(CommandSender sender, @Flags("other") Player player) {
+        var game = instance.getGame();
+        player.getEquipment().setHelmet(game.getTnt());
+        player.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20*1000, 0));
+        sender.sendMessage(ChatColor.YELLOW + "TNT head " + player.getName());
+
+    }
+
+    @Subcommand("tnt-explode")
+    @CommandAlias("tnt-explode")
+    public void explode(CommandSender sender) {
+        var chain = PERMADED.newChain();
+
+        chain.delay(20).sync(() -> {
+            Bukkit.getOnlinePlayers().forEach(p -> {
+                p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_GUITAR, 1, 1);
+                p.sendTitle(Title.builder().title("")
+                        .subtitle(new ComponentBuilder("3").bold(true).color(ChatColor.GREEN).create()).build());
+            });
+
+        });
+
+        chain.delay(20).sync(() -> {
+            Bukkit.getOnlinePlayers().forEach(p -> {
+                p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_GUITAR, 1, 1);
+                p.sendTitle(Title.builder().title("")
+                        .subtitle(new ComponentBuilder("2").bold(true).color(ChatColor.GREEN).create()).build());
+            });
+
+        });
+
+        chain.delay(20).sync(() -> {
+            Bukkit.getOnlinePlayers().forEach(p -> {
+                p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_GUITAR, 1, 1);
+                p.sendTitle(Title.builder().title("")
+                        .subtitle(new ComponentBuilder("1").bold(true).color(ChatColor.GREEN).create()).build());
+            });
+
+        });
+
+        chain.delay(20).sync(() -> {
+            Bukkit.getOnlinePlayers().forEach(player -> {
+                var helmet = player.getEquipment().getHelmet();
+                player.sendTitle(Title.builder().title("").subtitle(new ComponentBuilder("").create()).build());
+                if (helmet != null && helmet.getItemMeta().getDisplayName() != null && helmet.getItemMeta().getDisplayName().contains("TNT")) {
+                    player.setHealth(1);
+                    player.getLocation().createExplosion(1, false, false);
+                    player.getWorld().strikeLightning(player.getLocation());
+                }
+            });
+
+        });
+
+        chain.sync(TaskChain::abort).execute();
+
+        sender.sendMessage(ChatColor.YELLOW + "TNT explode!");
 
     }
 
@@ -83,10 +194,10 @@ public class FightCMD extends BaseCommand {
     @CommandAlias("fight-list")
     public void list(CommandSender sender) {
         var fight = instance.getGame().getFighters();
-        sender.sendMessage(ChatColor.YELLOW + fight.toString() + " Fighters list.");
+        sender.sendMessage(ChatColor.YELLOW + "" + fight.size() + " Fighters list.");
     }
 
-    public void addKit(Player player){
+    public void addKit(Player player) {
         var equip = player.getEquipment();
         var inv = player.getInventory();
         inv.clear();
@@ -97,13 +208,12 @@ public class FightCMD extends BaseCommand {
         inv.addItem(new ItemStack(Material.GOLDEN_APPLE));
         inv.addItem(new ItemStack(Material.ARROW, 8));
         inv.addItem(new ItemStack(Material.BAKED_POTATO, 8));
-        
-        equip.setHelmet(new ItemStack(Material.IRON_HELMET));
-        equip.setChestplate(new ItemStack(Material.IRON_CHESTPLATE));
-        equip.setLeggings(new ItemStack(Material.IRON_LEGGINGS));
-        equip.setBoots(new ItemStack(Material.IRON_BOOTS));
-    }
 
+        equip.setHelmet(new ItemStack(Material.DIAMOND_HELMET));
+        equip.setChestplate(new ItemStack(Material.DIAMOND_CHESTPLATE));
+        equip.setLeggings(new ItemStack(Material.DIAMOND_LEGGINGS));
+        equip.setBoots(new ItemStack(Material.DIAMOND_BOOTS));
+    }
 
     @Subcommand("fight-random")
     @CommandAlias("fight-random")
@@ -112,126 +222,124 @@ public class FightCMD extends BaseCommand {
         var fighters = instance.getGame().getFighters();
         var pvp = instance.getGame().getPvpOn();
 
-        if(fighters.size() >= 2){
+        if (fighters.size() >= 2) {
             var player1 = fighters.get(0);
             var player2 = fighters.get(1);
 
             fighters.remove(player1);
             fighters.remove(player2);
-            
+
             var chain = PERMADED.newChain();
 
-                    var p1 = Bukkit.getPlayer(UUID.fromString(player1));
-                    var p2 = Bukkit.getPlayer(UUID.fromString(player2));
+            var p1 = Bukkit.getPlayer(UUID.fromString(player1));
+            var p2 = Bukkit.getPlayer(UUID.fromString(player2));
 
-                    p1.setGameMode(GameMode.SURVIVAL);
-                    p2.setGameMode(GameMode.SURVIVAL);
-                    
-                    p1.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20*180, 1));
-                    p2.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20*180, 1));
+            p1.setGameMode(GameMode.SURVIVAL);
+            p2.setGameMode(GameMode.SURVIVAL);
 
-                    addKit(p1);
-                    addKit(p2);
+            p1.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20 * 180, 1));
+            p2.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20 * 180, 1));
 
-                    p1.teleport(new Location(Bukkit.getWorld("world"), -510, 200, -263, 90, 0));
-                    p2.teleport(new Location(Bukkit.getWorld("world"), -554, 200, -263, -90, 0));
+            addKit(p1);
+            addKit(p2);
 
-                    Bukkit.getOnlinePlayers().forEach(p -> {
-                        p.playSound(p.getLocation(), Sound.BLOCK_CONDUIT_ACTIVATE, 1, 1);
-                            p.sendTitle(Title.builder().title("")
-                                .subtitle(new ComponentBuilder(p1.getName() + " VS " + p2.getName()).bold(true).color(ChatColor.DARK_RED).create()).build());
-                    });
+            p1.teleport(new Location(Bukkit.getWorld("world"), -510, 200, -263, 90, 0));
+            p2.teleport(new Location(Bukkit.getWorld("world"), -554, 200, -263, -90, 0));
 
-                    chain.delay(80).sync(() -> {
-                        Bukkit.getOnlinePlayers().forEach(p -> {
-                            p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_GUITAR, 1, 1);
-                            p.sendTitle(Title.builder().title("")
-                                .subtitle(new ComponentBuilder("3").bold(true).color(ChatColor.GREEN).create()).build());
-                        });
+            Bukkit.getOnlinePlayers().forEach(p -> {
+                p.playSound(p.getLocation(), Sound.BLOCK_CONDUIT_ACTIVATE, 1, 1);
+                p.sendTitle(
+                        Title.builder().title("").subtitle(new ComponentBuilder(p1.getName() + " VS " + p2.getName())
+                                .bold(true).color(ChatColor.DARK_RED).create()).build());
+            });
 
-                    });
+            chain.delay(80).sync(() -> {
+                Bukkit.getOnlinePlayers().forEach(p -> {
+                    p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_GUITAR, 1, 1);
+                    p.sendTitle(Title.builder().title("")
+                            .subtitle(new ComponentBuilder("3").bold(true).color(ChatColor.GREEN).create()).build());
+                });
 
-                    chain.delay(20).sync(() -> {
-                        Bukkit.getOnlinePlayers().forEach(p -> {
-                            p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_GUITAR, 1, 1);
-                            p.sendTitle(Title.builder().title("")
-                                .subtitle(new ComponentBuilder("2").bold(true).color(ChatColor.GREEN).create()).build());
-                        });
+            });
 
-                    });
+            chain.delay(20).sync(() -> {
+                Bukkit.getOnlinePlayers().forEach(p -> {
+                    p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_GUITAR, 1, 1);
+                    p.sendTitle(Title.builder().title("")
+                            .subtitle(new ComponentBuilder("2").bold(true).color(ChatColor.GREEN).create()).build());
+                });
 
-                    chain.delay(20).sync(() -> {
-                        Bukkit.getOnlinePlayers().forEach(p -> {
-                            p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_GUITAR, 1, 1);
-                            p.sendTitle(Title.builder().title("")
-                                .subtitle(new ComponentBuilder("1").bold(true).color(ChatColor.GREEN).create()).build());
-                        });
+            });
 
-                    });
+            chain.delay(20).sync(() -> {
+                Bukkit.getOnlinePlayers().forEach(p -> {
+                    p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_GUITAR, 1, 1);
+                    p.sendTitle(Title.builder().title("")
+                            .subtitle(new ComponentBuilder("1").bold(true).color(ChatColor.GREEN).create()).build());
+                });
 
-                    chain.delay(20).sync(() -> {
-                        Bukkit.getOnlinePlayers().forEach(p -> {
-                            p.playSound(p.getLocation(), Sound.ENTITY_RAVAGER_ROAR, 1, 1);
-                            p.sendTitle(Title.builder().title("")
-                                .subtitle(new ComponentBuilder("GO!").bold(true).color(ChatColor.AQUA).create()).build());
-                            pvp.add(player1);
-                            pvp.add(player2);
-                        });
+            });
 
-                    });
+            chain.delay(20).sync(() -> {
+                Bukkit.getOnlinePlayers().forEach(p -> {
+                    p.playSound(p.getLocation(), Sound.ENTITY_RAVAGER_ROAR, 1, 1);
+                    p.sendTitle(Title.builder().title("")
+                            .subtitle(new ComponentBuilder("GO!").bold(true).color(ChatColor.AQUA).create()).build());
+                    pvp.add(player1);
+                    pvp.add(player2);
+                });
 
-                    chain.delay(20).sync(() -> {
-                        Bukkit.getOnlinePlayers().forEach(p -> {
-                            p.sendTitle(Title.builder().title("")
-                                .subtitle(new ComponentBuilder("").bold(true).color(ChatColor.AQUA).create()).build());
-                        });
+            });
 
-                    });
+            chain.delay(20).sync(() -> {
+                Bukkit.getOnlinePlayers().forEach(p -> {
+                    p.sendTitle(Title.builder().title("")
+                            .subtitle(new ComponentBuilder("").bold(true).color(ChatColor.AQUA).create()).build());
+                });
 
-                    chain.sync(TaskChain::abort).execute();
+            });
 
-            
-        }else{
+            chain.sync(TaskChain::abort).execute();
+
+        } else {
             sender.sendMessage(ChatColor.RED + "Not enough fighters.");
         }
 
     }
-    
+
     @Subcommand("add-fighters")
     @CommandAlias("add-fighters")
     public void addFighter(CommandSender sender) {
         var fight = instance.getGame().getFighters();
         fight.clear();
-        Bukkit.getOnlinePlayers().forEach(player ->{
-            if(!player.hasPermission("mod.perm") && player.getGameMode() == GameMode.SPECTATOR){
+        Bukkit.getOnlinePlayers().forEach(player -> {
+            if (!player.hasPermission("mod.perm") && player.getGameMode() == GameMode.SPECTATOR) {
                 fight.add(player.getUniqueId().toString());
             }
         });
 
-        sender.sendMessage(ChatColor.YELLOW + fight.toString() + " Fighters added.");
+        sender.sendMessage(ChatColor.YELLOW + "" + fight.size() + " Fighters added.");
 
     }
 
-
-    
     @Subcommand("gulag")
     @CommandAlias("gulag")
     public void gulag(CommandSender sender) {
         var game = instance.getGame();
         var bool = !game.isGulak();
 
-        if(!bool){
+        if (!bool) {
             var chain = PERMADED.newChain();
-        
-            Bukkit.getOnlinePlayers().forEach(p->{
+
+            Bukkit.getOnlinePlayers().forEach(p -> {
                 chain.delay(1).sync(() -> {
-                    if(p.getGameMode() == GameMode.SPECTATOR && !p.hasPermission("mod.perm")){
+                    if (p.getGameMode() == GameMode.SPECTATOR && !p.hasPermission("mod.perm")) {
                         p.kickPlayer(KICK_MSG);
                     }
 
                 });
             });
-    
+
             chain.sync(TaskChain::abort).execute();
 
         }
@@ -239,6 +347,5 @@ public class FightCMD extends BaseCommand {
         game.setGulak(!game.isGulak());
         sender.sendMessage(ChatColor.GREEN + "Gulag set to " + bool);
     }
-
 
 }

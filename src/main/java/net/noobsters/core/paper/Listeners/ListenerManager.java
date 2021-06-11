@@ -24,6 +24,8 @@ public class ListenerManager {
         registerListener(new DedsafioListener(instance));
         registerListener(new Extra(instance));
         registerListener(new Cancel(instance));
+        registerListener(new DamageListener(instance));
+        registerListener(new RaceListener(instance));
 
 
     }

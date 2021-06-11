@@ -105,6 +105,29 @@ public class UnDead implements Listener {
             var players = loc.getNearbyPlayers(64, player-> player.getGameMode() == GameMode.SURVIVAL).stream().findAny();
             if(players.isPresent()) golem.setTarget(players.get());
 
+            /*CraftIronGolem craft = ((CraftIronGolem) golem);
+            EntityIronGolem nms = craft.getHandle();
+
+            try {
+                Class<? extends EntityInsentient> cl = EntityInsentient.class; //nms.getClass()
+                Field gf = cl.getDeclaredField("goalSelector");
+                gf.setAccessible(true);
+
+                PathfinderGoalSelector goal = (PathfinderGoalSelector) gf.get(nms);
+                goal.a(0, new PathfinderGoalMeleeAttack(nms, 1.0D, true));
+
+                Field tf = cl.getDeclaredField("targetSelector");
+                tf.setAccessible(true);
+
+                PathfinderGoalSelector target = (PathfinderGoalSelector) tf.get(nms);
+                target.a(0, new PathfinderGoalNearestAttackableTarget<>(nms, EntityHuman.class, 10, true, false, null));
+                
+            } catch (Exception x) {
+                x.printStackTrace();
+            }*/
+
+
+
         } else if (entity instanceof Skeleton && difficulty.get("skeletons")) {
             var skeleton = (Skeleton) entity;
 

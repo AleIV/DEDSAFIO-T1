@@ -6,4 +6,4 @@ depend: [ProtocolLib]
 author: AleIV
 api-version: 1.16
 api: ["1.16"]
-softdepend: [LibsDisguises, Vault]
+softdepend: [Vault]

@@ -27,6 +27,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionEffectType;
 
 import fr.mrmicky.fastinv.ItemBuilder;
 import net.md_5.bungee.api.ChatColor;
@@ -110,19 +111,13 @@ public class DedsafioListener implements Listener {
     }
     
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.NORMAL)
     public void playerDied(PlayerDeathEvent e) {
         var player = e.getEntity();
         var game = instance.getGame();
-        var name = e.getEntity().getName();
-        
 
         if (player.getGameMode() == GameMode.SPECTATOR || player.hasPermission("mod.perm"))
             e.setDeathMessage("");
-
-        if (game.getDeathPlayers().containsKey(name)) {
-            game.getDeathPlayers().put(name, true);
-        }
 
         player.setHealth(20);
         player.setGameMode(GameMode.SPECTATOR);
@@ -139,10 +134,7 @@ public class DedsafioListener implements Listener {
             }, 20 * 30);
 
         }else if(game.getPvpOn().contains(player.getUniqueId().toString())){
-
-            if(!player.hasPermission("mod.perm")){
-                instance.animation(ChatColor.DARK_RED + "" + ChatColor.BOLD + "" + e.getDeathMessage(), "fatality", "E", 55, true);
-            }
+            instance.animation(ChatColor.DARK_RED + "" + ChatColor.BOLD + "" + e.getDeathMessage(), "fatality", "E", 55, true);
             
         }
 
@@ -241,12 +233,18 @@ public class DedsafioListener implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void onDeath(PlayerDeathEvent e) {
         var game = instance.getGame();
-
+        var player = e.getEntity();
+        var uuid = player.getUniqueId().toString();
         if(game.isGulak()){
+           player.removePotionEffect(PotionEffectType.GLOWING);
            game.getPvpOn().clear(); 
+
+           if(game.getFighters().contains(uuid)){
+            game.getFighters().remove(uuid);
+           }
         }
 
         

@@ -36,6 +36,7 @@ public class Disguise implements Listener {
         this.instance = instance;
     }
 
+    
     @EventHandler
     public void deathDisguise(PlayerDeathEvent e) {
         var player = e.getEntity();
@@ -69,6 +70,7 @@ public class Disguise implements Listener {
         }
     }
 
+    
     @EventHandler
     public void onDrop(PlayerDropItemEvent e) {
         var item = e.getItemDrop().getItemStack();
@@ -83,6 +85,7 @@ public class Disguise implements Listener {
         
     }
 
+   
     @EventHandler
     public void onQuit(PlayerQuitEvent e) {
         var player = e.getPlayer();

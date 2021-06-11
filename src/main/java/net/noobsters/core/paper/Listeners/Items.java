@@ -230,9 +230,9 @@ public class Items implements Listener {
                 && projectile.getCustomName().toString().contains("explosive")) {
 
             if (hitblock != null) {
-                hitblock.getLocation().createExplosion(1, true, false);
+                hitblock.getLocation().createExplosion(3, true, false);
             } else if (entity != null) {
-                entity.getLocation().createExplosion(1, true, false);
+                entity.getLocation().createExplosion(3, true, false);
             }
 
         }

@@ -52,7 +52,7 @@ public class Animals implements Listener {
 
             if(Bukkit.getWorld("world_nether") == entity.getWorld()){
 
-                if (random.nextInt(175) == 1) {
+                if (random.nextInt(175) == 1 && entity.getLocation().getY() < 100) {
                     var pig = (Pig) entity;
                     pig.setCustomName(ChatColor.AQUA + "Muddy Pig");
                     pig.setRemoveWhenFarAway(true);

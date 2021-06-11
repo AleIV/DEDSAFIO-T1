@@ -16,6 +16,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import net.noobsters.core.paper.PERMADED;
 
@@ -23,9 +25,38 @@ public class DamageListener implements Listener {
 
     PERMADED instance;
     Random random = new Random();
-    
+
     DamageListener(PERMADED instance) {
         this.instance = instance;
+    }
+
+    @EventHandler
+    public void latraes(EntityDamageByEntityEvent e){
+        var entity = e.getEntity();
+        var damager = e.getDamager();
+        var game = instance.getGame();
+
+        if(game.isGulak() && entity instanceof Player && damager instanceof Player){
+            var player1 = (Player) entity;
+            var player2 = (Player) damager;
+            var equip1 = player1.getEquipment();
+            var equip2 = player2.getEquipment();
+
+            var helmet2 = equip2.getHelmet();
+    
+            if (helmet2 != null && helmet2.getItemMeta().getDisplayName() != null && helmet2.getItemMeta().getDisplayName().contains("TNT")) {
+                player2.removePotionEffect(PotionEffectType.GLOWING);
+                equip2.setHelmet(null);
+                equip1.setHelmet(game.getTnt());
+                player1.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20*1000, 0));
+
+            }
+
+            if(game.getDifficultyChanges().get("tnt")){
+                e.setDamage(0);
+            }
+
+        }
     }
     
     @EventHandler
@@ -130,7 +161,6 @@ public class DamageListener implements Listener {
         var entity = e.getEntity();
         var damager = e.getDamager();
 
-
         if(entity instanceof Player){
 
             if(damager instanceof Projectile){
@@ -163,7 +193,6 @@ public class DamageListener implements Listener {
         if(!(entity instanceof Player)){
             var mobResistance = instance.getGame().getMobResistance();
             e.setDamage(e.getDamage()-((e.getDamage()/100)*mobResistance));
-            
         }
     }
 
