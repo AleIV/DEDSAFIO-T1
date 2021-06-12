@@ -6,13 +6,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.World.Environment;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Drowned;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Hoglin;
-import org.bukkit.entity.Horse;
 import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.Pillager;
 import org.bukkit.entity.Player;
@@ -20,7 +18,6 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
@@ -75,71 +72,6 @@ public class GlobalListeners implements Listener{
         }else if(!player.hasPermission("mod.perm") && game.isClosed()){
             player.kickPlayer(NO_JUGAR);
         }
-    }
-
-    @EventHandler
-    public void onDamage(EntityDamageEvent e){
-        var entity = e.getEntity();
-        var cause = e.getCause();
-        var damage = instance.getGame().getDamageAmplifier();
-        var difficulty = instance.getGame().getDifficultyChanges();
-        var loc = entity.getLocation();
-        
-        if(entity instanceof Horse && entity.getCustomName() != null){
-
-            loc.getNearbyPlayers(10).stream().forEach(p ->{
-                p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_LAND, 0.5f, 1);
-            });
-            
-        }
-
-        if(entity instanceof IronGolem && entity.getCustomName() != null && entity.getCustomName().toString().contains("Mutant")){
-            if(random.nextBoolean()){
-                loc.getNearbyPlayers(10).stream().forEach(p ->{
-                    p.playSound(p.getLocation(), "zombie_damage1", 0.5f, 1);
-                });
-
-            }else{
-                loc.getNearbyPlayers(10).stream().forEach(p ->{
-                    p.playSound(p.getLocation(), "zombie_damage2", 0.5f, 1);
-                });
-            }
-        }
-
-        if(entity instanceof Player){
-            var player = (Player) entity;
-            if(player.getGameMode() == GameMode.SPECTATOR && cause == DamageCause.VOID){
-                e.setCancelled(true);
-            }
-        }
-
-
-        if(difficulty.get("lava") && cause == DamageCause.LAVA || cause == DamageCause.DRAGON_BREATH){
-            e.setDamage(e.getDamage()*damage);
-        }
-
-        if(difficulty.get("environment") && (cause == DamageCause.FIRE || cause == DamageCause.FIRE_TICK 
-            || cause == DamageCause.DROWNING || cause == DamageCause.HOT_FLOOR 
-                || cause == DamageCause.STARVATION || cause == DamageCause.FALL)){
-            e.setDamage(e.getDamage()*damage);
-        }
-
-        if(difficulty.get("meteor") && (cause == DamageCause.WITHER || cause == DamageCause.DRAGON_BREATH || cause == DamageCause.MAGIC)){
-            e.setDamage(e.getDamage()*damage);
-        }
-
-        if(entity instanceof Horse && entity.getCustomName() != null && cause == DamageCause.FALL){
-            e.setCancelled(true);
-        }
-
-        if(entity instanceof Player && entity.getVehicle() != null){
-            var vehicle = entity.getVehicle();
-            if(vehicle instanceof Horse && vehicle.getCustomName() != null && cause == DamageCause.FALL){
-                e.setCancelled(true);
-            }
-        }
-
-
     }
 
     @EventHandler

@@ -20,7 +20,7 @@ public class Game extends BukkitRunnable{
     PERMADED instance;
     int spawnPatrolDelay = 600;
     int damageAmplifier = 3;
-    int mobResistance = 40;
+    int mobResistance = 60;
     HashMap<String, Boolean> difficultyChanges = new HashMap<>();
     HashMap<String, Boolean> deathPlayers = new HashMap<>();
 
