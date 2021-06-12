@@ -282,7 +282,6 @@ public class GlobalListeners implements Listener{
     @EventHandler
     public void mobsDamageModifier(EntityDamageByEntityEvent e){
         var damager = e.getDamager();
-        var damageAmplifier = instance.getGame().getDamageAmplifier();
 
         if(damager instanceof Player) return;
 
@@ -304,17 +303,7 @@ public class GlobalListeners implements Listener{
             }else if(proj.getCustomName() != null && proj.getCustomName().contains("golden")){
                 e.setDamage(e.getDamage()+6);
             }
-
-            if(shooter != null && shooter instanceof Player) return;
-
-            if(shooter != null){
-                e.setDamage(e.getDamage()*damageAmplifier);
-            }
         }
-
-        if(damager.getCustomName() != null){
-            e.setDamage(e.getDamage()*damageAmplifier);
-        }  
 
     }
 

@@ -172,7 +172,7 @@ public class DamageListener implements Listener {
                 damager = (Entity) proj.getShooter();
             }
 
-            if(!(damager instanceof Player) && damager.getCustomName() != null){
+            if(!(damager instanceof Player)){
                 var damage = instance.getGame().getDamageAmplifier();
                 e.setDamage(e.getDamage()*damage);
             }
