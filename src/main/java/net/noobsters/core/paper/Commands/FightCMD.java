@@ -88,6 +88,23 @@ public class FightCMD extends BaseCommand {
         sender.sendMessage(ChatColor.BLUE + "" + fight.size() + " Fighters spec enabled.");
     }
 
+    @Subcommand("surv-fighters")
+    @CommandAlias("surv-fighters")
+    public void survfighters(CommandSender sender) {
+        var fight = instance.getGame().getFighters();
+        var pvp = instance.getGame().getPvpOn();
+
+        pvp.clear();
+        Bukkit.getOnlinePlayers().forEach(player -> {
+            var uuid = player.getUniqueId().toString();
+            if (fight.contains(uuid)) {
+                player.setGameMode(GameMode.SURVIVAL);
+            }
+        });
+
+        sender.sendMessage(ChatColor.BLUE + "" + fight.size() + " Fighters survival enabled.");
+    }
+
     @Subcommand("tpall-fighters")
     @CommandAlias("tpall-fighters")
     public void tp(Player sender) {
@@ -109,9 +126,14 @@ public class FightCMD extends BaseCommand {
     public void fighteradd(CommandSender sender, @Flags("other") Player player, boolean bool) {
         var fight = instance.getGame().getFighters();
 
+        var uuid = player.getUniqueId().toString();
         if (bool) {
-            fight.add(player.getUniqueId().toString());
-            sender.sendMessage(ChatColor.GREEN + "Fighter " + player + " set to " + bool);
+            if(!fight.contains(uuid)){
+                fight.add(player.getUniqueId().toString());
+                sender.sendMessage(ChatColor.GREEN + "Fighter " + player + " set to " + bool);
+            }else{
+                sender.sendMessage(ChatColor.RED + "CANT ADD");
+            }
         } else {
             fight.remove(player.getUniqueId().toString());
             sender.sendMessage(ChatColor.RED + "Fighter " + player + " set to " + bool);
@@ -136,6 +158,41 @@ public class FightCMD extends BaseCommand {
     @CommandAlias("tnt-explode")
     public void explode(CommandSender sender) {
         var chain = PERMADED.newChain();
+
+        chain.delay(20).sync(() -> {
+            Bukkit.getOnlinePlayers().forEach(p -> {
+                p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_GUITAR, 1, 1);
+                p.sendTitle(Title.builder().title("")
+                        .subtitle(new ComponentBuilder("10").bold(true).color(ChatColor.GREEN).create()).build());
+            });
+
+        });
+
+        chain.delay(20).sync(() -> {
+            Bukkit.getOnlinePlayers().forEach(p -> {
+                p.sendTitle(Title.builder().title("")
+                        .subtitle(new ComponentBuilder("").bold(true).color(ChatColor.GREEN).create()).build());
+            });
+
+        });
+
+        chain.delay(80).sync(() -> {
+            Bukkit.getOnlinePlayers().forEach(p -> {
+                p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_GUITAR, 1, 1);
+                p.sendTitle(Title.builder().title("")
+                        .subtitle(new ComponentBuilder("5").bold(true).color(ChatColor.GREEN).create()).build());
+            });
+
+        });
+
+        chain.delay(20).sync(() -> {
+            Bukkit.getOnlinePlayers().forEach(p -> {
+                p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_GUITAR, 1, 1);
+                p.sendTitle(Title.builder().title("")
+                        .subtitle(new ComponentBuilder("4").bold(true).color(ChatColor.GREEN).create()).build());
+            });
+
+        });
 
         chain.delay(20).sync(() -> {
             Bukkit.getOnlinePlayers().forEach(p -> {
@@ -237,9 +294,6 @@ public class FightCMD extends BaseCommand {
             p1.setGameMode(GameMode.SURVIVAL);
             p2.setGameMode(GameMode.SURVIVAL);
 
-            p1.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20 * 180, 1));
-            p2.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20 * 180, 1));
-
             addKit(p1);
             addKit(p2);
 
@@ -253,6 +307,7 @@ public class FightCMD extends BaseCommand {
                                 .bold(true).color(ChatColor.DARK_RED).create()).build());
             });
 
+            
             chain.delay(80).sync(() -> {
                 Bukkit.getOnlinePlayers().forEach(p -> {
                     p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_GUITAR, 1, 1);
@@ -279,6 +334,8 @@ public class FightCMD extends BaseCommand {
                 });
 
             });
+
+
 
             chain.delay(20).sync(() -> {
                 Bukkit.getOnlinePlayers().forEach(p -> {

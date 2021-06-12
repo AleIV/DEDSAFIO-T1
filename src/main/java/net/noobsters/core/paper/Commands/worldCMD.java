@@ -73,6 +73,22 @@ public class worldCMD extends BaseCommand {
 
     }
 
+    @Subcommand("place-gulag")
+    @CommandAlias("place-gulag")
+    public void placegulag(CommandSender sender) {
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "setblock -496 153 -246 minecraft:redstone_block");
+        sender.sendMessage(ChatColor.AQUA + "GULAG PLACED");
+
+    }
+
+    @Subcommand("remove-gulag")
+    @CommandAlias("remove-gulag")
+    public void removegulag(CommandSender sender) {
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "setblock -500 153 -246 minecraft:redstone_block");
+        sender.sendMessage(ChatColor.AQUA + "GULAG REMOVED");
+
+    }
+
     public void ruedita() {
         var ruleta = letters.get(random.nextInt(letters.size()));
         instance.animation("", "ruedita", ruleta, 97, false);

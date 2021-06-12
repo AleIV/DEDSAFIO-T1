@@ -66,6 +66,10 @@ public class DamageListener implements Listener {
         var damage = instance.getGame().getDamageAmplifier();
         var difficulty = instance.getGame().getDifficultyChanges();
         var loc = entity.getLocation();
+
+        if(difficulty.get("tnt") && cause == DamageCause.FALL){
+            e.setCancelled(true);
+        }
         
         if(entity instanceof Horse && entity.getCustomName() != null){
 
