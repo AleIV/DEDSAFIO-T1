@@ -7,8 +7,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -89,9 +91,10 @@ public class Extra implements Listener {
                 }
             }
 
+            var equip = player.getEquipment();
             if (difficulty.get("environment") && player.getWorld() == Bukkit.getWorld("world_nether")) {
 
-                var equip = player.getEquipment();
+            
                 var helmet = equip.getHelmet();
                 var chest = equip.getChestplate();
                 var legs = equip.getLeggings();
@@ -105,8 +108,52 @@ public class Extra implements Listener {
                 }
             }
 
+            //CUSTOM TOTEMS
+
+            var offhand = equip.getItemInOffHand();
+
+            if(offhand != null && offhand.getType() == Material.TOTEM_OF_UNDYING && offhand.getItemMeta().hasCustomModelData()){
+                var data = offhand.getItemMeta().getCustomModelData();
+
+                switch (data) {
+                    case 1:{
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 20*2, 1));
+                    }break;
+                
+                    default:
+                        break;
+                }
+            }
+
         });
 
     }
+
+    @EventHandler
+    public void onDamage(EntityDamageByEntityEvent e){
+        var entity = e.getEntity();
+        if(entity instanceof Player){
+            var player = (Player) entity;
+
+            var equip = player.getEquipment();
+            var offhand = equip.getItemInOffHand();
+
+            if(offhand != null && offhand.getType() == Material.TOTEM_OF_UNDYING && offhand.getItemMeta().hasCustomModelData()){
+                var data = offhand.getItemMeta().getCustomModelData();
+
+                switch (data) {
+                    case 1:{
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 20*2, 1));
+                    }break;
+                
+                    default:
+                        break;
+                }
+            }
+        }
+
+    }
+
+
 
 }

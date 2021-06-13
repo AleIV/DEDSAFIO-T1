@@ -178,7 +178,7 @@ public class Animals implements Listener {
                     weaponMeta.setDisplayName(ChatColor.LIGHT_PURPLE + "Great Hammer");
 
                     final AttributeModifier damage = new AttributeModifier(UUID.randomUUID(), "GENERIC.ATTACK.DAMAGE",
-                            11.0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
+                            12.0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
                     weaponMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, damage);
 
                     final AttributeModifier attackSpeed = new AttributeModifier(UUID.randomUUID(),

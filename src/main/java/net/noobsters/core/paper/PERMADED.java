@@ -50,10 +50,6 @@ public class PERMADED extends JavaPlugin {
       arenaWorld.environment(Environment.NORMAL);
       arenaWorld.createWorld();
 
-      WorldCreator race = new WorldCreator("RACE");
-      race.environment(Environment.NORMAL);
-      race.createWorld();
-
     }, 20 * 10);
 
   }

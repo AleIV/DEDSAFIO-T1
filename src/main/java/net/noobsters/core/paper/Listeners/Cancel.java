@@ -57,6 +57,9 @@ public class Cancel implements Listener {
         //CANCEL CRAFTS
         items.add(Material.CUT_RED_SANDSTONE);
         items.add(Material.CUT_RED_SANDSTONE_SLAB);
+        items.add(Material.RED_SANDSTONE_WALL);
+        items.add(Material.TRAPPED_CHEST);
+
 
         items.add(Material.GOLDEN_HELMET);
         items.add(Material.GOLDEN_CHESTPLATE);

@@ -74,7 +74,7 @@ public class DamageListener implements Listener {
         if(entity instanceof Horse && entity.getCustomName() != null){
 
             loc.getNearbyPlayers(10).stream().forEach(p ->{
-                p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_LAND, 0.5f, 1);
+                p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_LAND, 0.2f, 0.3f);
             });
             
         }

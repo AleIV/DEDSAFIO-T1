@@ -118,8 +118,6 @@ public class GlobalListeners implements Listener{
         var entity = e.getEntity();
         var damager = e.getDamager();
         if(entity.getCustomName() != null){
-            var mobResistance = instance.getGame().getMobResistance();
-            e.setDamage(e.getDamage()-((e.getDamage()/100)*mobResistance));
 
             if(damager instanceof IronGolem && entity.getCustomName().toString().contains("Mutant") && entity instanceof Player){
 
