@@ -14,8 +14,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerVelocityEvent;
@@ -70,19 +70,12 @@ public class Disguise implements Listener {
         }
     }
 
-    
     @EventHandler
-    public void onDrop(PlayerDropItemEvent e) {
-        var item = e.getItemDrop().getItemStack();
-        var string = item.getItemMeta().getDisplayName().toString();
-        if (DisguiseAPI.isDisguised(e.getPlayer()) && string != null && string.contains("Melee")
-                || string.contains("Fireball") || string.contains("Explosion")
-                || string.contains("Walk") || string.contains("Speed") || string.contains("Jump")
-                || string.contains("Roar") || string.contains("Laugh")) {
+    public void onDrop(ItemSpawnEvent e){
+        var item = e.getEntity().getItemStack();
+        if(item.getItemMeta().hasCustomModelData() && item.getItemMeta().getCustomModelData() == 666){
             e.setCancelled(true);
-
         }
-        
     }
 
    
@@ -165,6 +158,9 @@ public class Disguise implements Listener {
                     p.playSound(p.getLocation(), "laugh", 3, 1);
                 });
 
+            }else if(string.contains("Bomber")){
+                //bomber
+                Bukkit.dispatchCommand(player, "summon tnt ~ ~ ~ {Fuse:80}");
             }
         }
     }

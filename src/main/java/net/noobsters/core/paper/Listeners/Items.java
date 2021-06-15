@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
@@ -97,7 +98,8 @@ public class Items implements Listener {
             var redstone = armor.clone();
             var meta = redstone.getItemMeta();
             meta.setCustomModelData(126);
-            meta.setUnbreakable(true);
+            redstone.removeEnchantment(Enchantment.DURABILITY);
+            redstone.addEnchantment(Enchantment.DURABILITY, 5);
 
             if (armor.getType() == Material.NETHERITE_HELMET) {
                 meta.setDisplayName(ChatColor.DARK_RED + "Reinforced Redstone Helmet");
@@ -214,7 +216,7 @@ public class Items implements Listener {
 
         if (item == Material.MILK_BUCKET && itemMeta.hasCustomModelData() && itemMeta.getCustomModelData() == 1) {
             Bukkit.getScheduler().runTaskLater(instance, () -> {
-                e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.HEAL, 20, 5));
+                e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 20*15, 2));
             }, 20);
         }
 
@@ -304,7 +306,7 @@ public class Items implements Listener {
             var loc = e.getEntity().getLocation();
 
             loc.getNearbyPlayers(20).stream().forEach(p ->{
-                p.playSound(p.getLocation(), "rifle_shoot", 1, 1);
+                p.playSound(p.getLocation(), "rifle_shoot", 0.3f, 1);
             });
 
                     
@@ -314,7 +316,7 @@ public class Items implements Listener {
             var loc = e.getEntity().getLocation();
 
             loc.getNearbyPlayers(20).stream().forEach(p ->{
-                p.playSound(p.getLocation(), "gun_1", 1, 1);
+                p.playSound(p.getLocation(), "gun_1", 0.3f, 1);
             });
 
         }

@@ -194,6 +194,7 @@ public class DamageListener implements Listener {
     @EventHandler
     public void resistance(EntityDamageEvent e){
         var entity = e.getEntity();
+
         if(!(entity instanceof Player)){
             var mobResistance = instance.getGame().getMobResistance();
             e.setDamage(e.getDamage()-((e.getDamage()/100)*mobResistance));
@@ -212,18 +213,18 @@ public class DamageListener implements Listener {
             var shooter = proj.getShooter();
 
             if(proj.getCustomName() != null && proj.getCustomName().contains("lead")){
-                e.setDamage(e.getDamage()+12);
+                e.setDamage(e.getDamage()+22);
                 if(random.nextBoolean() && shooter instanceof Pillager){
                     var pillager = (Pillager) shooter;
                     var loc = pillager.getLocation();
 
                     loc.getNearbyPlayers(20).stream().forEach(p ->{
-                        p.playSound(p.getLocation(), "boomheadshot", 1, 1);
+                        p.playSound(p.getLocation(), "boomheadshot", 0.3f, 1);
                     });
 
                 }
             }else if(proj.getCustomName() != null && proj.getCustomName().contains("golden")){
-                e.setDamage(e.getDamage()+6);
+                e.setDamage(e.getDamage()+14);
             }
 
         }

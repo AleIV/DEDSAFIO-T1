@@ -12,7 +12,6 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Cow;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Horse;
 import org.bukkit.entity.Illusioner;
 import org.bukkit.entity.MushroomCow;
 import org.bukkit.entity.Pig;
@@ -52,7 +51,7 @@ public class Animals implements Listener {
 
             if(Bukkit.getWorld("world_nether") == entity.getWorld()){
 
-                if (random.nextInt(175) == 1 && entity.getLocation().getY() < 100) {
+                if (random.nextInt(200) == 1 && entity.getLocation().getY() < 100) {
                     var pig = (Pig) entity;
                     pig.setCustomName(ChatColor.AQUA + "Muddy Pig");
                     pig.setRemoveWhenFarAway(true);
@@ -85,13 +84,21 @@ public class Animals implements Listener {
 
         }else if(difficulty.get("raiders") && (entity instanceof Cow || entity instanceof MushroomCow)){
 
-            if(random.nextInt(30) == 1 && !(entity instanceof MushroomCow)){
-                var cow = (Cow) entity;
-                cow.setCustomName(ChatColor.AQUA + "Moobloom");
-                
+
+            if(pigCap && random.nextInt(70) == 1){
+
+                if(random.nextInt(100) == 1 && !(entity instanceof MushroomCow)){
+                    var cow = (Cow) entity;
+                    cow.setCustomName(ChatColor.AQUA + "Moobloom");
+                    cow.setRemoveWhenFarAway(true);
+                    
+                }else{
+                    e.setCancelled(true);
+                    entity.getWorld().spawnEntity(entity.getLocation(), EntityType.PILLAGER);   
+                }
+
             }else{
                 e.setCancelled(true);
-                entity.getWorld().spawnEntity(entity.getLocation(), EntityType.PILLAGER);
             }
 
         } else if (difficulty.get("pigs") && entity instanceof Piglin) {
@@ -207,12 +214,15 @@ public class Animals implements Listener {
             e.getDrops().forEach(drop -> drop.setType(Material.AIR));
             e.getDrops().add(new ItemStack(Material.ENCHANTED_GOLDEN_APPLE));
 
-        }else if(entity instanceof Horse && entity.getCustomName() != null && entity.isSilent()){
+        }else if(entity.getCustomName() != null && entity.isSilent()){
             e.getDrops().forEach(drop -> drop.setType(Material.AIR));
             
 
         }else if(entity instanceof Illusioner){
             entity.getWorld().dropItemNaturally(entity.getLocation(), new ItemStack(Material.TOTEM_OF_UNDYING));
+            
+        }else if(entity instanceof Cow){
+            e.getDrops().forEach(drop -> drop.setType(Material.AIR));
             
         }
 
@@ -230,8 +240,9 @@ public class Animals implements Listener {
         }else if(difficulty.get("raiders") && entity instanceof Cow && entity.getCustomName() == null){
             var cow = (Cow) entity;
             cow.damage(100);
+            cow.getWorld().createExplosion(cow.getLocation(), 1, false);
             e.setCancelled(true);
-            entity.getWorld().spawnEntity(entity.getLocation(), EntityType.COW);
+            entity.getWorld().spawnEntity(entity.getLocation(), EntityType.VINDICATOR);
         }
 
     }

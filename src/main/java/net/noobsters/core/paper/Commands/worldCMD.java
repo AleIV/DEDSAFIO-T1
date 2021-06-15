@@ -28,9 +28,10 @@ public class worldCMD extends BaseCommand {
     Random random = new Random();
     List<String> letters = new ArrayList<>();
 
-    String item1 = "uE2A4";
-    String item2 = "uE1A0";
-    String item3 = "uE0A9";
+    String item1 = "uE3A6";
+    String item2 = "uE1A9";
+    String item3 = "uE3A7";
+
     String item4 = "uE0A3";
     String item5 = "uE1A3";
 
@@ -140,34 +141,35 @@ public class worldCMD extends BaseCommand {
                         });
                     });
 
-                    chain.delay(20).sync(() -> {
+                    /*chain.delay(20).sync(() -> {
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
                                 "title @a title {\"text\":\"" + charac + item4 + "\"}");
                         
                         Bukkit.getOnlinePlayers().forEach(p -> {
                             p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 1, 0.5f);
                         });
-                    });
+                    });*/
 
                     chain.delay(20).sync(() -> {
 
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-                                "title @a title {\"text\":\"" + charac + item5 + "\"}");
+                        /*Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
+                                "title @a title {\"text\":\"" + charac + item5 + "\"}");*/
                         Bukkit.broadcastMessage("");
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-                                "tellraw @a {\"text\":\"" + charac + item1 + " x1" + "\"}");
+                                "tellraw @a {\"text\":\"" + charac + item1 + " x32" + "\"}");
                         Bukkit.broadcastMessage("");
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-                                "tellraw @a {\"text\":\"" + charac + item2 + " x64" + "\"}");
+                                "tellraw @a {\"text\":\"" + charac + item2 + " x48" + "\"}");
                         Bukkit.broadcastMessage("");
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
                                 "tellraw @a {\"text\":\"" + charac + item3 + " x64" + "\"}");
                         Bukkit.broadcastMessage("");
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
+
+                        /*Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
                                 "tellraw @a {\"text\":\"" + charac + item4 + " x64" + "\"}");
                         Bukkit.broadcastMessage("");
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-                                "tellraw @a {\"text\":\"" + charac + item5 + " x64" + "\"}");
+                                "tellraw @a {\"text\":\"" + charac + item5 + " x64" + "\"}");*/
                                 
                             
                         Bukkit.getOnlinePlayers().forEach(p -> {

@@ -23,6 +23,7 @@ public class Game extends BukkitRunnable{
     int mobResistance = 60;
     HashMap<String, Boolean> difficultyChanges = new HashMap<>();
     HashMap<String, Boolean> deathPlayers = new HashMap<>();
+    HashMap<String, String> disguises = new HashMap<>();
 
     List<String> fighters = new ArrayList<>();
     List<String> pvpOn = new ArrayList<>();
@@ -47,12 +48,15 @@ public class Game extends BukkitRunnable{
         difficultyChanges.put("pigcapenable", false);
         difficultyChanges.put("villager", false);
 
+        difficultyChanges.put("totems50", false);
+        difficultyChanges.put("totems", true);
+
         difficultyChanges.put("zombies", true);
         difficultyChanges.put("spiders", true);
         difficultyChanges.put("skeletons", true);
         difficultyChanges.put("dragon", true);
         difficultyChanges.put("pigs", true);
-        difficultyChanges.put("raiders", false); 
+        difficultyChanges.put("raiders", true); 
         difficultyChanges.put("mages", true);
         difficultyChanges.put("demons", false);
         difficultyChanges.put("creepers", false);

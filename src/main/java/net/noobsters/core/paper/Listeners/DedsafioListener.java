@@ -14,12 +14,9 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Skull;
 import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
@@ -42,15 +39,15 @@ public class DedsafioListener implements Listener {
             .filter(material -> material.name().contains("FENCE") && !material.name().contains("FENCE_GATE"))
             .collect(Collectors.toList());
 
-    int amount1 = 1;
-    int amount2 = 64;
+    int amount1 = 32;
+    int amount2 = 48;
     int amount3 = 64;
     int amount4 = 64;
     int amount5 = 64;
 
-    Material item1 = Material.MUSIC_DISC_PIGSTEP;
-    Material item2 = Material.EMERALD_BLOCK;
-    Material item3 = Material.DIAMOND_ORE;
+    Material item1 = Material.SPONGE;
+    Material item2 = Material.SHULKER_SHELL;
+    Material item3 = Material.TNT;
     Material item4 = Material.CHORUS_FRUIT;
     Material item5 = Material.END_CRYSTAL;
 
@@ -66,19 +63,19 @@ public class DedsafioListener implements Listener {
         if(entity instanceof ArmorStand && entity.getCustomName() != null && entity.getCustomName().contains("pilar")){
             var inv = player.getInventory();
 
-            if(inv.contains(item1, amount1) && inv.contains(item2, amount2) && inv.contains(item3, amount3) && inv.contains(item4, amount4) && inv.contains(item4, amount4)){
+            if(inv.contains(item1, amount1) && inv.contains(item2, amount2) && inv.contains(item3, amount3) /*&& inv.contains(item4, amount4) && inv.contains(item4, amount4)*/){
                 var itemstack1 = new org.bukkit.inventory.ItemStack(item1, amount1);
                 var itemstack2 = new org.bukkit.inventory.ItemStack(item2, amount2);
                 var itemstack3 = new org.bukkit.inventory.ItemStack(item3, amount3);
                 //var itemstack4 = new org.bukkit.inventory.ItemStack(item4, amount4);
-                var itemstack5 = new org.bukkit.inventory.ItemStack(item5, amount5);
+                //var itemstack5 = new org.bukkit.inventory.ItemStack(item5, amount5);
 
                 inv.removeItem(itemstack1);
                 inv.removeItem(itemstack2);
                 inv.removeItem(itemstack3);
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "clear " + player.getName() + " minecraft:chorus_fruit 64");
+                //Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "clear " + player.getName() + " minecraft:chorus_fruit 64");
                 //inv.removeItem(itemstack4);
-                inv.removeItem(itemstack5);
+                //inv.removeItem(itemstack5);
 
                 var item = new ItemBuilder(Material.WOODEN_SHOVEL).name(ChatColor.GOLD + "" + ChatColor.BOLD + "RESURRECCTION SPOON").flags(ItemFlag.HIDE_ATTRIBUTES).meta(ItemMeta.class, meta -> meta.setCustomModelData(114)).build();
                 player.getInventory().addItem(item);
@@ -198,38 +195,6 @@ public class DedsafioListener implements Listener {
         var player = e.getPlayer();
         if (player.getGameMode() == GameMode.SPECTATOR) {
             e.setQuitMessage("");
-        }
-    }
-
-    @EventHandler(priority = EventPriority.HIGH)
-    public void onPVP(EntityDamageByEntityEvent e) {
-
-        if (e.getEntity() instanceof Player) {
-            Player p1 = (Player) e.getEntity();
-            Player p2 = null;
-            if (e.getDamager() instanceof Player) {
-                p2 = (Player) e.getDamager();
-            } else if (e.getDamager() instanceof Projectile) {
-                Projectile proj = (Projectile) e.getDamager();
-                if (proj.getShooter() instanceof Player) {
-                    p2 = (Player) proj.getShooter();
-                }
-            }
-            if (p2 != null) {
-                var pvp = instance.getGame().getPvpOn();
-
-                if (pvp.contains(p1.getUniqueId().toString()) && pvp.contains(p2.getUniqueId().toString()))
-                    return;
-
-                if (p1.getUniqueId().toString() == p2.getUniqueId().toString())
-                    return;
-
-                if (!p1.hasPermission("mod.perm") && p2.getGameMode() == GameMode.SURVIVAL
-                        && !p2.hasPermission("mod.perm")) {
-                    e.setCancelled(true);
-            
-                }
-            }
         }
     }
 

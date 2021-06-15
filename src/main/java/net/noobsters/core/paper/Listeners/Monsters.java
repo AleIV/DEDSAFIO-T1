@@ -38,7 +38,7 @@ public class Monsters implements Listener {
         var entity = e.getEntity();
         var difficulty = game.getDifficultyChanges();
         if (difficulty.get("spiders") && entity instanceof Spider) {
-            if(entity instanceof CaveSpider){
+            if (entity instanceof CaveSpider) {
                 e.setCancelled(true);
                 entity.getWorld().spawnEntity(entity.getLocation(), EntityType.SPIDER);
                 return;
@@ -71,15 +71,15 @@ public class Monsters implements Listener {
                     break;
             }
 
-        }else if(difficulty.get("spiders") && entity instanceof CaveSpider){
+        } else if (difficulty.get("spiders") && entity instanceof CaveSpider) {
             e.setCancelled(true);
             entity.getWorld().spawnEntity(entity.getLocation(), EntityType.SPIDER);
-            
-        }else if(entity instanceof MagmaCube && difficulty.get("redstone")){
+
+        } else if (entity instanceof MagmaCube && difficulty.get("redstone")) {
             var magma = (MagmaCube) entity;
             magma.setCustomName(ChatColor.DARK_RED + "Redstone Cube");
 
-        }else if (difficulty.get("creepers") && entity instanceof Creeper) {
+        } else if (difficulty.get("creepers") && entity instanceof Creeper) {
             var creeper = (Creeper) entity;
 
             switch (random.nextInt(5)) {
@@ -106,7 +106,7 @@ public class Monsters implements Listener {
                     creeper.setCustomName(ChatColor.GREEN + "Atomic Creeper");
                     creeper.setPowered(true);
                     creeper.setExplosionRadius(30);
-                    creeper.setHealth(creeper.getHealth()/2);
+                    creeper.setHealth(creeper.getHealth() / 2);
                     creeper.setGlowing(true);
                 }
                     break;
@@ -157,21 +157,21 @@ public class Monsters implements Listener {
             switch (random.nextInt(4)) {
                 case 1:
 
-                    loc.getNearbyPlayers(20).stream().forEach(p ->{
+                    loc.getNearbyPlayers(20).stream().forEach(p -> {
                         p.playSound(p.getLocation(), "pollo", 1, 1);
                     });
 
                     break;
                 case 2:
 
-                    loc.getNearbyPlayers(20).stream().forEach(p ->{
+                    loc.getNearbyPlayers(20).stream().forEach(p -> {
                         p.playSound(p.getLocation(), "pollo_2", 1, 1);
                     });
 
                     break;
                 case 3:
 
-                    loc.getNearbyPlayers(20).stream().forEach(p ->{
+                    loc.getNearbyPlayers(20).stream().forEach(p -> {
                         p.playSound(p.getLocation(), "pollo_3", 1, 1);
                     });
 
@@ -179,7 +179,7 @@ public class Monsters implements Listener {
 
                 default:
 
-                    loc.getNearbyPlayers(20).stream().forEach(p ->{
+                    loc.getNearbyPlayers(20).stream().forEach(p -> {
                         p.playSound(p.getLocation(), "pollo_4", 1, 1);
                     });
 
@@ -187,10 +187,10 @@ public class Monsters implements Listener {
             }
         }
     }
-    
+
     @EventHandler
     public void rubberSoundItem(EntityDamageByEntityEvent e) {
-        var entity =  e.getEntity();
+        var entity = e.getEntity();
         var damager = e.getDamager();
         if (damager instanceof Player) {
             var player = (Player) damager;
@@ -199,62 +199,94 @@ public class Monsters implements Listener {
                 var loc = damager.getLocation();
                 switch (random.nextInt(4)) {
                     case 1:
-    
-                        loc.getNearbyPlayers(20).stream().forEach(p ->{
+
+                        loc.getNearbyPlayers(20).stream().forEach(p -> {
                             p.playSound(p.getLocation(), "pollo", 1, 1);
                         });
-    
+
                         break;
                     case 2:
-    
-                        loc.getNearbyPlayers(20).stream().forEach(p ->{
+
+                        loc.getNearbyPlayers(20).stream().forEach(p -> {
                             p.playSound(p.getLocation(), "pollo_2", 1, 1);
                         });
-    
+
                         break;
                     case 3:
-    
-                        loc.getNearbyPlayers(20).stream().forEach(p ->{
+
+                        loc.getNearbyPlayers(20).stream().forEach(p -> {
                             p.playSound(p.getLocation(), "pollo_3", 1, 1);
                         });
-    
+
                         break;
-    
+
                     default:
-    
-                        loc.getNearbyPlayers(20).stream().forEach(p ->{
+
+                        loc.getNearbyPlayers(20).stream().forEach(p -> {
                             p.playSound(p.getLocation(), "pollo_4", 1, 1);
                         });
-    
+
                         break;
                 }
             }
-        }else if(damager instanceof Spider && entity instanceof Player){
+        } else if (damager instanceof Spider && entity instanceof Player) {
             var player = (Player) entity;
             var spider = (Spider) e.getDamager();
-            if(spider.getCustomName() != null){
+            if (spider.getCustomName() != null) {
                 var name = spider.getCustomName().toString();
 
-                if(name.contains("Green")){
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 20*30, 0));
+                var totem = getTotemOnUse(player);
 
-                }else if(name.contains("Stone")){
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 20*20, 2));
-
-                }else if(name.contains("Dust")){
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20*10, 0));
-
-                }else if(name.contains("Glaciar")){
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20*10, 2));
-
-                }else if(name.contains("Ancient")){
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, 20*5, 200));
+                if (totem != null && isSpecialTotem(totem)) {
+                    var data = totem.getItemMeta().getCustomModelData();
+                    //SPIDER TOTEM
+                    if(data == 3)
+                        return;
                 }
 
+                if (name.contains("Green")) {
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 20 * 30, 0));
+
+                } else if (name.contains("Stone")) {
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 20 * 20, 2));
+
+                } else if (name.contains("Dust")) {
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 10, 0));
+
+                } else if (name.contains("Glaciar")) {
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20 * 10, 3));
+
+                } else if (name.contains("Ancient")) {
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, 20 * 5, 200));
                 }
-            
+
+            }
+
         }
 
     }
+
+    public ItemStack getTotemOnUse(Player player){
+        var equip = player.getEquipment();
+        var totemoff = equip.getItemInOffHand();
+        var totemhand = equip.getItemInMainHand();
+
+        if(isTotem(totemhand)){
+            return totemhand;
+        }else if(isTotem(totemoff)){
+            return totemoff;
+        }
+
+        return null;
+    }
+
+    public boolean isTotem(ItemStack stack){
+        return stack != null && stack.getType() == Material.TOTEM_OF_UNDYING;
+    }
+
+    public boolean isSpecialTotem(ItemStack stack){
+        return isTotem(stack) && stack.getItemMeta().hasCustomModelData();
+    }
+
 
 }

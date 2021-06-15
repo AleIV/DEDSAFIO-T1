@@ -8,7 +8,6 @@ import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.command.CommandSender;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Horse;
@@ -27,7 +26,6 @@ import co.aikar.commands.annotation.CommandPermission;
 import co.aikar.commands.annotation.Flags;
 import co.aikar.commands.annotation.Subcommand;
 import co.aikar.taskchain.TaskChain;
-import fr.mrmicky.fastinv.ItemBuilder;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import net.md_5.bungee.api.ChatColor;
@@ -144,6 +142,7 @@ public class permadedCMD extends BaseCommand {
         instance.getGame().setDamageAmplifier(change);
         sender.sendMessage(ChatColor.GREEN + "Damage amplifier set to " + change);
     }
+    
     @Subcommand("spawn-patrol-delay")
     @CommandAlias("spawn-patrol-delay")
     public void patrol(CommandSender sender, int change) {
@@ -160,71 +159,6 @@ public class permadedCMD extends BaseCommand {
         }, 2);
         
         sender.sendMessage(ChatColor.AQUA + "Summoned " + summon);
-    }
-
-    @Subcommand("redstone")
-    @CommandAlias("redstone")
-    public void disguise(Player sender) {
-
-        var name = "&4Redstone Monstrosity";
-        Bukkit.dispatchCommand(sender, "disguise ravager setcustomname \""+ name +"\" setcustomnamevisible false setSelfDisguiseVisible false");
-
-        var melee = new ItemBuilder(Material.NETHERITE_SWORD).name(ChatColor.GOLD + "Melee").build();
-
-        var shootFireball = new ItemBuilder(Material.BOW).enchant(Enchantment.ARROW_INFINITE).name(ChatColor.GOLD + "Shoot Fireball").build();
-
-        var explosion = new ItemBuilder(Material.GUNPOWDER).name(ChatColor.GOLD + "Explosion").build();
-
-        var walk = new ItemBuilder(Material.NETHERITE_BOOTS).name(ChatColor.GREEN + "Walk").build();
-
-        var speed = new ItemBuilder(Material.DIAMOND_BOOTS).name(ChatColor.GREEN + "Speed").build();
-
-        var jump = new ItemBuilder(Material.IRON_BOOTS).name(ChatColor.GREEN + "Jump").build();
-
-        var roar = new ItemBuilder(Material.GLOWSTONE_DUST).name(ChatColor.GREEN + "Roar").build();
-
-        var laugh = new ItemBuilder(Material.SUGAR).name(ChatColor.GREEN + "Laugh").build();
-
-        var inv = sender.getInventory();
-        inv.addItem(melee);
-        inv.addItem(shootFireball);
-        inv.addItem(explosion);
-
-        inv.addItem(walk);
-        inv.addItem(speed);
-        inv.addItem(jump);
-        inv.addItem(roar);
-        inv.addItem(laugh);
-
-        inv.addItem(new ItemStack(Material.ARROW));
-
-        var helmet = new ItemBuilder(Material.NETHERITE_HELMET).enchant(Enchantment.PROTECTION_ENVIRONMENTAL, 4).build();
-        var chestplate = new ItemBuilder(Material.NETHERITE_CHESTPLATE).enchant(Enchantment.PROTECTION_ENVIRONMENTAL, 4).build();
-        var leggings = new ItemBuilder(Material.NETHERITE_LEGGINGS).enchant(Enchantment.PROTECTION_PROJECTILE, 4).build();
-        var boots = new ItemBuilder(Material.NETHERITE_BOOTS).enchant(Enchantment.PROTECTION_PROJECTILE, 4).build();
-
-        var equip = sender.getEquipment();
-        equip.setHelmet(helmet);
-        equip.setChestplate(chestplate);
-        equip.setLeggings(leggings);
-        equip.setBoots(boots);
-
-        sender.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 100000, 5, false, false));
-        sender.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100000, 3, false, false));
-
-        sender.setGameMode(GameMode.SURVIVAL);
-
-        sender.sendMessage(ChatColor.GOLD + "Disquised as Redstone Monstrosity");
-    }
-
-    @Subcommand("disguise")
-    public void disguiseCustom(Player sender, EntityType entity, String name, boolean baby) {
-
-        Bukkit.dispatchCommand(sender, "disguise " + entity + " setBaby " + baby + " setcustomname \""+ name +"\" setcustomnamevisible false setSelfDisguiseVisible false");
-
-        sender.setGameMode(GameMode.SURVIVAL);
-
-        sender.sendMessage(ChatColor.GOLD + "Disquised as " + name);
     }
 
     @Subcommand("car")

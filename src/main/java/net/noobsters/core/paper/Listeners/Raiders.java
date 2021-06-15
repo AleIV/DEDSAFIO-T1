@@ -10,6 +10,7 @@ import org.bukkit.entity.Illusioner;
 import org.bukkit.entity.Pillager;
 import org.bukkit.entity.Ravager;
 import org.bukkit.entity.Vindicator;
+import org.bukkit.entity.Witch;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
@@ -112,6 +113,9 @@ public class Raiders implements Listener {
 
             vindicator.getEquipment().setItemInMainHand(axe);
 
+        }else if(difficulty.get("mages") && entity instanceof Witch){
+            e.setCancelled(true);
+            entity.getWorld().spawnEntity(entity.getLocation(), EntityType.EVOKER);
         }
 
     }

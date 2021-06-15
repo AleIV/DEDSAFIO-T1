@@ -12,9 +12,7 @@ import org.bukkit.entity.Drowned;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Hoglin;
 import org.bukkit.entity.IronGolem;
-import org.bukkit.entity.Pillager;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -66,7 +64,7 @@ public class GlobalListeners implements Listener{
         var game = instance.getGame();
         if(!locale.contains("NOOBSTERS")){
             player.kickPlayer(NO_TXT);
-        }else if(!locale.contains("NOOBSTERS_2")){
+        }else if(!locale.contains("NOOBSTERS_4")){
             player.kickPlayer(NO_TXT + ChatColor.RED + "\n Hay otra actualizacion del texture pack, descarga la ultima!");
             
         }else if(!player.hasPermission("mod.perm") && game.isClosed()){
@@ -207,34 +205,6 @@ public class GlobalListeners implements Listener{
 
             
         }
-    }
-
-    @EventHandler
-    public void mobsDamageModifier(EntityDamageByEntityEvent e){
-        var damager = e.getDamager();
-
-        if(damager instanceof Player) return;
-
-        if(damager instanceof Projectile){
-            var proj = (Projectile) damager;
-            var shooter = proj.getShooter();
-
-            if(proj.getCustomName() != null && proj.getCustomName().contains("lead")){
-                e.setDamage(e.getDamage()+12);
-                if(random.nextBoolean() && shooter instanceof Pillager){
-                    var pillager = (Pillager) shooter;
-                    var loc = pillager.getLocation();
-
-                    loc.getNearbyPlayers(20).stream().forEach(p ->{
-                        p.playSound(p.getLocation(), "boomheadshot", 1, 1);
-                    });
-
-                }
-            }else if(proj.getCustomName() != null && proj.getCustomName().contains("golden")){
-                e.setDamage(e.getDamage()+6);
-            }
-        }
-
     }
 
     public Integer chooseCoord(int radius) {
