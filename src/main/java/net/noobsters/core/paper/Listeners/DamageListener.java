@@ -202,7 +202,7 @@ public class DamageListener implements Listener {
     }
 
     
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOW)
     public void mobsDamageModifier(EntityDamageByEntityEvent e){
         var damager = e.getDamager();
 
