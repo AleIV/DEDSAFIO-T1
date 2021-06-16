@@ -12,7 +12,6 @@ import org.bukkit.entity.Cod;
 import org.bukkit.entity.Cow;
 import org.bukkit.entity.Dolphin;
 import org.bukkit.entity.Donkey;
-import org.bukkit.entity.Fish;
 import org.bukkit.entity.Fox;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Llama;
@@ -129,9 +128,6 @@ public class Cancel implements Listener {
             e.setCancelled(true);
 
         }else if(entity instanceof Cod){
-            e.setCancelled(true);
-
-        }else if(entity instanceof Fish){
             e.setCancelled(true);
 
         }else if(entity instanceof TropicalFish){

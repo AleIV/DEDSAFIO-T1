@@ -78,7 +78,7 @@ public class Naturally implements Listener {
         var entity = e.getEntity();
         var damager = e.getDamager();
         final var difficulty = instance.getGame().getDifficultyChanges();
-        if(damager instanceof Guardian && !(damager instanceof ElderGuardian) && random.nextInt(5) == 1 && difficulty.get("watermonster")){
+        if(damager instanceof Guardian && !(damager instanceof ElderGuardian) && random.nextInt(3) == 1 && difficulty.get("watermonster")){
             
             entity.getWorld().spawnEntity(entity.getLocation(), EntityType.DROWNED);
 
