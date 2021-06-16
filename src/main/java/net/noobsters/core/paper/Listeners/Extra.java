@@ -98,6 +98,16 @@ public class Extra implements Listener {
 
                     player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 20, 1));
                 }
+
+                var blinds = player.getNearbyEntities(100, 100, 100).stream()
+                        .filter(blindStand -> blindStand instanceof ArmorStand && blindStand.getCustomName() != null
+                                && blindStand.getCustomName().contains("blind"))
+                        .map(e -> (ArmorStand) e).collect(Collectors.toList());
+                        
+                if (!blinds.isEmpty() && !player.hasPermission("mod.perm")) {
+
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20*3, 0));
+                }
             }
 
             var equip = player.getEquipment();
@@ -115,6 +125,10 @@ public class Extra implements Listener {
                     player.removePotionEffect(PotionEffectType.FIRE_RESISTANCE);
                     player.setFireTicks(20 * 30);
                 }
+            }
+
+            if(difficulty.get("blind")){
+                player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20*3, 0));
             }
 
             //CUSTOM TOTEMS

@@ -129,6 +129,14 @@ public class permadedCMD extends BaseCommand {
         sender.sendMessage(ChatColor.AQUA + "LIST: " + game.getDifficultyChanges().toString());
     }
 
+    @Subcommand("fire-all")
+    @CommandAlias("fire-all")
+    public void fireall(CommandSender sender) {
+        Bukkit.getOnlinePlayers().forEach(player ->{
+            player.setFireTicks(30*20);
+        });
+    }
+
     @Subcommand("resistance")
     @CommandAlias("resistance")
     public void resistanceChange(CommandSender sender, int change) {
@@ -194,6 +202,17 @@ public class permadedCMD extends BaseCommand {
         stand.setCustomName(ChatColor.RED + "Dragon Scale");
 
         sender.sendMessage(ChatColor.BLUE + "Blood Scale ");
+    }
+
+    @Subcommand("blind-stand")
+    public void blind(Player sender) {
+
+        var stand = (ArmorStand) sender.getWorld().spawnEntity(sender.getLocation(), EntityType.ARMOR_STAND);
+
+        stand.setCustomName("blind");
+        stand.setInvisible(true);
+
+        sender.sendMessage(ChatColor.BLUE + "Blind stand ");
     }
 
 

@@ -12,6 +12,7 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Cow;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Hoglin;
 import org.bukkit.entity.Illusioner;
 import org.bukkit.entity.MushroomCow;
 import org.bukkit.entity.Pig;
@@ -51,7 +52,7 @@ public class Animals implements Listener {
 
             if(Bukkit.getWorld("world_nether") == entity.getWorld()){
 
-                if (random.nextInt(200) == 1 && entity.getLocation().getY() < 100) {
+                if (random.nextInt(250) == 1 && entity.getLocation().getY() < 100) {
                     var pig = (Pig) entity;
                     pig.setCustomName(ChatColor.AQUA + "Muddy Pig");
                     pig.setRemoveWhenFarAway(true);
@@ -72,6 +73,11 @@ public class Animals implements Listener {
                 e.setCancelled(true);
             }
 
+        }else if(entity instanceof Hoglin){
+
+            var hoglin = (Hoglin) entity;
+            hoglin.setImmuneToZombification(true);
+            
         }else if(difficulty.get("pigs") && entity.getType() == EntityType.ZOMBIFIED_PIGLIN){
 
             e.setCancelled(true);

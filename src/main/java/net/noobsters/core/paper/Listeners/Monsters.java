@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Spider;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -149,7 +150,7 @@ public class Monsters implements Listener {
 
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOW)
     public void entityDamage(EntityDeathEvent e) {
         var entity = e.getEntity();
         if (entity.getName().toString().contains("Rubber") && random.nextBoolean()) {
@@ -188,7 +189,7 @@ public class Monsters implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOW)
     public void rubberSoundItem(EntityDamageByEntityEvent e) {
         var entity = e.getEntity();
         var damager = e.getDamager();

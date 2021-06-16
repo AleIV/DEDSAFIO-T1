@@ -5,9 +5,7 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Bat;
-import org.bukkit.entity.Bee;
 import org.bukkit.entity.Cat;
 import org.bukkit.entity.Chicken;
 import org.bukkit.entity.Cod;
@@ -24,7 +22,6 @@ import org.bukkit.entity.Panda;
 import org.bukkit.entity.Parrot;
 import org.bukkit.entity.Pig;
 import org.bukkit.entity.PolarBear;
-import org.bukkit.entity.PufferFish;
 import org.bukkit.entity.Rabbit;
 import org.bukkit.entity.Salmon;
 import org.bukkit.entity.Sheep;
@@ -41,7 +38,6 @@ import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.entity.VillagerAcquireTradeEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 
 import net.noobsters.core.paper.PERMADED;
@@ -177,9 +173,6 @@ public class Cancel implements Listener {
         }else if(entity instanceof Llama){
             e.setCancelled(true);
 
-        }else if(entity instanceof Bee){
-            e.setCancelled(true);
-
         }else if(entity instanceof Dolphin){
             e.setCancelled(true);
 
@@ -187,9 +180,6 @@ public class Cancel implements Listener {
             e.setCancelled(true);
 
         }else if(entity instanceof Wolf){
-            e.setCancelled(true);
-
-        }else if(entity instanceof PufferFish){
             e.setCancelled(true);
 
         }else if(entity instanceof Villager && !difficulty.get("villager")){
@@ -204,13 +194,6 @@ public class Cancel implements Listener {
         }else if(entity instanceof Rabbit){
             e.setCancelled(true);
         }
-    }
-
-    @EventHandler
-    public void onDrop(PlayerJoinEvent e){
-        var player = e.getPlayer();
-        player.getAttribute(Attribute.GENERIC_LUCK).setBaseValue(0);
-
     }
 
 }

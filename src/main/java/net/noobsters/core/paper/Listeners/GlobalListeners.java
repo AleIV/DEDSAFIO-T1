@@ -8,7 +8,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World.Environment;
 import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Drowned;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Hoglin;
 import org.bukkit.entity.IronGolem;
@@ -17,7 +16,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
-import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
@@ -25,8 +23,6 @@ import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLocaleChangeEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.Damageable;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.EulerAngle;
 
 import net.md_5.bungee.api.ChatColor;
@@ -64,7 +60,7 @@ public class GlobalListeners implements Listener{
         var game = instance.getGame();
         if(!locale.contains("NOOBSTERS")){
             player.kickPlayer(NO_TXT);
-        }else if(!locale.contains("NOOBSTERS_4")){
+        }else if(!locale.contains("NOOBSTERS_5")){
             player.kickPlayer(NO_TXT + ChatColor.RED + "\n Hay otra actualizacion del texture pack, descarga la ultima!");
             
         }else if(!player.hasPermission("mod.perm") && game.isClosed()){
@@ -72,6 +68,7 @@ public class GlobalListeners implements Listener{
         }
     }
 
+    /*
     @EventHandler
     public void onDrownedDeath(EntityDeathEvent e) {
         var entity = e.getEntity();
@@ -109,7 +106,7 @@ public class GlobalListeners implements Listener{
                 drowned.getLocation().getWorld().dropItemNaturally(drowned.getLocation(), offHand);
             }
         }
-    }
+    }*/
 
     @EventHandler
     public void mobsResistanceModifier(EntityDamageByEntityEvent e){

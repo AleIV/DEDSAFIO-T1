@@ -48,6 +48,9 @@ public class Game extends BukkitRunnable{
         difficultyChanges.put("pigcapenable", false);
         difficultyChanges.put("villager", false);
 
+        difficultyChanges.put("blind", false);
+        difficultyChanges.put("watermonster", true);
+
         difficultyChanges.put("totems50", false);
         difficultyChanges.put("totems", true);
 
@@ -58,6 +61,7 @@ public class Game extends BukkitRunnable{
         difficultyChanges.put("pigs", true);
         difficultyChanges.put("raiders", true); 
         difficultyChanges.put("mages", true);
+        difficultyChanges.put("naturally", true);
         difficultyChanges.put("demons", false);
         difficultyChanges.put("creepers", false);
         difficultyChanges.put("raids", false);

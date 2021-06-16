@@ -26,6 +26,7 @@ public class ListenerManager {
         registerListener(new Cancel(instance));
         registerListener(new DamageListener(instance));
         registerListener(new RaceListener(instance));
+        registerListener(new Naturally(instance));
 
 
     }
