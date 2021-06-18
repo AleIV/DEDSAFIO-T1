@@ -48,7 +48,7 @@ public class Monsters implements Listener {
             var spider = (Spider) entity;
             spider.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 20 * 600, 1));
             spider.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * 600, 1));
-            spider.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20 * 600, 0));
+            spider.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20 * 600, 1));
             switch (random.nextInt(5)) {
                 case 1:
                     spider.setCustomName(ChatColor.GREEN + "Green Spider");

@@ -38,6 +38,10 @@ public class Demons implements Listener{
             phantom.setCustomName(ChatColor.GRAY + "Phantom Thief");
             phantom.setSize(2);
 
+            var loc = phantom.getLocation();
+            var players = loc.getNearbyPlayers(64, player-> player.getGameMode() == GameMode.SURVIVAL).stream().findAny();
+            if(players.isPresent()) phantom.setTarget(players.get());
+
         }else if(entity instanceof Vex && difficulty.get("mages")){
             var spirit = (Vex) entity;
             spirit.setCustomName(ChatColor.DARK_PURPLE + "Spirit");

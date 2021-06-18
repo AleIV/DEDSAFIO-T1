@@ -54,6 +54,16 @@ public class DamageListener implements Listener {
 
             if(game.getDifficultyChanges().get("tnt")){
                 e.setDamage(0);
+
+            }
+
+            if(game.getDifficultyChanges().get("sumo")){
+                e.setDamage(0);
+                var loc = player1.getLocation();
+                loc.getNearbyPlayers(40).stream().forEach(p ->{
+                    p.playSound(p.getLocation(), "roblox_hurt", 0.5f, 1);
+                });
+
             }
 
         }
@@ -177,14 +187,17 @@ public class DamageListener implements Listener {
                 e.setDamage(e.getDamage()*damage);
             }
 
-            if(damager instanceof IronGolem && entity.getCustomName().toString().contains("Mutant")){
+            if(entity.getCustomName() != null){
 
-                var loc = entity.getLocation();
-
-                loc.getNearbyPlayers(20).stream().forEach(p ->{
-                    p.playSound(p.getLocation(), "zombie_attack", 1, 1);
-                });
-
+                if(damager instanceof IronGolem && entity.getCustomName().toString().contains("Mutant") && entity instanceof Player){
+    
+                    var loc = entity.getLocation();
+    
+                    loc.getNearbyPlayers(20).stream().forEach(p ->{
+                        p.playSound(p.getLocation(), "zombie_attack", 1, 1);
+                    });
+    
+                }
             }
 
         }

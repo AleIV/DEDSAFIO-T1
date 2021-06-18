@@ -10,11 +10,9 @@ import org.bukkit.World.Environment;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Hoglin;
-import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -107,25 +105,6 @@ public class GlobalListeners implements Listener{
             }
         }
     }*/
-
-    @EventHandler
-    public void mobsResistanceModifier(EntityDamageByEntityEvent e){
-        var entity = e.getEntity();
-        var damager = e.getDamager();
-        if(entity.getCustomName() != null){
-
-            if(damager instanceof IronGolem && entity.getCustomName().toString().contains("Mutant") && entity instanceof Player){
-
-                var loc = entity.getLocation();
-
-                loc.getNearbyPlayers(20).stream().forEach(p ->{
-                    p.playSound(p.getLocation(), "zombie_attack", 1, 1);
-                });
-
-            }
-        }
-
-    }
 
     @EventHandler
     public void onDamage(PlayerDeathEvent e){

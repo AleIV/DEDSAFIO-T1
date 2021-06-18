@@ -1,11 +1,12 @@
 package net.noobsters.core.paper.Listeners;
 
+import java.lang.reflect.Field;
 import java.util.Random;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_16_R3.entity.CraftIronGolem;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Drowned;
@@ -33,6 +34,12 @@ import org.spigotmc.event.entity.EntityDismountEvent;
 
 import me.libraryaddict.disguise.DisguiseAPI;
 import net.md_5.bungee.api.ChatColor;
+import net.minecraft.server.v1_16_R3.EntityHuman;
+import net.minecraft.server.v1_16_R3.EntityInsentient;
+import net.minecraft.server.v1_16_R3.EntityIronGolem;
+import net.minecraft.server.v1_16_R3.PathfinderGoalMeleeAttack;
+import net.minecraft.server.v1_16_R3.PathfinderGoalNearestAttackableTarget;
+import net.minecraft.server.v1_16_R3.PathfinderGoalSelector;
 import net.noobsters.core.paper.PERMADED;
 
 public class UnDead implements Listener {
@@ -101,11 +108,7 @@ public class UnDead implements Listener {
             golem.setCustomName(ChatColor.RED + "Mutant Zombie");
             golem.setRemoveWhenFarAway(true);
 
-            var loc = golem.getLocation();
-            var players = loc.getNearbyPlayers(64, player-> player.getGameMode() == GameMode.SURVIVAL).stream().findAny();
-            if(players.isPresent()) golem.setTarget(players.get());
-
-            /*CraftIronGolem craft = ((CraftIronGolem) golem);
+            CraftIronGolem craft = ((CraftIronGolem) golem);
             EntityIronGolem nms = craft.getHandle();
 
             try {
@@ -124,9 +127,7 @@ public class UnDead implements Listener {
                 
             } catch (Exception x) {
                 x.printStackTrace();
-            }*/
-
-
+            }
 
         } else if (entity instanceof Skeleton && difficulty.get("skeletons")) {
             var skeleton = (Skeleton) entity;

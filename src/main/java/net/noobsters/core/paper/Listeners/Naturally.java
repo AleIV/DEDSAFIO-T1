@@ -1,8 +1,11 @@
 package net.noobsters.core.paper.Listeners;
 
+import java.lang.reflect.Field;
 import java.util.Random;
 
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.craftbukkit.v1_16_R3.entity.CraftBee;
 import org.bukkit.entity.Bee;
 import org.bukkit.entity.Drowned;
 import org.bukkit.entity.ElderGuardian;
@@ -16,10 +19,17 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import fr.mrmicky.fastinv.ItemBuilder;
 import net.md_5.bungee.api.ChatColor;
+import net.minecraft.server.v1_16_R3.EntityBee;
+import net.minecraft.server.v1_16_R3.EntityHuman;
+import net.minecraft.server.v1_16_R3.EntityInsentient;
+import net.minecraft.server.v1_16_R3.PathfinderGoalMeleeAttack;
+import net.minecraft.server.v1_16_R3.PathfinderGoalNearestAttackableTarget;
+import net.minecraft.server.v1_16_R3.PathfinderGoalSelector;
 import net.noobsters.core.paper.PERMADED;
 
 public class Naturally implements Listener {
@@ -55,7 +65,6 @@ public class Naturally implements Listener {
             var fish = (Silverfish) entity;
             fish.setCustomName(ChatColor.RED + "Ant");
             fish.setRemoveWhenFarAway(true);
-            fish.setSilent(true);
             
 
         }else if(entity instanceof Drowned){
@@ -69,7 +78,32 @@ public class Naturally implements Listener {
             var bee = (Bee) entity;
             bee.setCustomName(ChatColor.BLACK + "Moth");
             bee.setRemoveWhenFarAway(true);
+
+            bee.getAttribute(Attribute.GENERIC_ATTACK_KNOCKBACK).setBaseValue(20);
+            bee.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20 * 600, 0));
+            bee.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * 600, 0));
             
+            CraftBee craft = ((CraftBee) bee);
+            EntityBee nms = craft.getHandle();
+
+            try {
+                Class<? extends EntityInsentient> cl = EntityInsentient.class; //nms.getClass()
+                Field gf = cl.getDeclaredField("goalSelector");
+                gf.setAccessible(true);
+
+                PathfinderGoalSelector goal = (PathfinderGoalSelector) gf.get(nms);
+                goal.a(0, new PathfinderGoalMeleeAttack(nms, 1.0D, true));
+
+                Field tf = cl.getDeclaredField("targetSelector");
+                tf.setAccessible(true);
+
+                PathfinderGoalSelector target = (PathfinderGoalSelector) tf.get(nms);
+                target.a(0, new PathfinderGoalNearestAttackableTarget<>(nms, EntityHuman.class, 10, true, false, null));
+                
+            } catch (Exception x) {
+                x.printStackTrace();
+            }
+
         }
     }
 
@@ -90,6 +124,12 @@ public class Naturally implements Listener {
             
         }else if(entity instanceof Guardian && !(entity instanceof ElderGuardian)){
             entity.getLocation().createExplosion(6);
+
+        }else if(entity instanceof Player && damager instanceof Bee){
+            var player = (Player) entity;
+            player.getActivePotionEffects().forEach(effect ->{
+                player.removePotionEffect(effect.getType());
+            });
         }
     }
 

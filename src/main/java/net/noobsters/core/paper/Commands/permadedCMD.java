@@ -137,6 +137,15 @@ public class permadedCMD extends BaseCommand {
         });
     }
 
+    @Subcommand("fix-light-fill")
+    @CommandAlias("fix-light-fill")
+    public void fixfill(Player sender) {
+        Bukkit.dispatchCommand(sender, "fill ~15 ~5 ~15 ~-20 ~-10 ~-20 minecraft:sea_lantern replace air");
+        Bukkit.getScheduler().runTaskLater(instance, task ->{
+            Bukkit.dispatchCommand(sender, "fill ~15 ~5 ~15 ~-20 ~-10 ~-20 air replace minecraft:sea_lantern");
+        }, 20);
+    }
+
     @Subcommand("resistance")
     @CommandAlias("resistance")
     public void resistanceChange(CommandSender sender, int change) {

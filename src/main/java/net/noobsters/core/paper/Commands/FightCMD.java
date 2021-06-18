@@ -12,7 +12,7 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -23,6 +23,7 @@ import co.aikar.commands.annotation.CommandPermission;
 import co.aikar.commands.annotation.Flags;
 import co.aikar.commands.annotation.Subcommand;
 import co.aikar.taskchain.TaskChain;
+import fr.mrmicky.fastinv.ItemBuilder;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import net.md_5.bungee.api.ChatColor;
@@ -258,7 +259,15 @@ public class FightCMD extends BaseCommand {
         var equip = player.getEquipment();
         var inv = player.getInventory();
         inv.clear();
-        equip.setItemInOffHand(new ItemStack(Material.SHIELD));
+
+        var head = new ItemBuilder(Material.PLAYER_HEAD)
+                    .meta(SkullMeta.class, meta -> meta.setOwningPlayer(Bukkit.getOfflinePlayer(player.getUniqueId())))
+                    .build();
+        var sumo = new ItemBuilder(Material.JIGSAW).name(ChatColor.RED + "Sumo").build();
+        equip.setItemInOffHand(sumo);
+        equip.setHelmet(head);
+
+        /*
         inv.addItem(new ItemStack(Material.DIAMOND_SWORD));
         inv.addItem(new ItemStack(Material.BOW));
         inv.addItem(new ItemStack(Material.IRON_AXE));
@@ -269,7 +278,7 @@ public class FightCMD extends BaseCommand {
         equip.setHelmet(new ItemStack(Material.DIAMOND_HELMET));
         equip.setChestplate(new ItemStack(Material.DIAMOND_CHESTPLATE));
         equip.setLeggings(new ItemStack(Material.DIAMOND_LEGGINGS));
-        equip.setBoots(new ItemStack(Material.DIAMOND_BOOTS));
+        equip.setBoots(new ItemStack(Material.DIAMOND_BOOTS));*/
     }
 
     @Subcommand("fight-random")

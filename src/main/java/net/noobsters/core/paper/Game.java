@@ -43,6 +43,7 @@ public class Game extends BukkitRunnable{
 
         difficultyChanges.put("race", false);
         difficultyChanges.put("tnt", false);
+        difficultyChanges.put("sumo", false);
 
         difficultyChanges.put("pigcap", true);
         difficultyChanges.put("pigcapenable", false);

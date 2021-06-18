@@ -28,8 +28,8 @@ public class worldCMD extends BaseCommand {
     Random random = new Random();
     List<String> letters = new ArrayList<>();
 
-    String item1 = "uE3A4";
-    String item2 = "uE0A6";
+    String item1 = "uE4A4";
+    String item2 = "uE3A5";
     String item3 = "uE1A3";
 
     String item4 = "uE0A3";
@@ -156,13 +156,13 @@ public class worldCMD extends BaseCommand {
                                 "title @a title {\"text\":\"" + charac + item5 + "\"}");*/
                         Bukkit.broadcastMessage("");
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-                                "tellraw @a {\"text\":\"" + charac + item1 + " x1" + "\"}");
+                                "tellraw @a {\"text\":\"" + charac + item1 + " x4" + "\"}");
                         Bukkit.broadcastMessage("");
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-                                "tellraw @a {\"text\":\"" + charac + item2 + " x128" + "\"}");
+                                "tellraw @a {\"text\":\"" + charac + item2 + " x64" + "\"}");
                         Bukkit.broadcastMessage("");
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-                                "tellraw @a {\"text\":\"" + charac + item3 + " x32" + "\"}");
+                                "tellraw @a {\"text\":\"" + charac + item3 + " x64" + "\"}");
                         Bukkit.broadcastMessage("");
 
                         /*Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
