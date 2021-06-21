@@ -116,7 +116,7 @@ public class Cancel implements Listener {
         var entity = e.getEntity();
         final var difficulty = instance.getGame().getDifficultyChanges();
 
-        if(entity instanceof Sheep){
+        if(entity instanceof Sheep && !difficulty.get("creepers")){
             e.setCancelled(true);
 
         }else if(entity instanceof Panda){

@@ -6,6 +6,10 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -21,16 +25,21 @@ public class Game extends BukkitRunnable{
     int spawnPatrolDelay = 600;
     int damageAmplifier = 3;
     int mobResistance = 60;
+
+    HashMap<String, BossBar> bossbars = new HashMap<>();
+
     HashMap<String, Boolean> difficultyChanges = new HashMap<>();
     HashMap<String, Boolean> deathPlayers = new HashMap<>();
     HashMap<String, String> disguises = new HashMap<>();
 
+    HashMap<String, Boolean> intelligence = new HashMap<>();
+
     List<String> fighters = new ArrayList<>();
     List<String> pvpOn = new ArrayList<>();
     List<String> reviveList = new ArrayList<>();
+
     boolean gulak = false;
     boolean closed = true;
-
 
     long gameTime = 0;
     long startTime = 0;
@@ -41,11 +50,27 @@ public class Game extends BukkitRunnable{
         this.instance = instance;
         this.startTime = System.currentTimeMillis();
 
+        var raid = Bukkit.createBossBar(new NamespacedKey(instance, "boss-raid"), ChatColor.GRAY + "DEATH RAID", BarColor.BLUE, BarStyle.SOLID);
+        var warden = Bukkit.createBossBar(new NamespacedKey(instance, "boss-warden"), ChatColor.DARK_AQUA + "WARDEN MONSTROSITY", BarColor.GREEN, BarStyle.SOLID);
+        var redstone = Bukkit.createBossBar(new NamespacedKey(instance, "boss-redstone"), ChatColor.DARK_RED + "REDSTONE MONSTROSITY", BarColor.YELLOW, BarStyle.SOLID);
+
+        raid.setVisible(false);
+        warden.setVisible(false);
+        redstone.setVisible(false);
+        raid.setProgress(1);
+        warden.setProgress(1);
+        redstone.setProgress(1);
+
+        bossbars.put("raid", raid);
+        bossbars.put("warden", warden);
+        bossbars.put("redstone", redstone);
+
         difficultyChanges.put("race", false);
         difficultyChanges.put("tnt", false);
         difficultyChanges.put("sumo", false);
 
         difficultyChanges.put("pigcap", true);
+        difficultyChanges.put("creepercap", true);
         difficultyChanges.put("pigcapenable", false);
         difficultyChanges.put("villager", false);
 
@@ -67,7 +92,7 @@ public class Game extends BukkitRunnable{
         difficultyChanges.put("creepers", false);
         difficultyChanges.put("raids", false);
 
-        difficultyChanges.put("redstone", false);
+        difficultyChanges.put("redstone", true);
         difficultyChanges.put("meteor", true);
 
         difficultyChanges.put("lava", true);

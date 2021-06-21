@@ -122,6 +122,22 @@ public class permadedCMD extends BaseCommand {
 
     }
 
+    @Subcommand("intelligence")
+    @CommandAlias("intelligence")
+    @CommandCompletion("@players")
+    public void intelligence(CommandSender sender, @Flags("other") Player player, boolean bool) {
+        var intelligenceList = instance.getGame().getIntelligence();
+        
+        if(bool){
+            intelligenceList.put(player.getName(), true);
+            sender.sendMessage(ChatColor.GREEN + "Intelligence " + player + " set to " + bool);
+        }else{
+            intelligenceList.remove(player.getName());
+            sender.sendMessage(ChatColor.RED + "Intelligence " + player + " set to " + bool);
+        }
+
+    }
+
     @Subcommand("difficulty-list")
     @CommandAlias("difficulty-list")
     public void difList(CommandSender sender) {

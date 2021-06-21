@@ -104,8 +104,19 @@ public class UnDead implements Listener {
         }else if(entity instanceof IronGolem && difficulty.get("zombies")){
             var golem = (IronGolem) entity;
 
+            if(golem.getLocation().getY() < 55){
+                var loc = golem.getLocation();
+                golem.setCustomName(ChatColor.DARK_AQUA + "Warden");
+                
+                loc.getNearbyPlayers(20).stream().forEach(p ->{
+                    p.playSound(p.getLocation(), "warden_idle", 1, 1);
+                });
+                
+            }else{
+                golem.setCustomName(ChatColor.RED + "Mutant Zombie");
+            }
+
             golem.setSilent(true);
-            golem.setCustomName(ChatColor.RED + "Mutant Zombie");
             golem.setRemoveWhenFarAway(true);
 
             CraftIronGolem craft = ((CraftIronGolem) golem);

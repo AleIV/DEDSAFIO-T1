@@ -25,7 +25,7 @@ import net.noobsters.core.paper.PERMADED;
 
 @RequiredArgsConstructor
 @CommandPermission("dedsafio.cmd")
-@CommandAlias("disguise-ded")
+@CommandAlias("dedsguise")
 public class disguiseCMD extends BaseCommand {
 
     private @NonNull PERMADED instance;
@@ -36,10 +36,17 @@ public class disguiseCMD extends BaseCommand {
     @CommandAlias("redstone")
     public void disguise(Player sender) {
 
+        var disguises = instance.getGame().getDisguises();
+        disguises.put(sender.getName(), "redstone");
+
+        var bossbars = instance.getGame().getBossbars();
+        var boss = bossbars.get("redstone");
+        boss.setProgress(1);
+
         var name = "&4Redstone Monstrosity";
         Bukkit.dispatchCommand(sender, "disguise ravager setcustomname \""+ name +"\" setcustomnamevisible false setSelfDisguiseVisible false");
 
-        var melee = new ItemBuilder(Material.NETHERITE_SWORD).name(ChatColor.GOLD + "Melee").meta(ItemMeta.class, meta -> meta.setCustomModelData(666)).build();
+        var melee = new ItemBuilder(Material.NETHERITE_AXE).name(ChatColor.GOLD + "Melee").meta(ItemMeta.class, meta -> meta.setCustomModelData(666)).build();
 
         var shootFireball = new ItemBuilder(Material.BOW).enchant(Enchantment.ARROW_INFINITE).meta(ItemMeta.class, meta -> meta.setCustomModelData(666)).name(ChatColor.GOLD + "Shoot Fireball").build();
 
@@ -84,6 +91,77 @@ public class disguiseCMD extends BaseCommand {
         sender.setGameMode(GameMode.SURVIVAL);
 
         sender.sendMessage(ChatColor.GOLD + "Disquised as Redstone Monstrosity");
+    }
+
+    @Subcommand("warden")
+    @CommandAlias("warden")
+    public void disguisewarden(Player sender) {
+
+        var disguises = instance.getGame().getDisguises();
+        disguises.put(sender.getName(), "warden");
+
+        var bossbars = instance.getGame().getBossbars();
+        var boss = bossbars.get("warden");
+        boss.setProgress(1);
+
+        var name = "&3Warden Monstrosity";
+        Bukkit.dispatchCommand(sender, "disguise ravager setcustomname \""+ name +"\" setcustomnamevisible false setSelfDisguiseVisible false setSoundGroup BOAT");
+
+        var melee = new ItemBuilder(Material.NETHERITE_AXE).name(ChatColor.GOLD + "Melee").meta(ItemMeta.class, meta -> meta.setCustomModelData(666)).build();
+
+        var walk = new ItemBuilder(Material.NETHERITE_BOOTS).name(ChatColor.GREEN + "WalkWarden").meta(ItemMeta.class, meta -> meta.setCustomModelData(666)).build();
+
+        var speed = new ItemBuilder(Material.DIAMOND_BOOTS).name(ChatColor.GREEN + "SpeedWarden").meta(ItemMeta.class, meta -> meta.setCustomModelData(666)).build();
+
+        var jump = new ItemBuilder(Material.IRON_BOOTS).name(ChatColor.GREEN + "JumpWarden").meta(ItemMeta.class, meta -> meta.setCustomModelData(666)).build();
+
+        var roar = new ItemBuilder(Material.GLOWSTONE_DUST).name(ChatColor.GREEN + "RoarWarden").meta(ItemMeta.class, meta -> meta.setCustomModelData(666)).build();
+
+        var sound = new ItemBuilder(Material.SUGAR).name(ChatColor.GREEN + "Laugh").meta(ItemMeta.class, meta -> meta.setCustomModelData(666)).build();
+
+        var inv = sender.getInventory();
+        inv.addItem(melee);
+
+        inv.addItem(walk);
+        inv.addItem(speed);
+        inv.addItem(jump);
+        inv.addItem(roar);
+        inv.addItem(sound);
+
+        inv.addItem(new ItemStack(Material.ARROW));
+
+        var helmet = new ItemBuilder(Material.NETHERITE_HELMET).enchant(Enchantment.PROTECTION_ENVIRONMENTAL, 4).meta(ItemMeta.class, meta -> meta.setCustomModelData(666)).build();
+        var chestplate = new ItemBuilder(Material.NETHERITE_CHESTPLATE).enchant(Enchantment.PROTECTION_ENVIRONMENTAL, 4).meta(ItemMeta.class, meta -> meta.setCustomModelData(666)).build();
+        var leggings = new ItemBuilder(Material.NETHERITE_LEGGINGS).enchant(Enchantment.PROTECTION_PROJECTILE, 4).meta(ItemMeta.class, meta -> meta.setCustomModelData(666)).build();
+        var boots = new ItemBuilder(Material.NETHERITE_BOOTS).enchant(Enchantment.PROTECTION_PROJECTILE, 4).meta(ItemMeta.class, meta -> meta.setCustomModelData(666)).build();
+
+        var equip = sender.getEquipment();
+        equip.setHelmet(helmet);
+        equip.setChestplate(chestplate);
+        equip.setLeggings(leggings);
+        equip.setBoots(boots);
+
+        sender.setGameMode(GameMode.SURVIVAL);
+
+        sender.sendMessage(ChatColor.GOLD + "Disquised as Warden Monstrosity");
+    }
+
+    @Subcommand("kamikaze")
+    @CommandAlias("kamikaze")
+    public void kamikaze(Player sender) {
+    
+        Bukkit.dispatchCommand(sender, "disguise cow setCustomName \""+ "Kamikaze" +"\" setSelfDisguiseVisible false");
+
+        var bomber = new ItemBuilder(Material.FLINT_AND_STEEL).name(ChatColor.GOLD + "kamikaze").meta(ItemMeta.class, meta -> meta.setCustomModelData(666)).build();
+
+        sender.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 100000, 5, false, false));
+
+        var inv = sender.getInventory();
+        inv.addItem(bomber);
+
+        sender.setGameMode(GameMode.SURVIVAL);
+        
+        sender.sendMessage(ChatColor.GOLD + "Disquised as Kamikaze");
     }
 
     @Subcommand("bomber")

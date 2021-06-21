@@ -68,7 +68,14 @@ public class Raiders implements Listener {
 
         } else if (difficulty.get("raiders") && entity instanceof Ravager) {
             var ravager = (Ravager) entity;
-            ravager.setCustomName(ChatColor.BLUE + "Ravager Powerful");
+
+            if(ravager.getLocation().getY() < 55){
+                ravager.setCustomName(ChatColor.RED + "Redstone Golem");
+                ravager.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20 * 600, 1));
+                
+            }else{
+                ravager.setCustomName(ChatColor.BLUE + "Ravager Powerful");
+            }
 
         }else if (difficulty.get("raiders") && entity instanceof Pillager) {
             

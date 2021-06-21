@@ -39,14 +39,14 @@ public class DedsafioListener implements Listener {
             .filter(material -> material.name().contains("FENCE") && !material.name().contains("FENCE_GATE"))
             .collect(Collectors.toList());
 
-    int amount1 = 4;
+    int amount1 = 3;
     int amount2 = 64;
     int amount3 = 64;
     int amount4 = 64;
     int amount5 = 64;
 
-    Material item1 = Material.WRITABLE_BOOK;
-    Material item2 = Material.BEE_NEST;
+    Material item1 = Material.COOKED_BEEF;
+    Material item2 = Material.TNT;
     Material item3 = Material.END_CRYSTAL;
     Material item4 = Material.CHORUS_FRUIT;
     Material item5 = Material.END_CRYSTAL;

@@ -9,6 +9,7 @@ import org.bukkit.entity.Creeper;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.MagmaCube;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Sheep;
 import org.bukkit.entity.Spider;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
@@ -76,7 +77,18 @@ public class Monsters implements Listener {
             e.setCancelled(true);
             entity.getWorld().spawnEntity(entity.getLocation(), EntityType.SPIDER);
 
-        } else if (entity instanceof MagmaCube && difficulty.get("redstone")) {
+        }else if(difficulty.get("creepers") && entity instanceof Sheep){
+
+            var pigCap = game.getDifficultyChanges().get("creepercap");
+            if(pigCap && random.nextInt(140) == 1){
+
+                entity.getWorld().spawnEntity(entity.getLocation(), EntityType.CREEPER);
+
+            }else{
+                e.setCancelled(true);
+            }
+
+        }else if (entity instanceof MagmaCube && difficulty.get("redstone")) {
             var magma = (MagmaCube) entity;
             magma.setCustomName(ChatColor.DARK_RED + "Redstone Cube");
 

@@ -8,7 +8,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
-import org.bukkit.Statistic;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Player;
@@ -16,19 +15,19 @@ import org.bukkit.entity.Vex;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityResurrectEvent;
 import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import fr.mrmicky.fastinv.ItemBuilder;
-import net.md_5.bungee.api.ChatColor;
 import net.noobsters.core.paper.GameTickEvent;
 import net.noobsters.core.paper.PERMADED;
 
@@ -39,6 +38,41 @@ public class Extra implements Listener {
 
     Extra(PERMADED instance) {
         this.instance = instance;
+    }
+
+    @EventHandler
+    public void onJoin(PlayerJoinEvent e) {
+        var player = e.getPlayer();
+        var boss = instance.getGame().getBossbars();
+        boss.values().forEach(bossbar -> {
+            bossbar.addPlayer(player);
+        });
+    }
+
+    @EventHandler
+    public void breakcancelstand(BlockBreakEvent e) {
+        var block = e.getBlock();
+        var stands = block.getLocation().getNearbyEntities(16, 16, 16).stream()
+                .filter(stand -> stand instanceof ArmorStand && stand.getCustomName() != null
+                        && stand.getCustomName().contains("Break"))
+                .map(ent -> (ArmorStand) ent).collect(Collectors.toList());
+        if (!stands.isEmpty()) {
+
+            e.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void placecancel(BlockPlaceEvent e) {
+        var block = e.getBlock();
+        var stands = block.getLocation().getNearbyEntities(16, 16, 16).stream()
+                .filter(stand -> stand instanceof ArmorStand && stand.getCustomName() != null
+                        && stand.getCustomName().contains("Break"))
+                .map(ent -> (ArmorStand) ent).collect(Collectors.toList());
+        if (!stands.isEmpty()) {
+
+            e.setCancelled(true);
+        }
     }
 
     @EventHandler
@@ -69,25 +103,17 @@ public class Extra implements Listener {
         var difficulty = instance.getGame().getDifficultyChanges();
         Bukkit.getScheduler().runTask(instance, () -> {
             if (difficulty.get("meteor")) {
+
                 playersRefresh();
+
             }
 
         });
 
     }
 
-    public float getDistance(Location val1, Location val2) {
-
-        double x1 = val1.getX();
-        double z1 = val1.getZ();
-
-        double x2 = val2.getX();
-        double z2 = val2.getZ();
-
-        return (float) Math.abs(Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(z2 - z1, 2)));
-    }
-
     public void playersRefresh() {
+
         var game = instance.getGame();
         var difficulty = game.getDifficultyChanges();
 
@@ -103,12 +129,22 @@ public class Extra implements Listener {
                     player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 20, 1));
                 }
 
-                var blinds = player.getNearbyEntities(100, 100, 100).stream()
+                var blinds = player.getNearbyEntities(16, 16, 16).stream()
                         .filter(blindStand -> blindStand instanceof ArmorStand && blindStand.getCustomName() != null
                                 && blindStand.getCustomName().contains("blind"))
                         .map(e -> (ArmorStand) e).collect(Collectors.toList());
 
                 if (!blinds.isEmpty() && !player.hasPermission("mod.perm")) {
+
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 5, 0));
+                }
+
+                var blindlarge = player.getNearbyEntities(100, 100, 100).stream()
+                        .filter(blindStand -> blindStand instanceof ArmorStand && blindStand.getCustomName() != null
+                                && blindStand.getCustomName().contains("blindlarge"))
+                        .map(e -> (ArmorStand) e).collect(Collectors.toList());
+
+                if (!blindlarge.isEmpty() && !player.hasPermission("mod.perm")) {
 
                     player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 5, 0));
                 }
@@ -130,26 +166,8 @@ public class Extra implements Listener {
                 }
             }
 
-            if (difficulty.get("blind")) {
+            if (difficulty.get("blind") && !player.hasPermission("mod.perm")) {
                 player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 5, 0));
-            }
-            
-            if (game.isGulak() && game.getPvpOn().contains(player.getUniqueId().toString())) {
-
-                var inv = player.getInventory();
-                inv.clear();
-
-                var head = new ItemBuilder(Material.PLAYER_HEAD).meta(SkullMeta.class,
-                        meta -> meta.setOwningPlayer(Bukkit.getOfflinePlayer(player.getUniqueId()))).build();
-                var sumo = new ItemBuilder(Material.JIGSAW).name(ChatColor.RED + "Sumo").build();
-
-                if(equip.getItemInMainHand() == null || equip.getHelmet() == null){
-                    equip.setItemInOffHand(sumo);
-                    equip.setHelmet(head);
-                }
-                
-                player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 20 * 5, 0));
-                player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, 20 * 5, 0));
             }
 
             // CUSTOM TOTEMS
@@ -222,7 +240,7 @@ public class Extra implements Listener {
 
                     case 16: {
                         // PHANTOM TOTEM
-                        player.setStatistic(Statistic.TIME_SINCE_REST, 0);
+                        // player.setStatistic(Statistic.TIME_SINCE_REST, 0);
                     }
                         break;
 

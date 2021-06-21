@@ -17,6 +17,7 @@ import org.bukkit.entity.Illusioner;
 import org.bukkit.entity.MushroomCow;
 import org.bukkit.entity.Pig;
 import org.bukkit.entity.Piglin;
+import org.bukkit.entity.Ravager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
@@ -228,6 +229,9 @@ public class Animals implements Listener {
             entity.getWorld().dropItemNaturally(entity.getLocation(), new ItemStack(Material.TOTEM_OF_UNDYING));
             
         }else if(entity instanceof Cow){
+            e.getDrops().forEach(drop -> drop.setType(Material.AIR));
+            
+        }else if(entity instanceof Ravager){
             e.getDrops().forEach(drop -> drop.setType(Material.AIR));
             
         }

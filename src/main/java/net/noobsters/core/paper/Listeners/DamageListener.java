@@ -15,6 +15,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -89,16 +90,27 @@ public class DamageListener implements Listener {
             
         }
 
-        if(entity instanceof IronGolem && entity.getCustomName() != null && entity.getCustomName().toString().contains("Mutant")){
-            if(random.nextBoolean()){
-                loc.getNearbyPlayers(10).stream().forEach(p ->{
-                    p.playSound(p.getLocation(), "zombie_damage1", 0.5f, 1);
-                });
+        if(entity instanceof IronGolem && entity.getCustomName() != null){
 
-            }else{
-                loc.getNearbyPlayers(10).stream().forEach(p ->{
-                    p.playSound(p.getLocation(), "zombie_damage2", 0.5f, 1);
-                });
+            if(entity.getCustomName().toString().contains("Mutant")){
+                if(random.nextBoolean()){
+                    loc.getNearbyPlayers(10).stream().forEach(p ->{
+                        p.playSound(p.getLocation(), "zombie_damage1", 0.5f, 1);
+                    });
+    
+                }else{
+                    loc.getNearbyPlayers(10).stream().forEach(p ->{
+                        p.playSound(p.getLocation(), "zombie_damage2", 0.5f, 1);
+                    });
+                }
+            }else if(entity.getCustomName().toString().contains("Warden")){
+
+                if(random.nextInt(10) == 1){
+                    loc.getNearbyPlayers(10).stream().forEach(p ->{
+                        p.playSound(p.getLocation(), "warden_hurt", 1, 1);
+                    });
+                }
+        
             }
         }
 
@@ -189,19 +201,43 @@ public class DamageListener implements Listener {
 
             if(entity.getCustomName() != null){
 
-                if(damager instanceof IronGolem && entity.getCustomName().toString().contains("Mutant") && entity instanceof Player){
-    
+                if(damager instanceof IronGolem && entity instanceof Player){
                     var loc = entity.getLocation();
-    
-                    loc.getNearbyPlayers(20).stream().forEach(p ->{
-                        p.playSound(p.getLocation(), "zombie_attack", 1, 1);
-                    });
+
+                    if(entity.getCustomName().toString().contains("Mutant")){
+
+                        loc.getNearbyPlayers(20).stream().forEach(p ->{
+                            p.playSound(p.getLocation(), "zombie_attack", 1, 1);
+                        });
+                    }else if(entity.getCustomName().toString().contains("Warden")){
+
+                        loc.getNearbyPlayers(20).stream().forEach(p ->{
+                            p.playSound(p.getLocation(), "warden_roar", 1, 1);
+                        });
+                    }
     
                 }
             }
 
         }
 
+    }
+
+    @EventHandler
+    public void ondeath(EntityDeathEvent e){
+        var entity = e.getEntity();
+        if(entity instanceof IronGolem && entity.getCustomName() != null){
+            var golem = (IronGolem) entity;
+
+            var loc = golem.getLocation();
+
+                if(entity.getCustomName().toString().contains("Warden")){
+
+                    loc.getNearbyPlayers(20).stream().forEach(p ->{
+                        p.playSound(p.getLocation(), "warden_death", 1, 1);
+                    });
+                }
+        }
     }
 
     @EventHandler
