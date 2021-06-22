@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -29,6 +30,7 @@ import org.bukkit.event.player.PlayerVelocityEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import co.aikar.taskchain.TaskChain;
 import fr.mrmicky.fastinv.ItemBuilder;
 import me.libraryaddict.disguise.DisguiseAPI;
 import net.md_5.bungee.api.ChatColor;
@@ -77,10 +79,12 @@ public class Disguise implements Listener {
                         // HANDLE WARDEN DEATH
                         disguises.remove(player.getName());
 
-                        loc.getNearbyPlayers(100).stream().forEach(p ->{
+                        loc.getNearbyPlayers(100).stream().forEach(p -> {
                             p.playSound(p.getLocation(), "warden_death", 1, 0.3f);
                             p.playSound(p.getLocation(), "warden_death", 1, 0.5f);
                         });
+
+                        createDeath(loc);
 
                     }
                         break;
@@ -88,10 +92,12 @@ public class Disguise implements Listener {
                     case "redstone": {
                         // HANDLE REDSTONE DEATH
                         disguises.remove(player.getName());
-                        loc.getNearbyPlayers(100).stream().forEach(p ->{
+                        loc.getNearbyPlayers(100).stream().forEach(p -> {
                             p.playSound(p.getLocation(), Sound.ENTITY_RAVAGER_DEATH, 1, 0.3f);
                             p.playSound(p.getLocation(), Sound.ENTITY_RAVAGER_DEATH, 1, 0.5f);
                         });
+
+                        createDeath(loc);
 
                     }
                         break;
@@ -109,9 +115,11 @@ public class Disguise implements Listener {
 
         } else if (killer != null && killer instanceof Player && DisguiseAPI.isDisguised(killer)) {
 
+            var killerPlayer = (Player) killer;
             var disguises = game.getDisguises();
-            if (disguises.containsKey(player.getName())) {
-                var mob = disguises.get(player.getName());
+
+            if (disguises.containsKey(killerPlayer.getName())) {
+                var mob = disguises.get(killerPlayer.getName());
                 switch (mob) {
                     case "warden": {
                         e.setDeathMessage(player.getName() + " was silenced to death by the " + ChatColor.DARK_AQUA
@@ -124,7 +132,7 @@ public class Disguise implements Listener {
                         e.setDeathMessage(player.getName() + " was reduced to dust by the " + ChatColor.DARK_RED
                                 + "Redstone Monstrosity");
 
-                        loc.getNearbyPlayers(100).stream().forEach(p ->{
+                        loc.getNearbyPlayers(100).stream().forEach(p -> {
                             p.playSound(p.getLocation(), "laugh", 1, 1);
                         });
                     }
@@ -152,29 +160,32 @@ public class Disguise implements Listener {
         var entity = e.getEntity();
         var loc = entity.getLocation();
         var game = instance.getGame();
-        var intelligence = loc.getNearbyEntities(32, 100, 32).stream()
-                .filter(radius -> radius instanceof ArmorStand && radius.getCustomName() != null
-                        && radius.getCustomName().contains("Raid"))
-                .map(ent -> (ArmorStand) ent).collect(Collectors.toList());
+        if (entity instanceof Zombie) {
+            var intelligence = loc.getNearbyEntities(32, 100, 32).stream()
+                    .filter(radius -> radius instanceof ArmorStand && radius.getCustomName() != null
+                            && radius.getCustomName().contains("Raid"))
+                    .map(ent -> (ArmorStand) ent).collect(Collectors.toList());
 
-        var entry = game.getIntelligence().entrySet().stream().filter(val -> val.getValue()).findAny();
+            var entry = game.getIntelligence().entrySet().stream().filter(val -> val.getValue()).findAny();
 
-        if (!intelligence.isEmpty() && entity instanceof Zombie && entry.isPresent()) {
-            Bukkit.getOnlinePlayers().forEach(player -> {
-                if (player.getName() == entry.get().getKey()) {
-                    // ALL DISGUISE INTELLIGENCE
+            if (!intelligence.isEmpty() && entry.isPresent()) {
+                Bukkit.getOnlinePlayers().forEach(player -> {
+                    if (player.getName() == entry.get().getKey()) {
+                        // ALL DISGUISE INTELLIGENCE
 
-                    var zombiePlayers = game.getDeathPlayers().keySet().stream().collect(Collectors.toList());
-                    var name = "&c" + zombiePlayers.get(random.nextInt(zombiePlayers.size()));
+                        var zombiePlayers = game.getDeathPlayers().keySet().stream().collect(Collectors.toList());
+                        var name = "&c" + zombiePlayers.get(random.nextInt(zombiePlayers.size()));
 
-                    Bukkit.dispatchCommand(player, "disguise zombie setcustomname \"" + name
-                            + "\" setcustomnamevisible false setSelfDisguiseVisible false");
+                        Bukkit.dispatchCommand(player, "disguise zombie setcustomname \"" + name
+                                + "\" setcustomnamevisible false setSelfDisguiseVisible false");
 
-                    var inv = player.getInventory();
-                    inv.addItem(new ItemBuilder(Material.NETHERITE_PICKAXE).enchant(Enchantment.DIG_SPEED, 5).build());
+                        var inv = player.getInventory();
+                        inv.addItem(
+                                new ItemBuilder(Material.NETHERITE_PICKAXE).enchant(Enchantment.DIG_SPEED, 5).build());
 
-                }
-            });
+                    }
+                });
+            }
         }
     }
 
@@ -205,6 +216,29 @@ public class Disguise implements Listener {
         }
     }
 
+    public void createDeath(Location loc) {
+
+        var chain = PERMADED.newChain();
+
+        chain.delay(20).sync(() -> {
+            loc.getWorld().strikeLightning(loc);
+        });
+
+        chain.delay(20).sync(() -> {
+            loc.getWorld().strikeLightning(loc);
+        });
+
+        chain.delay(20).sync(() -> {
+            loc.getWorld().strikeLightning(loc);
+        });
+
+        chain.delay(20).sync(() -> {
+            loc.getWorld().strikeLightning(loc);
+        });
+
+        chain.sync(TaskChain::abort).execute();
+    }
+
     @EventHandler
     public void powers(PlayerInteractEvent e) {
         var player = e.getPlayer();
@@ -212,12 +246,60 @@ public class Disguise implements Listener {
         if (item != null && DisguiseAPI.isDisguised(player)) {
             var string = item.getItemMeta().getDisplayName().toString();
             var loc = player.getLocation();
+
             if (string.contains("Explosion")) {
                 loc.createExplosion(10, false, false);
 
                 loc.getNearbyPlayers(100).stream().forEach(p -> {
                     p.playSound(p.getLocation(), "smash", 3, 1);
                 });
+
+            } else if (string.contains("Stars")) {
+                // sound stars
+
+                Bukkit.dispatchCommand(player, "particle minecraft:end_rod ~ ~ ~ .1 .1 .1 .3 40 normal");
+
+            } else if (string.contains("JumpWarden")) {
+                player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 20, 24, false, false));
+                // sound jump
+
+                loc.getNearbyPlayers(100).stream().forEach(p -> {
+                    p.playSound(p.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 3, 2);
+                });
+
+                loc.createExplosion(10, false, false);
+
+            } else if (string.contains("RoarWarden")) {
+                loc.getNearbyPlayers(100).stream().filter(p -> !DisguiseAPI.isDisguised(p)).forEach(p -> {
+                    p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20 * 3, 4, false, false));
+                    p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 3, 4, false, false));
+                });
+
+                // sound roarwarden
+
+                if (random.nextBoolean()) {
+                    loc.getNearbyPlayers(100).stream().forEach(p -> {
+                        p.playSound(p.getLocation(), "warden_death", 1, 0.8f);
+                    });
+                } else {
+                    loc.getNearbyPlayers(100).stream().forEach(p -> {
+                        p.playSound(p.getLocation(), "warden_hurt", 1, 0.7f);
+                    });
+                }
+
+            } else if (string.contains("SoundWarden")) {
+
+                // sound sound
+
+                if (random.nextBoolean()) {
+                    loc.getNearbyPlayers(100).stream().forEach(p -> {
+                        p.playSound(p.getLocation(), "warden_hurt", 1, 0.5f);
+                    });
+                } else {
+                    loc.getNearbyPlayers(100).stream().forEach(p -> {
+                        p.playSound(p.getLocation(), "warden_roar", 1, 0.5f);
+                    });
+                }
 
             } else if (string.contains("Walk")) {
                 if (player.hasPotionEffect(PotionEffectType.SPEED)) {
@@ -250,7 +332,7 @@ public class Disguise implements Listener {
                 });
 
             } else if (string.contains("Roar")) {
-                loc.getNearbyPlayers(40).stream().filter(p -> DisguiseAPI.isDisguised(p)).forEach(
+                loc.getNearbyPlayers(40).stream().filter(p -> !DisguiseAPI.isDisguised(p)).forEach(
                         p -> p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20 * 3, 4, false, false)));
                 // sound roar
 
@@ -337,7 +419,7 @@ public class Disguise implements Listener {
                     switch (mob) {
 
                         case "warden": {
-                            double point = 0.00001;
+                            double point = 0.0001;
                             var boss = bossbars.get("warden");
                             var health = boss.getProgress();
 
@@ -350,14 +432,14 @@ public class Disguise implements Listener {
 
                             boss.setProgress(finalHealth);
 
-                            loc.getNearbyPlayers(100).stream().forEach(p ->{
+                            loc.getNearbyPlayers(100).stream().forEach(p -> {
                                 p.playSound(p.getLocation(), "warden_hurt", 1, 1.5f);
                             });
                         }
                             break;
 
                         case "redstone": {
-                            double point = 0.00001;
+                            double point = 0.0001;
                             var boss = bossbars.get("redstone");
                             var health = boss.getProgress();
 
@@ -370,7 +452,7 @@ public class Disguise implements Listener {
 
                             boss.setProgress(finalHealth);
 
-                            loc.getNearbyPlayers(100).stream().forEach(p ->{
+                            loc.getNearbyPlayers(100).stream().forEach(p -> {
                                 p.playSound(p.getLocation(), Sound.ENTITY_RAVAGER_HURT, 1, 0.5f);
                             });
 

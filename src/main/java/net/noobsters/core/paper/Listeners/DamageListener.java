@@ -105,8 +105,8 @@ public class DamageListener implements Listener {
                 }
             }else if(entity.getCustomName().toString().contains("Warden")){
 
-                if(random.nextInt(10) == 1){
-                    loc.getNearbyPlayers(10).stream().forEach(p ->{
+                if(random.nextInt(5) == 1){
+                    loc.getNearbyPlayers(20).stream().forEach(p ->{
                         p.playSound(p.getLocation(), "warden_hurt", 1, 1);
                     });
                 }
@@ -219,6 +219,12 @@ public class DamageListener implements Listener {
                 }
             }
 
+        }else if(damager instanceof Player){
+            var dama = (Player) damager;
+            var item = dama.getInventory().getItem(9);
+            if(item != null && item.getItemMeta().hasCustomModelData() && item.getItemMeta().getCustomModelData() == 500){
+                e.setDamage(e.getDamage()*2);
+            }
         }
 
     }

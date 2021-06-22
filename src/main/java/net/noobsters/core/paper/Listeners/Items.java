@@ -8,13 +8,11 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
@@ -29,7 +27,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import fr.mrmicky.fastinv.ItemBuilder;
 import net.md_5.bungee.api.ChatColor;
 import net.noobsters.core.paper.PERMADED;
 
@@ -60,6 +57,7 @@ public class Items implements Listener {
 
     }
 
+    /*
     @EventHandler
     public void redstoneAmulet(BlockBreakEvent e){
         var difficulty = instance.getGame().getDifficultyChanges();
@@ -69,8 +67,8 @@ public class Items implements Listener {
             var item = new ItemBuilder(Material.RABBIT_FOOT).name(ChatColor.DARK_RED + "Redstone Amulet").meta(ItemMeta.class, meta -> meta.setCustomModelData(142)).build();
             block.getWorld().dropItemNaturally(block.getLocation(), item);
         }
-    }
-
+    }*/
+    
     @EventHandler
     public void onCustomArmor(PrepareSmithingEvent e) {
         var inv = e.getInventory();
@@ -91,15 +89,13 @@ public class Items implements Listener {
                 e.setResult(addBloodBootsMeta(armor));
             }
 
-        } else if (armor.getItemMeta().hasCustomModelData() && armor.getItemMeta().getCustomModelData() != 142 && armor.getItemMeta().getCustomModelData() == 123
+        } else if (armor.getItemMeta().hasCustomModelData() && armor.getItemMeta().getCustomModelData() == 123
                 && upgrade.getItemMeta().hasCustomModelData() && upgrade.getItemMeta().getCustomModelData() == 142) {
             // reinforced redstone armor
 
             var redstone = armor.clone();
             var meta = redstone.getItemMeta();
             meta.setCustomModelData(126);
-            redstone.removeEnchantment(Enchantment.DURABILITY);
-            redstone.addEnchantment(Enchantment.DURABILITY, 5);
 
             if (armor.getType() == Material.NETHERITE_HELMET) {
                 meta.setDisplayName(ChatColor.DARK_RED + "Reinforced Redstone Helmet");

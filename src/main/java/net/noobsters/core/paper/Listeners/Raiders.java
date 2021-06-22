@@ -71,7 +71,6 @@ public class Raiders implements Listener {
 
             if(ravager.getLocation().getY() < 55){
                 ravager.setCustomName(ChatColor.RED + "Redstone Golem");
-                ravager.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20 * 600, 1));
                 
             }else{
                 ravager.setCustomName(ChatColor.BLUE + "Ravager Powerful");

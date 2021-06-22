@@ -39,13 +39,13 @@ public class DedsafioListener implements Listener {
             .filter(material -> material.name().contains("FENCE") && !material.name().contains("FENCE_GATE"))
             .collect(Collectors.toList());
 
-    int amount1 = 3;
-    int amount2 = 64;
-    int amount3 = 64;
+    int amount1 = 1;
+    int amount2 = 32;
+    int amount3 = 32;
     int amount4 = 64;
     int amount5 = 64;
 
-    Material item1 = Material.COOKED_BEEF;
+    Material item1 = Material.INK_SAC;
     Material item2 = Material.TNT;
     Material item3 = Material.END_CRYSTAL;
     Material item4 = Material.CHORUS_FRUIT;
@@ -73,7 +73,7 @@ public class DedsafioListener implements Listener {
                 inv.removeItem(itemstack1);
                 inv.removeItem(itemstack2);
                 inv.removeItem(itemstack3);
-                //Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "clear " + player.getName() + " minecraft:chorus_fruit 64");
+                //Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "clear " + player.getName() + " minecraft:rabbit_foot 1");
                 //inv.removeItem(itemstack4);
                 //inv.removeItem(itemstack5);
 
@@ -122,7 +122,7 @@ public class DedsafioListener implements Listener {
         if (!game.isGulak()) {
             
             if(!player.hasPermission("mod.perm")){
-                instance.animation(ChatColor.DARK_RED + "" + ChatColor.BOLD + "" + e.getDeathMessage(), "muerte", "D", 90, true);
+                instance.animation(e.getDeathMessage(), "muerte", "D", 90, true);
             }
 
             Bukkit.getScheduler().runTaskLater(instance, () -> {
@@ -131,7 +131,7 @@ public class DedsafioListener implements Listener {
             }, 20 * 30);
 
         }else if(game.getPvpOn().contains(player.getUniqueId().toString())){
-            instance.animation(ChatColor.DARK_RED + "" + ChatColor.BOLD + "" + e.getDeathMessage(), "fatality", "E", 55, true);
+            instance.animation(e.getDeathMessage(), "fatality", "E", 55, true);
             
         }
 

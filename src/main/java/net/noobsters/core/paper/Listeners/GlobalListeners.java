@@ -58,7 +58,7 @@ public class GlobalListeners implements Listener{
         var game = instance.getGame();
         if(!locale.contains("NOOBSTERS")){
             player.kickPlayer(NO_TXT);
-        }else if(!locale.contains("NOOBSTERS_5")){
+        }else if(!locale.contains("NOOBSTERS_6")){
             player.kickPlayer(NO_TXT + ChatColor.RED + "\n Hay otra actualizacion del texture pack, descarga la ultima!");
             
         }else if(!player.hasPermission("mod.perm") && game.isClosed()){

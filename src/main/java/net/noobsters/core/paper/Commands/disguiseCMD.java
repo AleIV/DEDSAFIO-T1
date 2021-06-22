@@ -39,10 +39,6 @@ public class disguiseCMD extends BaseCommand {
         var disguises = instance.getGame().getDisguises();
         disguises.put(sender.getName(), "redstone");
 
-        var bossbars = instance.getGame().getBossbars();
-        var boss = bossbars.get("redstone");
-        boss.setProgress(1);
-
         var name = "&4Redstone Monstrosity";
         Bukkit.dispatchCommand(sender, "disguise ravager setcustomname \""+ name +"\" setcustomnamevisible false setSelfDisguiseVisible false");
 
@@ -87,6 +83,7 @@ public class disguiseCMD extends BaseCommand {
         equip.setBoots(boots);
 
         sender.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 100000, 5, false, false));
+        sender.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, 100000, 5, false, false));
 
         sender.setGameMode(GameMode.SURVIVAL);
 
@@ -100,46 +97,25 @@ public class disguiseCMD extends BaseCommand {
         var disguises = instance.getGame().getDisguises();
         disguises.put(sender.getName(), "warden");
 
-        var bossbars = instance.getGame().getBossbars();
-        var boss = bossbars.get("warden");
-        boss.setProgress(1);
-
         var name = "&3Warden Monstrosity";
         Bukkit.dispatchCommand(sender, "disguise ravager setcustomname \""+ name +"\" setcustomnamevisible false setSelfDisguiseVisible false setSoundGroup BOAT");
-
-        var melee = new ItemBuilder(Material.NETHERITE_AXE).name(ChatColor.GOLD + "Melee").meta(ItemMeta.class, meta -> meta.setCustomModelData(666)).build();
-
-        var walk = new ItemBuilder(Material.NETHERITE_BOOTS).name(ChatColor.GREEN + "WalkWarden").meta(ItemMeta.class, meta -> meta.setCustomModelData(666)).build();
-
-        var speed = new ItemBuilder(Material.DIAMOND_BOOTS).name(ChatColor.GREEN + "SpeedWarden").meta(ItemMeta.class, meta -> meta.setCustomModelData(666)).build();
 
         var jump = new ItemBuilder(Material.IRON_BOOTS).name(ChatColor.GREEN + "JumpWarden").meta(ItemMeta.class, meta -> meta.setCustomModelData(666)).build();
 
         var roar = new ItemBuilder(Material.GLOWSTONE_DUST).name(ChatColor.GREEN + "RoarWarden").meta(ItemMeta.class, meta -> meta.setCustomModelData(666)).build();
 
-        var sound = new ItemBuilder(Material.SUGAR).name(ChatColor.GREEN + "Laugh").meta(ItemMeta.class, meta -> meta.setCustomModelData(666)).build();
+        var sound = new ItemBuilder(Material.SUGAR).name(ChatColor.GREEN + "SoundWarden").meta(ItemMeta.class, meta -> meta.setCustomModelData(666)).build();
+
+        var stars = new ItemBuilder(Material.RABBIT_FOOT).name(ChatColor.GREEN + "Stars").meta(ItemMeta.class, meta -> meta.setCustomModelData(666)).build();
 
         var inv = sender.getInventory();
-        inv.addItem(melee);
 
-        inv.addItem(walk);
-        inv.addItem(speed);
         inv.addItem(jump);
         inv.addItem(roar);
         inv.addItem(sound);
+        inv.addItem(stars);
 
-        inv.addItem(new ItemStack(Material.ARROW));
-
-        var helmet = new ItemBuilder(Material.NETHERITE_HELMET).enchant(Enchantment.PROTECTION_ENVIRONMENTAL, 4).meta(ItemMeta.class, meta -> meta.setCustomModelData(666)).build();
-        var chestplate = new ItemBuilder(Material.NETHERITE_CHESTPLATE).enchant(Enchantment.PROTECTION_ENVIRONMENTAL, 4).meta(ItemMeta.class, meta -> meta.setCustomModelData(666)).build();
-        var leggings = new ItemBuilder(Material.NETHERITE_LEGGINGS).enchant(Enchantment.PROTECTION_PROJECTILE, 4).meta(ItemMeta.class, meta -> meta.setCustomModelData(666)).build();
-        var boots = new ItemBuilder(Material.NETHERITE_BOOTS).enchant(Enchantment.PROTECTION_PROJECTILE, 4).meta(ItemMeta.class, meta -> meta.setCustomModelData(666)).build();
-
-        var equip = sender.getEquipment();
-        equip.setHelmet(helmet);
-        equip.setChestplate(chestplate);
-        equip.setLeggings(leggings);
-        equip.setBoots(boots);
+        sender.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, 100000, 5, false, false));
 
         sender.setGameMode(GameMode.SURVIVAL);
 

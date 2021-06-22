@@ -77,7 +77,7 @@ public class Game extends BukkitRunnable{
         difficultyChanges.put("blind", false);
         difficultyChanges.put("watermonster", true);
 
-        difficultyChanges.put("totems50", false);
+        difficultyChanges.put("totems50", true);
         difficultyChanges.put("totems", true);
 
         difficultyChanges.put("zombies", true);
@@ -89,7 +89,7 @@ public class Game extends BukkitRunnable{
         difficultyChanges.put("mages", true);
         difficultyChanges.put("naturally", true);
         difficultyChanges.put("demons", false);
-        difficultyChanges.put("creepers", false);
+        difficultyChanges.put("creepers", true);
         difficultyChanges.put("raids", false);
 
         difficultyChanges.put("redstone", true);

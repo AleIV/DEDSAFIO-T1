@@ -151,12 +151,13 @@ public class Extra implements Listener {
             }
 
             var equip = player.getEquipment();
-            if (difficulty.get("environment") && player.getWorld() == Bukkit.getWorld("world_nether")) {
 
-                var helmet = equip.getHelmet();
-                var chest = equip.getChestplate();
-                var legs = equip.getLeggings();
-                var boots = equip.getBoots();
+            var helmet = equip.getHelmet();
+            var chest = equip.getChestplate();
+            var legs = equip.getLeggings();
+            var boots = equip.getBoots();
+
+            if (difficulty.get("environment") && player.getWorld() == Bukkit.getWorld("world_nether")) {
 
                 if (helmet == null || chest == null || chest.getType().toString().contains("ELYTRA") || legs == null
                         || boots == null) {
@@ -164,6 +165,15 @@ public class Extra implements Listener {
                     player.removePotionEffect(PotionEffectType.FIRE_RESISTANCE);
                     player.setFireTicks(20 * 30);
                 }
+            }
+
+            if (helmet != null && helmet.getItemMeta().hasCustomModelData() && helmet.getItemMeta().getCustomModelData() == 126
+                && chest != null && chest.getItemMeta().hasCustomModelData() && chest.getItemMeta().getCustomModelData() == 126
+                && legs != null && legs.getItemMeta().hasCustomModelData() && legs.getItemMeta().getCustomModelData() == 126
+                && boots != null && boots.getItemMeta().hasCustomModelData() && boots.getItemMeta().getCustomModelData() == 126) {
+
+                player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20 * 5, 1));
+                    
             }
 
             if (difficulty.get("blind") && !player.hasPermission("mod.perm")) {
