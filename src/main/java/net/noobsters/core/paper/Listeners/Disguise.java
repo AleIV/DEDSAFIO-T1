@@ -68,8 +68,10 @@ public class Disguise implements Listener {
                 loc.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, loc, 1);
 
             } else {
-                loc.getWorld().spawnParticle(Particle.CLOUD, loc, 50, 1);
+                Bukkit.dispatchCommand(player, "particle minecraft:cloud ~ ~1 ~ .1 .1 .1 .03 10 force");
             }
+
+            DisguiseAPI.undisguiseToAll(player);
 
             var disguises = game.getDisguises();
             if (disguises.containsKey(player.getName())) {
@@ -160,8 +162,9 @@ public class Disguise implements Listener {
         var entity = e.getEntity();
         var loc = entity.getLocation();
         var game = instance.getGame();
+
         if (entity instanceof Zombie) {
-            var intelligence = loc.getNearbyEntities(32, 100, 32).stream()
+            var intelligence = loc.getNearbyEntities(150, 30, 150).stream()
                     .filter(radius -> radius instanceof ArmorStand && radius.getCustomName() != null
                             && radius.getCustomName().contains("Raid"))
                     .map(ent -> (ArmorStand) ent).collect(Collectors.toList());
@@ -173,15 +176,29 @@ public class Disguise implements Listener {
                     if (player.getName() == entry.get().getKey()) {
                         // ALL DISGUISE INTELLIGENCE
 
+                        e.setCancelled(true);
+                        player.setGameMode(GameMode.SURVIVAL);
+                        player.teleport(entity.getLocation());
+
                         var zombiePlayers = game.getDeathPlayers().keySet().stream().collect(Collectors.toList());
-                        var name = "&c" + zombiePlayers.get(random.nextInt(zombiePlayers.size()));
+                        var name = "&cZombie " + zombiePlayers.get(random.nextInt(zombiePlayers.size()));
 
                         Bukkit.dispatchCommand(player, "disguise zombie setcustomname \"" + name
                                 + "\" setcustomnamevisible false setSelfDisguiseVisible false");
 
                         var inv = player.getInventory();
-                        inv.addItem(
-                                new ItemBuilder(Material.NETHERITE_PICKAXE).enchant(Enchantment.DIG_SPEED, 5).build());
+                        inv.clear();
+                        inv.addItem(new ItemBuilder(Material.NETHERITE_PICKAXE).enchant(Enchantment.DIG_SPEED, 5).build());
+                        inv.addItem(new ItemBuilder(Material.NETHERITE_SHOVEL).enchant(Enchantment.DIG_SPEED, 5).build());
+                        inv.addItem(new ItemBuilder(Material.NETHERITE_AXE).enchant(Enchantment.DIG_SPEED, 5).build());
+
+                        inv.addItem(new ItemBuilder(Material.SPONGE).amount(32).build());
+                        inv.addItem(new ItemBuilder(Material.COBBLESTONE).amount(64).build());
+
+
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, 10000, 1));
+
+                        game.getIntelligence().put(player.getName(), false);
 
                     }
                 });
@@ -243,7 +260,7 @@ public class Disguise implements Listener {
     public void powers(PlayerInteractEvent e) {
         var player = e.getPlayer();
         var item = e.getItem();
-        if (item != null && DisguiseAPI.isDisguised(player)) {
+        if (item != null && player.hasPermission("mod.perm")) {
             var string = item.getItemMeta().getDisplayName().toString();
             var loc = player.getLocation();
 
@@ -400,15 +417,20 @@ public class Disguise implements Listener {
             var player = (Player) entity;
             if (DisguiseAPI.isDisguised(player)) {
 
+                if (cause == DamageCause.FALL || cause == DamageCause.LAVA || cause == DamageCause.FIRE
+                            || cause == DamageCause.FIRE_TICK || cause == DamageCause.HOT_FLOOR
+                            || cause == DamageCause.WITHER) {
+                        e.setCancelled(true);
+                        return;
+                }
+
                 var loc = entity.getLocation();
 
                 var disguises = instance.getGame().getDisguises();
                 if (disguises.containsKey(player.getName())) {
 
-                    if (cause == DamageCause.FALL || cause == DamageCause.LAVA || cause == DamageCause.FIRE
-                            || cause == DamageCause.FIRE_TICK || cause == DamageCause.ENTITY_EXPLOSION
-                            || cause == DamageCause.BLOCK_EXPLOSION || cause == DamageCause.HOT_FLOOR
-                            || cause == DamageCause.WITHER) {
+                    if (cause == DamageCause.ENTITY_EXPLOSION
+                            || cause == DamageCause.BLOCK_EXPLOSION) {
                         e.setCancelled(true);
                         return;
                     }
@@ -419,7 +441,7 @@ public class Disguise implements Listener {
                     switch (mob) {
 
                         case "warden": {
-                            double point = 0.0001;
+                            double point = 0.001;
                             var boss = bossbars.get("warden");
                             var health = boss.getProgress();
 
@@ -439,7 +461,7 @@ public class Disguise implements Listener {
                             break;
 
                         case "redstone": {
-                            double point = 0.0001;
+                            double point = 0.001;
                             var boss = bossbars.get("redstone");
                             var health = boss.getProgress();
 

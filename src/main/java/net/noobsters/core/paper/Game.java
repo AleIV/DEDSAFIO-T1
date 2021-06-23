@@ -69,8 +69,10 @@ public class Game extends BukkitRunnable{
         difficultyChanges.put("tnt", false);
         difficultyChanges.put("sumo", false);
 
+        difficultyChanges.put("blazecap", true);
         difficultyChanges.put("pigcap", true);
         difficultyChanges.put("creepercap", true);
+        difficultyChanges.put("demoncap", true);
         difficultyChanges.put("pigcapenable", false);
         difficultyChanges.put("villager", false);
 
@@ -88,7 +90,7 @@ public class Game extends BukkitRunnable{
         difficultyChanges.put("raiders", true); 
         difficultyChanges.put("mages", true);
         difficultyChanges.put("naturally", true);
-        difficultyChanges.put("demons", false);
+        difficultyChanges.put("demons", true);
         difficultyChanges.put("creepers", true);
         difficultyChanges.put("raids", false);
 
@@ -126,7 +128,6 @@ public class Game extends BukkitRunnable{
         deathPlayers.put("Puji2", true);
         deathPlayers.put("Bizzza", true);
         deathPlayers.put("iChurro", true);
-        deathPlayers.put("ElChurches", true);
         deathPlayers.put("LarryCabirria", true);
         deathPlayers.put("Katuuta", true);
         deathPlayers.put("MrFerruzca", true);
@@ -144,7 +145,6 @@ public class Game extends BukkitRunnable{
         deathPlayers.put("Duxorethey", true);
         deathPlayers.put("Leyville", true);
         deathPlayers.put("D3stri", true);
-        deathPlayers.put("AkimCraft24", true);
         deathPlayers.put("Nonigamer", true);
         deathPlayers.put("MYM_TUM_TUM", true);
         deathPlayers.put("Dannespino", true);

@@ -182,7 +182,7 @@ public class Cancel implements Listener {
         }else if(entity instanceof Villager && !difficulty.get("villager")){
             e.setCancelled(true);
 
-        }else if(entity instanceof Chicken){
+        }else if(entity instanceof Chicken && !difficulty.get("demons")){
             e.setCancelled(true);
 
         }else if(entity instanceof PolarBear){

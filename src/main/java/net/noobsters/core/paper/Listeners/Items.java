@@ -256,9 +256,7 @@ public class Items implements Listener {
             player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 20 * 1, 70));
             var loc = e.getEntity().getLocation();
 
-            loc.getNearbyPlayers(20).stream().forEach(p ->{
-                p.playSound(p.getLocation(), "shootingstars", 1, 1);
-            });
+            loc.createExplosion(5);
 
         }
     }

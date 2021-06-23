@@ -10,6 +10,7 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Creature;
+import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Vex;
 import org.bukkit.event.EventHandler;
@@ -20,6 +21,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityResurrectEvent;
 import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -137,6 +139,7 @@ public class Extra implements Listener {
                 if (!blinds.isEmpty() && !player.hasPermission("mod.perm")) {
 
                     player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 5, 0));
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20 * 5, 3));
                 }
 
                 var blindlarge = player.getNearbyEntities(100, 100, 100).stream()
@@ -167,13 +170,15 @@ public class Extra implements Listener {
                 }
             }
 
-            if (helmet != null && helmet.getItemMeta().hasCustomModelData() && helmet.getItemMeta().getCustomModelData() == 126
-                && chest != null && chest.getItemMeta().hasCustomModelData() && chest.getItemMeta().getCustomModelData() == 126
-                && legs != null && legs.getItemMeta().hasCustomModelData() && legs.getItemMeta().getCustomModelData() == 126
-                && boots != null && boots.getItemMeta().hasCustomModelData() && boots.getItemMeta().getCustomModelData() == 126) {
+            if (helmet != null && helmet.getItemMeta().hasCustomModelData()
+                    && helmet.getItemMeta().getCustomModelData() == 126 && chest != null
+                    && chest.getItemMeta().hasCustomModelData() && chest.getItemMeta().getCustomModelData() == 126
+                    && legs != null && legs.getItemMeta().hasCustomModelData()
+                    && legs.getItemMeta().getCustomModelData() == 126 && boots != null
+                    && boots.getItemMeta().hasCustomModelData() && boots.getItemMeta().getCustomModelData() == 126) {
 
                 player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20 * 5, 1));
-                    
+
             }
 
             if (difficulty.get("blind") && !player.hasPermission("mod.perm")) {
@@ -345,6 +350,34 @@ public class Extra implements Listener {
                     default:
                         break;
                 }
+            }
+        }
+    }
+
+    @EventHandler
+    public void deathRaid(EntityDeathEvent e) {
+        var entity = e.getEntity();
+        if (entity instanceof Monster) {
+            var loc = entity.getLocation();
+            var raid = loc.getNearbyEntities(16, 16, 16).stream()
+                    .filter(raidStand -> raidStand instanceof ArmorStand && raidStand.getCustomName() != null
+                            && raidStand.getCustomName().contains("Raid"))
+                    .map(ent -> (ArmorStand) ent).collect(Collectors.toList());
+
+            if (!raid.isEmpty()) {
+                var bossbars = instance.getGame().getBossbars();
+                double point = 0.001;
+                var boss = bossbars.get("raid");
+                var health = boss.getProgress();
+
+                double finalHealth = health - point;
+                if (finalHealth <= 0) {
+                    boss.setVisible(false);
+                    return;
+                }
+
+                boss.setProgress(finalHealth);
+                        
             }
         }
     }

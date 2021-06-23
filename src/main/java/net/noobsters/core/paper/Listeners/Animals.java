@@ -82,7 +82,7 @@ public class Animals implements Listener {
         }else if(difficulty.get("pigs") && entity.getType() == EntityType.ZOMBIFIED_PIGLIN){
 
             e.setCancelled(true);
-            if(difficulty.get("demons") && random.nextInt(30) == 1){
+            if(difficulty.get("demons") && difficulty.get("blazecap") && random.nextInt(15) == 1){
                 entity.getWorld().spawnEntity(entity.getLocation(), EntityType.BLAZE);
                 
             }else{

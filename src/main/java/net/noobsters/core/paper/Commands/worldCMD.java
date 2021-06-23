@@ -28,8 +28,8 @@ public class worldCMD extends BaseCommand {
     Random random = new Random();
     List<String> letters = new ArrayList<>();
 
-    String item1 = "uE4A3";
-    String item2 = "uE3A7";
+    String item1 = "uE2A8";
+    String item2 = "uE1A4";
     String item3 = "uE1A3";
 
     String item4 = "uE0A3";
@@ -159,10 +159,10 @@ public class worldCMD extends BaseCommand {
                                 "tellraw @a {\"text\":\"" + charac + item1 + " x1" + "\"}");
                         Bukkit.broadcastMessage("");
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-                                "tellraw @a {\"text\":\"" + charac + item2 + " x32" + "\"}");
+                                "tellraw @a {\"text\":\"" + charac + item2 + " x8" + "\"}");
                         Bukkit.broadcastMessage("");
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-                                "tellraw @a {\"text\":\"" + charac + item3 + " x32" + "\"}");
+                                "tellraw @a {\"text\":\"" + charac + item3 + " x64" + "\"}");
                         Bukkit.broadcastMessage("");
 
                         /*Bukkit.dispatchCommand(Bukkit.getConsoleSender(),

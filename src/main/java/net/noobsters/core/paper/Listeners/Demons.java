@@ -4,7 +4,9 @@ import java.util.Random;
 
 import org.bukkit.GameMode;
 import org.bukkit.entity.Blaze;
+import org.bukkit.entity.Chicken;
 import org.bukkit.entity.Enderman;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Ghast;
 import org.bukkit.entity.Phantom;
 import org.bukkit.entity.Player;
@@ -50,17 +52,35 @@ public class Demons implements Listener{
             var ghast = (Ghast) entity;
             ghast.setCustomName(ChatColor.DARK_PURPLE + "Carminite Ghast Guard");
             var loc = ghast.getLocation();
+
             var players = loc.getNearbyPlayers(64, player-> player.getGameMode() == GameMode.SURVIVAL).stream().findAny();
             if(players.isPresent()) ghast.setTarget(players.get());
 
         }else if(difficulty.get("demons") && entity instanceof Blaze){
             var blaze = (Blaze) entity;
             blaze.setCustomName(ChatColor.DARK_PURPLE + "Pure Demon");
-            blaze.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20 * 600, 3));
+            blaze.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20 * 10000, 2));
+            blaze.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20 * 10000, 3));
+
+            var loc = blaze.getLocation();
+            loc.getNearbyPlayers(10).stream().forEach(p ->{
+                p.playSound(p.getLocation(), "lich", 1, 0.3f);
+            });
+
+        }else if(difficulty.get("demons") && entity instanceof Chicken){
+
+            var demoncap = instance.getGame().getDifficultyChanges().get("demoncap");
+            if(demoncap && random.nextInt(70) == 1){
+                e.setCancelled(true);
+                entity.getWorld().spawnEntity(entity.getLocation(), EntityType.BLAZE);
+
+            }else{
+                e.setCancelled(true);
+            }
 
         }else if(difficulty.get("demons") && entity instanceof Enderman){
             var enderman = (Enderman) entity;
-            enderman.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20 * 600, 1));
+            enderman.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20 * 600, 2));
             switch (random.nextInt(4)) {
                 case 1:{
                     enderman.setCustomName(ChatColor.DARK_PURPLE + "Corrupted Demon");
@@ -80,7 +100,8 @@ public class Demons implements Listener{
                 }
                     break;
             }
-            if(random.nextInt(30) == 1){
+
+            if(random.nextInt(20) == 1){
                 var loc = enderman.getLocation();
                 var players = loc.getNearbyPlayers(64, player-> player.getGameMode() == GameMode.SURVIVAL).stream().findAny();
                 if(players.isPresent()) enderman.setTarget(players.get());

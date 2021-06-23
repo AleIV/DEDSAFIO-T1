@@ -81,7 +81,7 @@ public class Monsters implements Listener {
 
             var pigCap = game.getDifficultyChanges().get("creepercap");
             if(pigCap && random.nextInt(140) == 1){
-
+                e.setCancelled(true);
                 entity.getWorld().spawnEntity(entity.getLocation(), EntityType.CREEPER);
 
             }else{
@@ -118,7 +118,7 @@ public class Monsters implements Listener {
                 case 4: {
                     creeper.setCustomName(ChatColor.GREEN + "Atomic Creeper");
                     creeper.setPowered(true);
-                    creeper.setExplosionRadius(30);
+                    creeper.setExplosionRadius(10);
                     creeper.setHealth(creeper.getHealth() / 2);
                     creeper.setGlowing(true);
                 }
@@ -165,7 +165,7 @@ public class Monsters implements Listener {
     @EventHandler(priority = EventPriority.LOW)
     public void entityDamage(EntityDeathEvent e) {
         var entity = e.getEntity();
-        if (entity.getName().toString().contains("Rubber") && random.nextBoolean()) {
+        if (entity.getName().toString().contains("Rubber")) {
             var loc = entity.getLocation();
             switch (random.nextInt(4)) {
                 case 1:

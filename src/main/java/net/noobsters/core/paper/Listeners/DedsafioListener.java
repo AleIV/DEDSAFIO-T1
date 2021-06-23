@@ -40,8 +40,8 @@ public class DedsafioListener implements Listener {
             .collect(Collectors.toList());
 
     int amount1 = 1;
-    int amount2 = 32;
-    int amount3 = 32;
+    int amount2 = 8;
+    int amount3 = 64;
     int amount4 = 64;
     int amount5 = 64;
 
