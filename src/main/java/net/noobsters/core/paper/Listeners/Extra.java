@@ -359,7 +359,7 @@ public class Extra implements Listener {
         var entity = e.getEntity();
         if (entity instanceof Monster) {
             var loc = entity.getLocation();
-            var raid = loc.getNearbyEntities(16, 16, 16).stream()
+            var raid = loc.getNearbyEntities(100, 30, 100).stream()
                     .filter(raidStand -> raidStand instanceof ArmorStand && raidStand.getCustomName() != null
                             && raidStand.getCustomName().contains("Raid"))
                     .map(ent -> (ArmorStand) ent).collect(Collectors.toList());

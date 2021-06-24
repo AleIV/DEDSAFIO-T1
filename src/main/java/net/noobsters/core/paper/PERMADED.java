@@ -1,6 +1,8 @@
 package net.noobsters.core.paper;
 
 import org.bukkit.Bukkit;
+import org.bukkit.World.Environment;
+import org.bukkit.WorldCreator;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import co.aikar.commands.PaperCommandManager;
@@ -47,12 +49,12 @@ public class PERMADED extends JavaPlugin {
     commandManager.registerCommand(new disguiseCMD(this));
     commandManager.registerCommand(new extra(this));
 
-    /*Bukkit.getScheduler().runTaskLater(this, task -> {
+    Bukkit.getScheduler().runTaskLater(this, task -> {
       WorldCreator arenaWorld = new WorldCreator("FINALFIGHT");
       arenaWorld.environment(Environment.NORMAL);
       arenaWorld.createWorld();
 
-    }, 20 * 10);*/
+    }, 20 * 10);
 
   }
 

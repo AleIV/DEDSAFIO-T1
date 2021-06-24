@@ -256,7 +256,7 @@ public class Items implements Listener {
             player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 20 * 1, 70));
             var loc = e.getEntity().getLocation();
 
-            loc.createExplosion(5);
+            loc.createExplosion(7);
 
         }
     }
