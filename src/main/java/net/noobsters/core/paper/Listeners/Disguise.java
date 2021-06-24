@@ -188,10 +188,12 @@ public class Disguise implements Listener {
 
                         var inv = player.getInventory();
                         inv.clear();
-                        inv.addItem(new ItemBuilder(Material.NETHERITE_PICKAXE).enchant(Enchantment.DIG_SPEED, 5).build());
-                        inv.addItem(new ItemBuilder(Material.NETHERITE_SHOVEL).enchant(Enchantment.DIG_SPEED, 5).build());
-                        inv.addItem(new ItemBuilder(Material.NETHERITE_AXE).enchant(Enchantment.DIG_SPEED, 5).build());
+                        inv.addItem(new ItemBuilder(Material.SHEARS).build());
+                        inv.addItem(new ItemBuilder(Material.DIAMOND_PICKAXE).enchant(Enchantment.DIG_SPEED, 5).build());
+                        inv.addItem(new ItemBuilder(Material.DIAMOND_SHOVEL).enchant(Enchantment.DIG_SPEED, 5).build());
+                        inv.addItem(new ItemBuilder(Material.DIAMOND_AXE).enchant(Enchantment.DIG_SPEED, 5).build());
 
+                        inv.addItem(new ItemBuilder(Material.WATER_BUCKET).amount(32).build());
                         inv.addItem(new ItemBuilder(Material.SPONGE).amount(32).build());
                         inv.addItem(new ItemBuilder(Material.COBBLESTONE).amount(64).build());
 
@@ -417,9 +419,7 @@ public class Disguise implements Listener {
             var player = (Player) entity;
             if (DisguiseAPI.isDisguised(player)) {
 
-                if (cause == DamageCause.FALL || cause == DamageCause.LAVA || cause == DamageCause.FIRE
-                            || cause == DamageCause.FIRE_TICK || cause == DamageCause.HOT_FLOOR
-                            || cause == DamageCause.WITHER) {
+                if (cause == DamageCause.WITHER) {
                         e.setCancelled(true);
                         return;
                 }
@@ -429,7 +429,9 @@ public class Disguise implements Listener {
                 var disguises = instance.getGame().getDisguises();
                 if (disguises.containsKey(player.getName())) {
 
-                    if (cause == DamageCause.ENTITY_EXPLOSION
+                    if (cause == DamageCause.LAVA || cause == DamageCause.FIRE
+                        || cause == DamageCause.FIRE_TICK || cause == DamageCause.HOT_FLOOR
+                        || cause == DamageCause.FALL || cause == DamageCause.ENTITY_EXPLOSION
                             || cause == DamageCause.BLOCK_EXPLOSION) {
                         e.setCancelled(true);
                         return;
@@ -449,6 +451,7 @@ public class Disguise implements Listener {
                             if (finalHealth <= 0) {
                                 boss.setVisible(false);
                                 player.damage(100);
+                                boss.setProgress(1);
                                 return;
                             }
 
@@ -469,6 +472,7 @@ public class Disguise implements Listener {
                             if (finalHealth <= 0) {
                                 boss.setVisible(false);
                                 player.damage(100);
+                                boss.setProgress(1);
                                 return;
                             }
 

@@ -30,6 +30,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import net.md_5.bungee.api.ChatColor;
 import net.noobsters.core.paper.GameTickEvent;
 import net.noobsters.core.paper.PERMADED;
 
@@ -373,10 +374,48 @@ public class Extra implements Listener {
                 double finalHealth = health - point;
                 if (finalHealth <= 0) {
                     boss.setVisible(false);
+                    boss.setProgress(1);
                     return;
                 }
 
                 boss.setProgress(finalHealth);
+                        
+            }
+        }
+    }
+
+    @EventHandler
+    public void deathRaidbase(BlockBreakEvent e) {
+        var block = e.getBlock();
+        if(block.getType() == Material.BEACON){
+            var loc = block.getLocation();
+            var raid = loc.getNearbyEntities(100, 30, 100).stream()
+                    .filter(raidStand -> raidStand instanceof ArmorStand && raidStand.getCustomName() != null
+                            && raidStand.getCustomName().contains("Raid"))
+                    .map(ent -> (ArmorStand) ent).collect(Collectors.toList());
+
+            if (!raid.isEmpty()) {
+                var bossbars = instance.getGame().getBossbars();
+                double point = 0.25;
+                var boss = bossbars.get("base");
+                var health = boss.getProgress();
+
+                double finalHealth = health - point;
+                if (finalHealth <= 0) {
+                    boss.setVisible(false);
+                    boss.setProgress(1);
+                    Bukkit.broadcastMessage(ChatColor.RED + "LA BASE HA CAIDO.");
+                    Bukkit.getOnlinePlayers().forEach(player ->{
+                        player.playSound(player.getLocation(), Sound.ENTITY_WITHER_SPAWN, 1, 0.5f);
+                    });
+                    return;
+                }
+
+                boss.setProgress(finalHealth);
+                Bukkit.broadcastMessage(ChatColor.RED + "BEACON CAIDO.");
+                Bukkit.getOnlinePlayers().forEach(player ->{
+                    player.playSound(player.getLocation(), Sound.ENTITY_WITHER_DEATH, 1, 0.5f);
+                });
                         
             }
         }

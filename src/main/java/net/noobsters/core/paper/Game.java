@@ -53,14 +53,18 @@ public class Game extends BukkitRunnable{
         var raid = Bukkit.createBossBar(new NamespacedKey(instance, "boss-raid"), ChatColor.GRAY + "DEATH RAID", BarColor.BLUE, BarStyle.SOLID);
         var warden = Bukkit.createBossBar(new NamespacedKey(instance, "boss-warden"), ChatColor.DARK_AQUA + "WARDEN MONSTROSITY", BarColor.GREEN, BarStyle.SOLID);
         var redstone = Bukkit.createBossBar(new NamespacedKey(instance, "boss-redstone"), ChatColor.DARK_RED + "REDSTONE MONSTROSITY", BarColor.YELLOW, BarStyle.SOLID);
+        var base = Bukkit.createBossBar(new NamespacedKey(instance, "base"), ChatColor.GRAY + "BASE", BarColor.WHITE, BarStyle.SOLID);
 
         raid.setVisible(false);
         warden.setVisible(false);
         redstone.setVisible(false);
+        base.setVisible(false);
         raid.setProgress(1);
         warden.setProgress(1);
         redstone.setProgress(1);
+        base.setProgress(1);
 
+        bossbars.put("base", base);
         bossbars.put("raid", raid);
         bossbars.put("warden", warden);
         bossbars.put("redstone", redstone);
