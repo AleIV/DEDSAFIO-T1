@@ -23,8 +23,8 @@ import net.md_5.bungee.api.ChatColor;
 public class Game extends BukkitRunnable{
     PERMADED instance;
     int spawnPatrolDelay = 600;
-    int damageAmplifier = 3;
-    int mobResistance = 60;
+    int damageAmplifier = 5;
+    int mobResistance = 80;
 
     HashMap<String, BossBar> bossbars = new HashMap<>();
 

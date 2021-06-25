@@ -11,8 +11,9 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -144,6 +145,24 @@ public class FightCMD extends BaseCommand {
 
     }
 
+    @Subcommand("award")
+    @CommandAlias("award")
+    @CommandCompletion("@players")
+    public void award(CommandSender sender, @Flags("other") String player, String text) {
+
+        Bukkit.getOnlinePlayers().forEach(p -> {
+            if(p.getName().contains(player)){
+                p.teleport(new Location(Bukkit.getWorld("world"), -536.5, 204, -258.5, 0, 0));
+            }
+
+            p.sendTitle(Title.builder().title(ChatColor.GOLD + "" + ChatColor.BOLD + "Premio a " + player)
+                    .subtitle(new ComponentBuilder(ChatColor.GREEN + "" + text).bold(true).create()).build());
+        });
+
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "setblock -539 154 -245 minecraft:redstone_block");
+
+    }
+
     @Subcommand("tnt-head")
     @CommandAlias("tnt-head")
     @CommandCompletion("@players")
@@ -260,25 +279,20 @@ public class FightCMD extends BaseCommand {
         var inv = player.getInventory();
         inv.clear();
 
-        var head = new ItemBuilder(Material.PLAYER_HEAD)
-                    .meta(SkullMeta.class, meta -> meta.setOwningPlayer(Bukkit.getOfflinePlayer(player.getUniqueId())))
-                    .build();
-        var sumo = new ItemBuilder(Material.JIGSAW).name(ChatColor.RED + "Sumo").build();
-        equip.setItemInOffHand(sumo);
-        equip.setHelmet(head);
+        player.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, 20*10000, 0));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.DOLPHINS_GRACE, 20*10000, 0));
+        
+        inv.addItem(new ItemBuilder(Material.TRIDENT).enchant(Enchantment.LOYALTY, 3).build());
+        inv.addItem(new ItemBuilder(Material.TRIDENT).enchant(Enchantment.RIPTIDE, 1).build());
 
-        /*
-        inv.addItem(new ItemStack(Material.DIAMOND_SWORD));
-        inv.addItem(new ItemStack(Material.BOW));
-        inv.addItem(new ItemStack(Material.IRON_AXE));
         inv.addItem(new ItemStack(Material.GOLDEN_APPLE));
-        inv.addItem(new ItemStack(Material.ARROW, 8));
-        inv.addItem(new ItemStack(Material.BAKED_POTATO, 8));
+        inv.addItem(new ItemStack(Material.COOKED_COD, 8));
 
-        equip.setHelmet(new ItemStack(Material.DIAMOND_HELMET));
-        equip.setChestplate(new ItemStack(Material.DIAMOND_CHESTPLATE));
-        equip.setLeggings(new ItemStack(Material.DIAMOND_LEGGINGS));
-        equip.setBoots(new ItemStack(Material.DIAMOND_BOOTS));*/
+        equip.setHelmet(new ItemStack(Material.TURTLE_HELMET));
+        equip.setChestplate(new ItemBuilder(Material.DIAMOND_CHESTPLATE).enchant(Enchantment.PROTECTION_ENVIRONMENTAL).build());
+        equip.setLeggings(new ItemBuilder(Material.CHAINMAIL_LEGGINGS).enchant(Enchantment.PROTECTION_ENVIRONMENTAL).build());
+        equip.setBoots(new ItemBuilder(Material.CHAINMAIL_BOOTS).enchant(Enchantment.DEPTH_STRIDER, 3).build());
+        
     }
 
     @Subcommand("fight-random")

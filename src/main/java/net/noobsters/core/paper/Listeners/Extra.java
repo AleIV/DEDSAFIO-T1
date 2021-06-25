@@ -30,6 +30,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import me.libraryaddict.disguise.DisguiseAPI;
 import net.md_5.bungee.api.ChatColor;
 import net.noobsters.core.paper.GameTickEvent;
 import net.noobsters.core.paper.PERMADED;
@@ -387,7 +388,9 @@ public class Extra implements Listener {
     @EventHandler
     public void deathRaidbase(BlockBreakEvent e) {
         var block = e.getBlock();
+        
         if(block.getType() == Material.BEACON){
+            var player = e.getPlayer();
             var loc = block.getLocation();
             var raid = loc.getNearbyEntities(100, 30, 100).stream()
                     .filter(raidStand -> raidStand instanceof ArmorStand && raidStand.getCustomName() != null
@@ -405,17 +408,28 @@ public class Extra implements Listener {
                     boss.setVisible(false);
                     boss.setProgress(1);
                     Bukkit.broadcastMessage(ChatColor.RED + "LA BASE HA CAIDO.");
-                    Bukkit.getOnlinePlayers().forEach(player ->{
-                        player.playSound(player.getLocation(), Sound.ENTITY_WITHER_SPAWN, 1, 0.5f);
+                    Bukkit.getOnlinePlayers().forEach(p ->{
+                        p.playSound(p.getLocation(), Sound.ENTITY_WITHER_SPAWN, 1, 0.5f);
                     });
+                    instance.getGame().getIntelligence().clear();
+
+                    if(DisguiseAPI.isDisguised(player)){
+                        player.damage(100);
+                        
+                    }
                     return;
                 }
 
                 boss.setProgress(finalHealth);
                 Bukkit.broadcastMessage(ChatColor.RED + "BEACON CAIDO.");
-                Bukkit.getOnlinePlayers().forEach(player ->{
-                    player.playSound(player.getLocation(), Sound.ENTITY_WITHER_DEATH, 1, 0.5f);
+                Bukkit.getOnlinePlayers().forEach(p ->{
+                    p.playSound(p.getLocation(), Sound.ENTITY_WITHER_DEATH, 1, 0.5f);
                 });
+
+                if(DisguiseAPI.isDisguised(player)){
+                    player.damage(100);
+                    
+                }
                         
             }
         }
