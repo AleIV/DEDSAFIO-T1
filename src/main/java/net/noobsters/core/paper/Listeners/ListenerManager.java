@@ -27,6 +27,7 @@ public class ListenerManager {
         registerListener(new DamageListener(instance));
         registerListener(new RaceListener(instance));
         registerListener(new Naturally(instance));
+        registerListener(new FinalBoss(instance));
 
 
     }

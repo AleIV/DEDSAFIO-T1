@@ -280,7 +280,6 @@ public class FightCMD extends BaseCommand {
         inv.clear();
 
         player.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, 20*10000, 0));
-        player.addPotionEffect(new PotionEffect(PotionEffectType.DOLPHINS_GRACE, 20*10000, 0));
         
         inv.addItem(new ItemBuilder(Material.TRIDENT).enchant(Enchantment.LOYALTY, 3).build());
         inv.addItem(new ItemBuilder(Material.TRIDENT).enchant(Enchantment.RIPTIDE, 1).build());

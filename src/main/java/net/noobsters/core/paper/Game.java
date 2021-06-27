@@ -54,7 +54,11 @@ public class Game extends BukkitRunnable{
         var warden = Bukkit.createBossBar(new NamespacedKey(instance, "boss-warden"), ChatColor.DARK_AQUA + "WARDEN MONSTROSITY", BarColor.GREEN, BarStyle.SOLID);
         var redstone = Bukkit.createBossBar(new NamespacedKey(instance, "boss-redstone"), ChatColor.DARK_RED + "REDSTONE MONSTROSITY", BarColor.YELLOW, BarStyle.SOLID);
         var base = Bukkit.createBossBar(new NamespacedKey(instance, "base"), ChatColor.GRAY + "BASE", BarColor.WHITE, BarStyle.SOLID);
+        var clown = Bukkit.createBossBar(new NamespacedKey(instance, "clown"), ChatColor.DARK_PURPLE + "DEATH CLOWN", BarColor.WHITE, BarStyle.SOLID);
+        var clown_fake = Bukkit.createBossBar(new NamespacedKey(instance, "fake"), ChatColor.RED + "DED CLOWN", BarColor.WHITE, BarStyle.SOLID);
 
+        clown.setVisible(false);
+        clown_fake.setVisible(false);
         raid.setVisible(false);
         warden.setVisible(false);
         redstone.setVisible(false);
@@ -63,12 +67,17 @@ public class Game extends BukkitRunnable{
         warden.setProgress(1);
         redstone.setProgress(1);
         base.setProgress(1);
+        clown.setProgress(1);
+        clown_fake.setProgress(1);
 
+        bossbars.put("clown", clown);
+        bossbars.put("fake", clown_fake);
         bossbars.put("base", base);
         bossbars.put("raid", raid);
         bossbars.put("warden", warden);
         bossbars.put("redstone", redstone);
 
+        difficultyChanges.put("finalboss", true);
         difficultyChanges.put("race", false);
         difficultyChanges.put("tnt", false);
         difficultyChanges.put("sumo", false);

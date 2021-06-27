@@ -127,8 +127,8 @@ public class DedsafioListener implements Listener {
 
             Bukkit.getScheduler().runTaskLater(instance, () -> {
                 if (!player.hasPermission("mod.perm"))
-                    player.kickPlayer(ChatColor.RED + "Good luck in the Gulag!");
-            }, 20 * 30);
+                    player.kickPlayer(ChatColor.RED + "GG");
+            }, 20);
 
         }else if(game.getPvpOn().contains(player.getUniqueId().toString())){
             instance.animation(e.getDeathMessage(), "fatality", "E", 55, true);
