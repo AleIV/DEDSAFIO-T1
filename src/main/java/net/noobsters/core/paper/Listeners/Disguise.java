@@ -45,6 +45,10 @@ public class Disguise implements Listener {
         this.instance = instance;
     }
 
+    public void clownDeath(Location loc){
+
+    }
+
     @EventHandler
     public void deathDisguise(PlayerDeathEvent e) {
         var player = e.getEntity();
@@ -64,7 +68,7 @@ public class Disguise implements Listener {
 
             if (disguise.getType().getEntityType() == EntityType.RAVAGER
                     || disguise.getType().getEntityType() == EntityType.IRON_GOLEM
-                    || disguise.getType().getEntityType() == EntityType.PHANTOM) {
+                    || disguise.getType().getEntityType() == EntityType.PHANTOM || disguise.getType().getEntityType() == EntityType.SLIME) {
                 loc.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, loc, 1);
 
             } else {
@@ -107,6 +111,19 @@ public class Disguise implements Listener {
                     case "clown": {
                         // HANDLE CLOWN DEATH
                         disguises.remove(player.getName());
+                        clownDeath(player.getLocation());
+                    }
+                        break;
+
+                    case "fake": {
+                        // HANDLE DED CLOWN DEATH
+                        disguises.remove(player.getName());
+                        loc.getNearbyPlayers(100).stream().forEach(p -> {
+                            p.playSound(p.getLocation(), "muerte", 1, 0.7f);
+                            p.playSound(p.getLocation(), "muerte", 1, 0.8f);
+                        });
+
+                        createDeath(loc);
                     }
                         break;
 
@@ -142,9 +159,25 @@ public class Disguise implements Listener {
 
                     case "clown": {
                         // HANDLE CLOWN KILL
+                        e.setDeathMessage(player.getName() + " was trampled by the " + ChatColor.DARK_PURPLE
+                        + "Death Clown");
 
-                    }
-                        break;
+                        loc.getNearbyPlayers(100).stream().forEach(p -> {
+                            p.playSound(p.getLocation(), "muerte", 1, 1);
+                        });
+
+                    }break;
+
+                    case "fake": {
+                        // HANDLE DED CLOWN KILL
+                        e.setDeathMessage(player.getName() + " was trolled by the " + ChatColor.RED
+                                + "DED Clown");
+
+                        loc.getNearbyPlayers(100).stream().forEach(p -> {
+                            p.playSound(p.getLocation(), "muerte", 1, 0.7f);
+                        });
+
+                    }break;
 
                     default:
                         break;
@@ -487,6 +520,45 @@ public class Disguise implements Listener {
 
                         case "clown": {
                             // HANDLE CLOWN DAMAGE
+                            double point = 0.001;
+                            var boss = bossbars.get("clown");
+                            var health = boss.getProgress();
+
+                            double finalHealth = health - (point * damage);
+                            if (finalHealth <= 0) {
+                                boss.setVisible(false);
+                                player.damage(100);
+                                boss.setProgress(1);
+                                return;
+                            }
+
+                            boss.setProgress(finalHealth);
+
+                            loc.getNearbyPlayers(100).stream().forEach(p -> {
+                                p.playSound(p.getLocation(), "clown_damage", 1, 1);
+                            });
+
+                        }
+                            break;
+
+                        case "fake": {
+                            double point = 0.001;
+                            var boss = bossbars.get("fake");
+                            var health = boss.getProgress();
+
+                            double finalHealth = health - (point * damage);
+                            if (finalHealth <= 0) {
+                                boss.setVisible(false);
+                                player.damage(100);
+                                boss.setProgress(1);
+                                return;
+                            }
+
+                            boss.setProgress(finalHealth);
+
+                            loc.getNearbyPlayers(100).stream().forEach(p -> {
+                                p.playSound(p.getLocation(), Sound.ENTITY_IRON_GOLEM_DEATH, 1, 0.1f);
+                            });
 
                         }
                             break;

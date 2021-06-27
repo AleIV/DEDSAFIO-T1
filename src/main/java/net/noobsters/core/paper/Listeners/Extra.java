@@ -140,8 +140,8 @@ public class Extra implements Listener {
 
                 if (!blinds.isEmpty() && !player.hasPermission("mod.perm")) {
 
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 5, 0));
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20 * 5, 3));
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 3, 0));
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20 * 3, 3));
                 }
 
                 var blindlarge = player.getNearbyEntities(100, 100, 100).stream()

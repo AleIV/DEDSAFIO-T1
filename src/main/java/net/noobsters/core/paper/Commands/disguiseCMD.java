@@ -32,6 +32,90 @@ public class disguiseCMD extends BaseCommand {
     static public String KICK_MSG = ChatColor.AQUA + "GG\n";
     Random random = new Random();
 
+    @Subcommand("fake")
+    @CommandAlias("fake")
+    public void disguisefake(Player sender) {
+
+        var disguises = instance.getGame().getDisguises();
+        disguises.put(sender.getName(), "fake");
+
+        var name = "&cDED Clown";
+        Bukkit.dispatchCommand(sender, "disguise slime setSize 3 setcustomname \""+ name +"\" setcustomnamevisible false setSelfDisguiseVisible false");
+
+        var shootFireball = new ItemBuilder(Material.BOW).enchant(Enchantment.ARROW_INFINITE).meta(ItemMeta.class, meta -> meta.setCustomModelData(666)).name(ChatColor.GOLD + "Shoot Fireball").build();
+
+        var explosion = new ItemBuilder(Material.GUNPOWDER).name(ChatColor.GOLD + "Explosion").meta(ItemMeta.class, meta -> meta.setCustomModelData(666)).build();
+
+        var jump = new ItemBuilder(Material.IRON_BOOTS).name(ChatColor.GREEN + "JumpWarden").meta(ItemMeta.class, meta -> meta.setCustomModelData(666)).build();
+
+        var inv = sender.getInventory();
+        inv.clear();
+        inv.addItem(shootFireball);
+        inv.addItem(explosion);
+        inv.addItem(jump);
+
+        inv.addItem(new ItemStack(Material.ARROW));
+
+        var helmet = new ItemBuilder(Material.NETHERITE_HELMET).enchant(Enchantment.PROTECTION_ENVIRONMENTAL, 4).meta(ItemMeta.class, meta -> meta.setCustomModelData(666)).build();
+        var chestplate = new ItemBuilder(Material.NETHERITE_CHESTPLATE).enchant(Enchantment.PROTECTION_ENVIRONMENTAL, 4).meta(ItemMeta.class, meta -> meta.setCustomModelData(666)).build();
+        var leggings = new ItemBuilder(Material.NETHERITE_LEGGINGS).enchant(Enchantment.PROTECTION_PROJECTILE, 4).meta(ItemMeta.class, meta -> meta.setCustomModelData(666)).build();
+        var boots = new ItemBuilder(Material.NETHERITE_BOOTS).enchant(Enchantment.PROTECTION_PROJECTILE, 4).meta(ItemMeta.class, meta -> meta.setCustomModelData(666)).build();
+
+        var equip = sender.getEquipment();
+        equip.setHelmet(helmet);
+        equip.setChestplate(chestplate);
+        equip.setLeggings(leggings);
+        equip.setBoots(boots);
+
+        sender.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 100000, 5, false, false));
+        sender.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, 100000, 5, false, false));
+
+        sender.setGameMode(GameMode.SURVIVAL);
+
+        sender.sendMessage(ChatColor.GOLD + "Disquised as DED CLOWN");
+    }
+
+    @Subcommand("clown")
+    @CommandAlias("clown")
+    public void disguiseclown(Player sender) {
+
+        var disguises = instance.getGame().getDisguises();
+        disguises.put(sender.getName(), "clown");
+
+        var name = "&5Death Clown";
+        Bukkit.dispatchCommand(sender, "disguise slime setSize 5 setcustomname \""+ name +"\" setcustomnamevisible false setSelfDisguiseVisible false");
+
+
+        var explosion = new ItemBuilder(Material.GUNPOWDER).name(ChatColor.GOLD + "Explosion").meta(ItemMeta.class, meta -> meta.setCustomModelData(666)).build();
+
+        var jump = new ItemBuilder(Material.IRON_BOOTS).name(ChatColor.GREEN + "JumpWarden").meta(ItemMeta.class, meta -> meta.setCustomModelData(666)).build();
+
+        var inv = sender.getInventory();
+        inv.clear();
+        inv.addItem(explosion);
+        inv.addItem(jump);
+
+        inv.addItem(new ItemStack(Material.ARROW));
+
+        var helmet = new ItemBuilder(Material.NETHERITE_HELMET).enchant(Enchantment.PROTECTION_ENVIRONMENTAL, 4).meta(ItemMeta.class, meta -> meta.setCustomModelData(666)).build();
+        var chestplate = new ItemBuilder(Material.NETHERITE_CHESTPLATE).enchant(Enchantment.PROTECTION_ENVIRONMENTAL, 4).meta(ItemMeta.class, meta -> meta.setCustomModelData(666)).build();
+        var leggings = new ItemBuilder(Material.NETHERITE_LEGGINGS).enchant(Enchantment.PROTECTION_PROJECTILE, 4).meta(ItemMeta.class, meta -> meta.setCustomModelData(666)).build();
+        var boots = new ItemBuilder(Material.NETHERITE_BOOTS).enchant(Enchantment.PROTECTION_PROJECTILE, 4).meta(ItemMeta.class, meta -> meta.setCustomModelData(666)).build();
+
+        var equip = sender.getEquipment();
+        equip.setHelmet(helmet);
+        equip.setChestplate(chestplate);
+        equip.setLeggings(leggings);
+        equip.setBoots(boots);
+
+        sender.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 100000, 5, false, false));
+        sender.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, 100000, 5, false, false));
+
+        sender.setGameMode(GameMode.SURVIVAL);
+
+        sender.sendMessage(ChatColor.GOLD + "Disquised as DEATH CLOWN");
+    }
+
     @Subcommand("redstone")
     @CommandAlias("redstone")
     public void disguise(Player sender) {
@@ -59,6 +143,7 @@ public class disguiseCMD extends BaseCommand {
         var laugh = new ItemBuilder(Material.SUGAR).name(ChatColor.GREEN + "Laugh").meta(ItemMeta.class, meta -> meta.setCustomModelData(666)).build();
 
         var inv = sender.getInventory();
+        inv.clear();
         inv.addItem(melee);
         inv.addItem(shootFireball);
         inv.addItem(explosion);
@@ -109,6 +194,7 @@ public class disguiseCMD extends BaseCommand {
         var stars = new ItemBuilder(Material.RABBIT_FOOT).name(ChatColor.GREEN + "Stars").meta(ItemMeta.class, meta -> meta.setCustomModelData(666)).build();
 
         var inv = sender.getInventory();
+        inv.clear();
 
         inv.addItem(jump);
         inv.addItem(roar);
@@ -150,6 +236,7 @@ public class disguiseCMD extends BaseCommand {
 
 
         var inv = sender.getInventory();
+        inv.clear();
         inv.addItem(bomber);
 
         var helmet = new ItemBuilder(Material.NETHERITE_HELMET).enchant(Enchantment.PROTECTION_ENVIRONMENTAL, 4).meta(ItemMeta.class, meta -> meta.setCustomModelData(666)).build();

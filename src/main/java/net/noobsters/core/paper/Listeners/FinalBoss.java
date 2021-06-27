@@ -4,21 +4,29 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.ItemFrame;
+import org.bukkit.entity.MagmaCube;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import net.md_5.bungee.api.ChatColor;
 import net.noobsters.core.paper.GameTickEvent;
 import net.noobsters.core.paper.PERMADED;
 
 public class FinalBoss implements Listener {
 
-    Location blood1 = new Location(Bukkit.getWorld("FINALFIGHT"), -1060, 146, 67);
-    Location blood2 = new Location(Bukkit.getWorld("FINALFIGHT"), -945, 21, 141);
+    Location blood1 = new Location(Bukkit.getWorld("FINALFIGHT"), -1060, 160, 67);
+    Location blood2 = new Location(Bukkit.getWorld("FINALFIGHT"), -943, 21, 141);
 
     PERMADED instance;
     Random random = new Random();
@@ -41,24 +49,20 @@ public class FinalBoss implements Listener {
 
     }
 
-    public boolean isInCube(Location point, Location pos1, Location pos2) {
+    public boolean isInArea(Location point, Location pos1, Location pos2) {
 
         var cX = pos1.getX() < pos2.getX();
-        var cY = pos1.getZ() < pos2.getZ();
         var cZ = pos1.getZ() < pos2.getZ();
 
         var minX = cX ? pos1.getX() : pos2.getX();
         var maxX = cX ? pos2.getX() : pos1.getX();
 
-        var minY = cY ? pos1.getY() : pos2.getY();
-        var maxY = cY ? pos2.getY() : pos1.getY();
-
         var minZ = cZ ? pos1.getZ() : pos2.getZ();
         var maxZ = cZ ? pos2.getZ() : pos1.getZ();
 
-        if (point.getX() < minX || point.getY() < minY || point.getZ() < minZ)
+        if (point.getX() < minX || point.getZ() < minZ)
             return false;
-        if (point.getX() > maxX || point.getY() > maxY || point.getZ() > maxZ)
+        if (point.getX() > maxX || point.getZ() > maxZ)
             return false;
 
         return true;
@@ -74,22 +78,58 @@ public class FinalBoss implements Listener {
                     .map(e -> (ArmorStand) e).collect(Collectors.toList());
 
             if (!slowfalling.isEmpty()) {
-                player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 20 * 5, 1));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 20 * 3, 1));
 
             }
 
-            if (player.getWorld() == Bukkit.getWorld("FINALFIGHT") && isInCube(player.getLocation(), blood1, blood2)) {
+            if (player.getWorld() == Bukkit.getWorld("FINALFIGHT")) {
 
-                var name = player.getName();
-                var character = 92;
-                var charac = Character.toString((char) character);
+                var drugs = player.getNearbyEntities(16, 16, 16).stream()
+                    .filter(drug -> drug instanceof ArmorStand && drug.getCustomName() != null
+                            && drug.getCustomName().contains("drugs"))
+                    .map(e -> (ArmorStand) e).collect(Collectors.toList());
 
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-                        "title " + name + " actionbar {\"text\":\"" + charac + "uE4A8" + "\"}");
+                if (!drugs.isEmpty()) {
+                    
+                    Bukkit.getOnlinePlayers().stream().forEach(all -> {
+                        if (all.getGameMode() == GameMode.SURVIVAL || !all.hasPermission("mod.perm")) {
+                            player.hidePlayer(instance, all);
+                        }
+                    });
+    
+                }else{
+
+                    Bukkit.getOnlinePlayers().stream().forEach(all -> {
+                        if (all.getGameMode() == GameMode.SURVIVAL) {
+                            player.showPlayer(instance, all);
+                        }
+                    });
+    
+                }
+
+                if(player.getLocation().getY() < 163 && isInArea(player.getLocation(), blood1, blood2)){
+                    var name = player.getName();
+                    var character = 92;
+                    var charac = Character.toString((char) character);
+
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
+                            "title " + name + " actionbar {\"text\":\"" + charac + "uE4A8" + "\"}");
+                }
+
             }
 
         });
 
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void checkForMute(AsyncPlayerChatEvent e) {
+        var difficulty = instance.getGame().getDifficultyChanges();
+        
+        if (difficulty.get("globalmute") && !e.getPlayer().hasPermission("mod.perm")) {
+            e.setCancelled(true);
+            e.getPlayer().sendMessage(ChatColor.GRAY + "Shhhhhhhhhhh!");
+        }
     }
 
     @EventHandler
@@ -97,7 +137,29 @@ public class FinalBoss implements Listener {
         var entity = e.getEntity();
 
         if (entity.getWorld() == Bukkit.getWorld("FINALFIGHT")) {
+            if(entity instanceof MagmaCube && e.getSpawnReason().toString().contains("NATURAL")){
+                e.setCancelled(true);              
 
+            }
+        }
+    }
+
+    @EventHandler
+    public void damageent(EntityDamageByEntityEvent e){
+        var entity = e.getEntity();
+        var damager = e.getDamager();
+        if(entity.getWorld() == Bukkit.getWorld("FINALFIGHT")){
+            if(entity instanceof ItemFrame){
+                if(damager instanceof Player){
+                    var player = (Player) damager;
+                    if(!player.hasPermission("mod.perm")){
+                        e.setCancelled(true);
+                    }
+                }else{
+                    e.setCancelled(true);
+                }
+                
+            }
         }
     }
 

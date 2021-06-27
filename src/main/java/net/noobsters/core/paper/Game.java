@@ -77,6 +77,7 @@ public class Game extends BukkitRunnable{
         bossbars.put("warden", warden);
         bossbars.put("redstone", redstone);
 
+        difficultyChanges.put("globalmute", false);
         difficultyChanges.put("finalboss", true);
         difficultyChanges.put("race", false);
         difficultyChanges.put("tnt", false);
