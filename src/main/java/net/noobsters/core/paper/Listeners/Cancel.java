@@ -3,7 +3,6 @@ package net.noobsters.core.paper.Listeners;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Bat;
 import org.bukkit.entity.Cat;
@@ -13,6 +12,7 @@ import org.bukkit.entity.Cow;
 import org.bukkit.entity.Dolphin;
 import org.bukkit.entity.Donkey;
 import org.bukkit.entity.Fox;
+import org.bukkit.entity.Ghast;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Llama;
 import org.bukkit.entity.MushroomCow;
@@ -122,7 +122,7 @@ public class Cancel implements Listener {
         }else if(entity instanceof Panda){
             e.setCancelled(true);
 
-        }else if(entity instanceof Horse && entity.getWorld() == Bukkit.getWorld("world")){
+        }else if(entity instanceof Horse && e.getSpawnReason().toString().contains("NATURAL")){
             e.setCancelled(true);
 
         }else if(entity instanceof Salmon){
@@ -137,10 +137,10 @@ public class Cancel implements Listener {
         }else if(entity instanceof Squid){
             e.setCancelled(true);
 
-        }else if(entity instanceof Pig && !difficulty.get("pigs")){
+        }else if(entity instanceof Pig && e.getSpawnReason().toString().contains("NATURAL")){
             e.setCancelled(true);
 
-        }else if(entity instanceof Cow && !difficulty.get("raiders")){
+        }else if(entity instanceof Cow && e.getSpawnReason().toString().contains("NATURAL")){
             e.setCancelled(true); 
 
         }else if(entity instanceof MushroomCow && !difficulty.get("raiders")){
@@ -173,7 +173,10 @@ public class Cancel implements Listener {
         }else if(entity instanceof Dolphin){
             e.setCancelled(true);
 
-        }else if(entity instanceof Fox){
+        }else if(entity instanceof Fox && e.getSpawnReason().toString().contains("NATURAL")){
+            e.setCancelled(true);
+
+        }else if(entity instanceof Ghast && e.getSpawnReason().toString().contains("NATURAL")){
             e.setCancelled(true);
 
         }else if(entity instanceof Wolf){
@@ -182,13 +185,13 @@ public class Cancel implements Listener {
         }else if(entity instanceof Villager && !difficulty.get("villager")){
             e.setCancelled(true);
 
-        }else if(entity instanceof Chicken && !difficulty.get("demons")){
+        }else if(entity instanceof Chicken && e.getSpawnReason().toString().contains("NATURAL")){
             e.setCancelled(true);
 
         }else if(entity instanceof PolarBear){
             e.setCancelled(true);
 
-        }else if(entity instanceof Rabbit){
+        }else if(entity instanceof Rabbit && e.getSpawnReason().toString().contains("NATURAL")){
             e.setCancelled(true);
         }
     }

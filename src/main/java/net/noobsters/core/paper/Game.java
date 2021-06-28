@@ -34,6 +34,8 @@ public class Game extends BukkitRunnable{
 
     HashMap<String, Boolean> intelligence = new HashMap<>();
 
+    List<String> flash = new ArrayList<>();
+    List<String> paranoia = new ArrayList<>();
     List<String> fighters = new ArrayList<>();
     List<String> pvpOn = new ArrayList<>();
     List<String> reviveList = new ArrayList<>();
@@ -54,7 +56,7 @@ public class Game extends BukkitRunnable{
         var warden = Bukkit.createBossBar(new NamespacedKey(instance, "boss-warden"), ChatColor.DARK_AQUA + "WARDEN MONSTROSITY", BarColor.GREEN, BarStyle.SOLID);
         var redstone = Bukkit.createBossBar(new NamespacedKey(instance, "boss-redstone"), ChatColor.DARK_RED + "REDSTONE MONSTROSITY", BarColor.YELLOW, BarStyle.SOLID);
         var base = Bukkit.createBossBar(new NamespacedKey(instance, "base"), ChatColor.GRAY + "BASE", BarColor.WHITE, BarStyle.SOLID);
-        var clown = Bukkit.createBossBar(new NamespacedKey(instance, "clown"), ChatColor.DARK_PURPLE + "DEATH CLOWN", BarColor.WHITE, BarStyle.SOLID);
+        var clown = Bukkit.createBossBar(new NamespacedKey(instance, "clown"), ChatColor.DARK_PURPLE + "DEATH CLOWN", BarColor.PINK, BarStyle.SOLID);
         var clown_fake = Bukkit.createBossBar(new NamespacedKey(instance, "fake"), ChatColor.RED + "DED CLOWN", BarColor.WHITE, BarStyle.SOLID);
 
         clown.setVisible(false);

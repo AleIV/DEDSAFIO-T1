@@ -1,5 +1,7 @@
 package net.noobsters.core.paper.Listeners;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -14,6 +16,7 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Slime;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -45,8 +48,15 @@ public class Disguise implements Listener {
         this.instance = instance;
     }
 
-    public void clownDeath(Location loc){
-
+    public void clownDeath(Location loc) {
+        var clown = (Slime) loc.getWorld().spawnEntity(loc, EntityType.SLIME);
+        clown.setCustomName(ChatColor.RED + "Dead Clown");
+        clown.setSize(10);
+        clown.setInvulnerable(true);
+        clown.setSilent(true);
+        clown.setPersistent(true);
+        clown.setAI(false);
+        
     }
 
     @EventHandler
@@ -111,7 +121,8 @@ public class Disguise implements Listener {
                     case "clown": {
                         // HANDLE CLOWN DEATH
                         disguises.remove(player.getName());
-                        clownDeath(player.getLocation());
+                        createDeath(loc);
+                        clownDeath(loc);
                     }
                         break;
 
@@ -159,25 +170,26 @@ public class Disguise implements Listener {
 
                     case "clown": {
                         // HANDLE CLOWN KILL
-                        e.setDeathMessage(player.getName() + " was trampled by the " + ChatColor.DARK_PURPLE
-                        + "Death Clown");
+                        e.setDeathMessage(
+                                player.getName() + " was trampled by the " + ChatColor.DARK_PURPLE + "Death Clown");
 
                         loc.getNearbyPlayers(100).stream().forEach(p -> {
                             p.playSound(p.getLocation(), "muerte", 1, 1);
                         });
 
-                    }break;
+                    }
+                        break;
 
                     case "fake": {
                         // HANDLE DED CLOWN KILL
-                        e.setDeathMessage(player.getName() + " was trolled by the " + ChatColor.RED
-                                + "DED Clown");
+                        e.setDeathMessage(player.getName() + " was trolled by the " + ChatColor.RED + "DED Clown");
 
                         loc.getNearbyPlayers(100).stream().forEach(p -> {
                             p.playSound(p.getLocation(), "muerte", 1, 0.7f);
                         });
 
-                    }break;
+                    }
+                        break;
 
                     default:
                         break;
@@ -222,14 +234,14 @@ public class Disguise implements Listener {
                         var inv = player.getInventory();
                         inv.clear();
                         inv.addItem(new ItemBuilder(Material.SHEARS).build());
-                        inv.addItem(new ItemBuilder(Material.DIAMOND_PICKAXE).enchant(Enchantment.DIG_SPEED, 5).build());
+                        inv.addItem(
+                                new ItemBuilder(Material.DIAMOND_PICKAXE).enchant(Enchantment.DIG_SPEED, 5).build());
                         inv.addItem(new ItemBuilder(Material.DIAMOND_SHOVEL).enchant(Enchantment.DIG_SPEED, 5).build());
                         inv.addItem(new ItemBuilder(Material.DIAMOND_AXE).enchant(Enchantment.DIG_SPEED, 5).build());
 
                         inv.addItem(new ItemBuilder(Material.WATER_BUCKET).amount(32).build());
                         inv.addItem(new ItemBuilder(Material.SPONGE).amount(32).build());
                         inv.addItem(new ItemBuilder(Material.COBBLESTONE).amount(64).build());
-
 
                         player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, 10000, 1));
 
@@ -291,6 +303,295 @@ public class Disguise implements Listener {
         chain.sync(TaskChain::abort).execute();
     }
 
+    public void pisoton(Player player) {
+        var loc = player.getLocation();
+        var name = "Death Clown";
+        var chain = PERMADED.newChain();
+
+        chain.delay(15).sync(() -> {
+            Bukkit.dispatchCommand(player, "disguise slime setSoundGroup IRON_GOLEM setSize 10 setcustomname \""
+                    + "Ded6" + "\" setcustomnamevisible false setSelfDisguiseVisible false");
+        });
+
+        chain.delay(15).sync(() -> {
+            Bukkit.dispatchCommand(player, "disguise slime setSoundGroup IRON_GOLEM setSize 10 setcustomname \""
+                    + "Ded7" + "\" setcustomnamevisible false setSelfDisguiseVisible false");
+        });
+
+        chain.delay(15).sync(() -> {
+            Bukkit.dispatchCommand(player, "disguise slime setSoundGroup IRON_GOLEM setSize 10 setcustomname \""
+                    + "Ded8" + "\" setcustomnamevisible false setSelfDisguiseVisible false");
+        });
+
+        chain.delay(15).sync(() -> {
+            Bukkit.dispatchCommand(player, "disguise slime setSoundGroup IRON_GOLEM setSize 10 setcustomname \""
+                    + "Ded9" + "\" setcustomnamevisible false setSelfDisguiseVisible false");
+        });
+
+        chain.delay(15).sync(() -> {
+            Bukkit.dispatchCommand(player, "disguise slime setSoundGroup IRON_GOLEM setSize 10 setcustomname \""
+                    + "Ded10" + "\" setcustomnamevisible false setSelfDisguiseVisible false");
+
+            loc.createExplosion(10, false, false);
+
+            loc.getNearbyPlayers(100).stream().forEach(p -> {
+                p.playSound(p.getLocation(), "smash", 3, 2);
+            });
+
+        });
+
+        chain.delay(15).sync(() -> {
+            Bukkit.dispatchCommand(player, "disguise slime setSoundGroup IRON_GOLEM setSize 10 setcustomname \""
+                    + "Ded9" + "\" setcustomnamevisible false setSelfDisguiseVisible false");
+        });
+
+        chain.delay(15).sync(() -> {
+            Bukkit.dispatchCommand(player, "disguise slime setSoundGroup IRON_GOLEM setSize 10 setcustomname \""
+                    + "Ded8" + "\" setcustomnamevisible false setSelfDisguiseVisible false");
+        });
+
+        chain.delay(15).sync(() -> {
+            Bukkit.dispatchCommand(player, "disguise slime setSoundGroup IRON_GOLEM setSize 10 setcustomname \""
+                    + "Ded7" + "\" setcustomnamevisible false setSelfDisguiseVisible false");
+        });
+
+        chain.delay(15).sync(() -> {
+            Bukkit.dispatchCommand(player, "disguise slime setSoundGroup IRON_GOLEM setSize 10 setcustomname \""
+                    + "Ded6" + "\" setcustomnamevisible false setSelfDisguiseVisible false");
+        });
+
+        chain.delay(15).sync(() -> {
+            Bukkit.dispatchCommand(player, "disguise slime setSoundGroup IRON_GOLEM setSize 10 setcustomname \"" + name
+                    + "\" setcustomnamevisible false setSelfDisguiseVisible false");
+        });
+
+        chain.sync(TaskChain::abort).execute();
+
+    }
+
+    public void jump(Player player) {
+        var loc = player.getLocation();
+        var name = "Death Clown";
+        var chain = PERMADED.newChain();
+
+        chain.delay(15).sync(() -> {
+            Bukkit.dispatchCommand(player, "disguise slime setSoundGroup IRON_GOLEM setSize 18 setcustomname \""
+                    + "Ded11" + "\" setcustomnamevisible false setSelfDisguiseVisible false");
+        });
+
+        chain.delay(15).sync(() -> {
+            Bukkit.dispatchCommand(player, "disguise slime setSoundGroup IRON_GOLEM setSize 18 setcustomname \""
+                    + "Ded12" + "\" setcustomnamevisible false setSelfDisguiseVisible false");
+        });
+
+        chain.delay(15).sync(() -> {
+            Bukkit.dispatchCommand(player, "disguise slime setSoundGroup IRON_GOLEM setSize 18 setcustomname \""
+                    + "Ded13" + "\" setcustomnamevisible false setSelfDisguiseVisible false");
+        });
+
+        chain.delay(15).sync(() -> {
+            Bukkit.dispatchCommand(player, "disguise slime setSoundGroup IRON_GOLEM setSize 18 setcustomname \""
+                    + "Ded14" + "\" setcustomnamevisible false setSelfDisguiseVisible false");
+            player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 20, 24, false, false));
+            // sound jump
+
+            loc.getNearbyPlayers(100).stream().forEach(p -> {
+                p.playSound(p.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 3, 2);
+            });
+
+            loc.createExplosion(10, false, false);
+
+        });
+
+        chain.delay(15).sync(() -> {
+            Bukkit.dispatchCommand(player, "disguise slime setSoundGroup IRON_GOLEM setSize 18 setcustomname \""
+                    + "Ded13" + "\" setcustomnamevisible false setSelfDisguiseVisible false");
+        });
+
+        chain.delay(15).sync(() -> {
+            Bukkit.dispatchCommand(player, "disguise slime setSoundGroup IRON_GOLEM setSize 18 setcustomname \""
+                    + "Ded12" + "\" setcustomnamevisible false setSelfDisguiseVisible false");
+        });
+
+        chain.delay(15).sync(() -> {
+            Bukkit.dispatchCommand(player, "disguise slime setSoundGroup IRON_GOLEM setSize 18 setcustomname \""
+                    + "Ded11" + "\" setcustomnamevisible false setSelfDisguiseVisible false");
+        });
+
+        chain.delay(15).sync(() -> {
+            Bukkit.dispatchCommand(player, "disguise slime setSoundGroup IRON_GOLEM setSize 18 setcustomname \"" + name
+                    + "\" setcustomnamevisible false setSelfDisguiseVisible false");
+        });
+
+        chain.sync(TaskChain::abort).execute();
+
+    }
+
+    public void fangs(Player player) {
+        var loc = player.getLocation();
+
+        var name = "Death Clown";
+        var chain = PERMADED.newChain();
+
+        chain.delay(15).sync(() -> {
+            Bukkit.dispatchCommand(player, "disguise slime setSoundGroup IRON_GOLEM setSize 10 setcustomname \""
+                    + "Ded2" + "\" setcustomnamevisible false setSelfDisguiseVisible false");
+        });
+
+        chain.delay(15).sync(() -> {
+            Bukkit.dispatchCommand(player, "disguise slime setSoundGroup IRON_GOLEM setSize 10 setcustomname \""
+                    + "Ded3" + "\" setcustomnamevisible false setSelfDisguiseVisible false");
+        });
+
+        chain.delay(15).sync(() -> {
+            Bukkit.dispatchCommand(player, "disguise slime setSoundGroup IRON_GOLEM setSize 10 setcustomname \""
+                    + "Ded4" + "\" setcustomnamevisible false setSelfDisguiseVisible false");
+        });
+
+        chain.delay(15).sync(() -> {
+            Bukkit.dispatchCommand(player, "disguise slime setSoundGroup IRON_GOLEM setSize 10 setcustomname \""
+                    + "Ded5" + "\" setcustomnamevisible false setSelfDisguiseVisible false");
+
+            List<String> list = new ArrayList<>();
+            list.add("Bear Trap");
+            list.add("Mouse Trap");
+            list.add("Clap");
+
+            var trapname = list.get(random.nextInt(list.size()));
+
+            var fang1 = loc.getWorld().spawnEntity(loc.add(2, 0, 2), EntityType.EVOKER_FANGS);
+            fang1.setCustomName(trapname);
+
+            var fang2 = loc.getWorld().spawnEntity(loc.add(3, 0, 3), EntityType.EVOKER_FANGS);
+            fang2.setCustomName(trapname);
+
+            var fang3 = loc.getWorld().spawnEntity(loc.add(-2, 0, -2), EntityType.EVOKER_FANGS);
+            fang3.setCustomName(trapname);
+
+            var fang4 = loc.getWorld().spawnEntity(loc.add(-3, 0, -3), EntityType.EVOKER_FANGS);
+            fang4.setCustomName(trapname);
+
+            var fang5 = loc.getWorld().spawnEntity(loc.add(-4, 0, -4), EntityType.EVOKER_FANGS);
+            fang5.setCustomName(trapname);
+
+            var fang6 = loc.getWorld().spawnEntity(loc.add(4, 0, 4), EntityType.EVOKER_FANGS);
+            fang6.setCustomName(trapname);
+
+            var fang7 = loc.getWorld().spawnEntity(loc.add(-5, 0, -5), EntityType.EVOKER_FANGS);
+            fang7.setCustomName(trapname);
+
+            var fang8 = loc.getWorld().spawnEntity(loc.add(5, 0, 5), EntityType.EVOKER_FANGS);
+            fang8.setCustomName(trapname);
+
+        });
+
+        chain.delay(15).sync(() -> {
+            Bukkit.dispatchCommand(player, "disguise slime setSoundGroup IRON_GOLEM setSize 10 setcustomname \""
+                    + "Ded4" + "\" setcustomnamevisible false setSelfDisguiseVisible false");
+        });
+
+        chain.delay(15).sync(() -> {
+            Bukkit.dispatchCommand(player, "disguise slime setSoundGroup IRON_GOLEM setSize 10 setcustomname \""
+                    + "Ded3" + "\" setcustomnamevisible false setSelfDisguiseVisible false");
+        });
+
+        chain.delay(15).sync(() -> {
+            Bukkit.dispatchCommand(player, "disguise slime setSoundGroup IRON_GOLEM setSize 10 setcustomname \""
+                    + "Ded2" + "\" setcustomnamevisible false setSelfDisguiseVisible false");
+        });
+
+        chain.delay(15).sync(() -> {
+            Bukkit.dispatchCommand(player, "disguise slime setSoundGroup IRON_GOLEM setSize 10 setcustomname \"" + name
+                    + "\" setcustomnamevisible false setSelfDisguiseVisible false");
+        });
+
+        chain.sync(TaskChain::abort).execute();
+
+    }
+
+    public void big(Player player) {
+        var loc = player.getLocation();
+
+        var name = "Death Clown";
+        var chain = PERMADED.newChain();
+
+        chain.delay(15).sync(() -> {
+            loc.getNearbyPlayers(100).stream().forEach(p -> {
+                p.playSound(p.getLocation(), Sound.BLOCK_BEACON_ACTIVATE, 3, 2);
+            });
+            Bukkit.dispatchCommand(player, "disguise slime setSoundGroup IRON_GOLEM setSize 12 setcustomname \"" + name
+                    + "\" setcustomnamevisible false setSelfDisguiseVisible false");
+        });
+
+        chain.delay(15).sync(() -> {
+            loc.getNearbyPlayers(100).stream().forEach(p -> {
+                p.playSound(p.getLocation(), Sound.BLOCK_BEACON_ACTIVATE, 3, 2);
+            });
+            Bukkit.dispatchCommand(player, "disguise slime setSoundGroup IRON_GOLEM setSize 14 setcustomname \"" + name
+                    + "\" setcustomnamevisible false setSelfDisguiseVisible false");
+        });
+
+        chain.delay(15).sync(() -> {
+            loc.getNearbyPlayers(100).stream().forEach(p -> {
+                p.playSound(p.getLocation(), Sound.BLOCK_BEACON_ACTIVATE, 3, 2);
+            });
+            Bukkit.dispatchCommand(player, "disguise slime setSoundGroup IRON_GOLEM setSize 16 setcustomname \"" + name
+                    + "\" setcustomnamevisible false setSelfDisguiseVisible false");
+        });
+
+        chain.delay(15).sync(() -> {
+            loc.getNearbyPlayers(100).stream().forEach(p -> {
+                p.playSound(p.getLocation(), Sound.BLOCK_BEACON_ACTIVATE, 3, 2);
+            });
+            Bukkit.dispatchCommand(player, "disguise slime setSoundGroup IRON_GOLEM setSize 18 setcustomname \"" + name
+                    + "\" setcustomnamevisible false setSelfDisguiseVisible false");
+        });
+
+        chain.sync(TaskChain::abort).execute();
+    }
+
+    public void small(Player player) {
+        var loc = player.getLocation();
+
+        var name = "Death Clown";
+
+        var chain = PERMADED.newChain();
+
+        chain.delay(15).sync(() -> {
+            loc.getNearbyPlayers(100).stream().forEach(p -> {
+                p.playSound(p.getLocation(), Sound.BLOCK_BEACON_ACTIVATE, 3, 2);
+            });
+            Bukkit.dispatchCommand(player, "disguise slime setSoundGroup IRON_GOLEM setSize 16 setcustomname \"" + name
+                    + "\" setcustomnamevisible false setSelfDisguiseVisible false");
+        });
+
+        chain.delay(15).sync(() -> {
+            loc.getNearbyPlayers(100).stream().forEach(p -> {
+                p.playSound(p.getLocation(), Sound.BLOCK_BEACON_ACTIVATE, 3, 2);
+            });
+            Bukkit.dispatchCommand(player, "disguise slime setSoundGroup IRON_GOLEM setSize 14 setcustomname \"" + name
+                    + "\" setcustomnamevisible false setSelfDisguiseVisible false");
+        });
+
+        chain.delay(15).sync(() -> {
+            loc.getNearbyPlayers(100).stream().forEach(p -> {
+                p.playSound(p.getLocation(), Sound.BLOCK_BEACON_ACTIVATE, 3, 2);
+            });
+            Bukkit.dispatchCommand(player, "disguise slime setSoundGroup IRON_GOLEM setSize 12 setcustomname \"" + name
+                    + "\" setcustomnamevisible false setSelfDisguiseVisible false");
+        });
+
+        chain.delay(15).sync(() -> {
+            loc.getNearbyPlayers(100).stream().forEach(p -> {
+                p.playSound(p.getLocation(), Sound.BLOCK_BEACON_ACTIVATE, 3, 2);
+            });
+            Bukkit.dispatchCommand(player, "disguise slime setSoundGroup IRON_GOLEM setSize 10 setcustomname \"" + name
+                    + "\" setcustomnamevisible false setSelfDisguiseVisible false");
+        });
+
+        chain.sync(TaskChain::abort).execute();
+    }
+
     @EventHandler
     public void powers(PlayerInteractEvent e) {
         var player = e.getPlayer();
@@ -305,6 +606,58 @@ public class Disguise implements Listener {
                 loc.getNearbyPlayers(100).stream().forEach(p -> {
                     p.playSound(p.getLocation(), "smash", 3, 1);
                 });
+
+            } else if (string.contains("FangsSpec")) {
+                List<String> list = new ArrayList<>();
+                list.add("Bear Trap");
+                list.add("Mouse Trap");
+                list.add("Clap");
+
+                var trapname = list.get(random.nextInt(list.size()));
+
+                var fang1 = loc.getWorld().spawnEntity(loc.add(2, 0, 2), EntityType.EVOKER_FANGS);
+                fang1.setCustomName(trapname);
+
+                var fang2 = loc.getWorld().spawnEntity(loc.add(3, 0, 3), EntityType.EVOKER_FANGS);
+                fang2.setCustomName(trapname);
+
+                var fang3 = loc.getWorld().spawnEntity(loc.add(-2, 0, -2), EntityType.EVOKER_FANGS);
+                fang3.setCustomName(trapname);
+
+                var fang4 = loc.getWorld().spawnEntity(loc.add(-3, 0, -3), EntityType.EVOKER_FANGS);
+                fang4.setCustomName(trapname);
+
+                var fang5 = loc.getWorld().spawnEntity(loc.add(-4, 0, -4), EntityType.EVOKER_FANGS);
+                fang5.setCustomName(trapname);
+
+                var fang6 = loc.getWorld().spawnEntity(loc.add(4, 0, 4), EntityType.EVOKER_FANGS);
+                fang6.setCustomName(trapname);
+
+                var fang7 = loc.getWorld().spawnEntity(loc.add(-5, 0, -5), EntityType.EVOKER_FANGS);
+                fang7.setCustomName(trapname);
+
+                var fang8 = loc.getWorld().spawnEntity(loc.add(5, 0, 5), EntityType.EVOKER_FANGS);
+                fang8.setCustomName(trapname);
+
+            } else if (string.contains("Pisoton")) {
+                // pisoton
+                pisoton(player);
+
+            } else if (string.contains("Big")) {
+                // big
+                big(player);
+
+            } else if (string.contains("Small")) {
+                // small
+                small(player);
+
+            } else if (string.contains("ClownJump")) {
+                // jumpclown
+                jump(player);
+
+            } else if (string.contains("Fangs")) {
+                // fangs
+                fangs(player);
 
             } else if (string.contains("Stars")) {
                 // sound stars
@@ -453,8 +806,8 @@ public class Disguise implements Listener {
             if (DisguiseAPI.isDisguised(player)) {
 
                 if (cause == DamageCause.WITHER) {
-                        e.setCancelled(true);
-                        return;
+                    e.setCancelled(true);
+                    return;
                 }
 
                 var loc = entity.getLocation();
@@ -462,10 +815,10 @@ public class Disguise implements Listener {
                 var disguises = instance.getGame().getDisguises();
                 if (disguises.containsKey(player.getName())) {
 
-                    if (cause == DamageCause.LAVA || cause == DamageCause.FIRE
-                        || cause == DamageCause.FIRE_TICK || cause == DamageCause.HOT_FLOOR
-                        || cause == DamageCause.FALL || cause == DamageCause.ENTITY_EXPLOSION
-                            || cause == DamageCause.BLOCK_EXPLOSION) {
+                    if (cause == DamageCause.LAVA || cause == DamageCause.FIRE || cause == DamageCause.FIRE_TICK
+                            || cause == DamageCause.HOT_FLOOR || cause == DamageCause.FALL
+                            || cause == DamageCause.ENTITY_EXPLOSION || cause == DamageCause.BLOCK_EXPLOSION
+                            || cause == DamageCause.MAGIC) {
                         e.setCancelled(true);
                         return;
                     }
@@ -520,7 +873,7 @@ public class Disguise implements Listener {
 
                         case "clown": {
                             // HANDLE CLOWN DAMAGE
-                            double point = 0.001;
+                            double point = 0.0001;
                             var boss = bossbars.get("clown");
                             var health = boss.getProgress();
 

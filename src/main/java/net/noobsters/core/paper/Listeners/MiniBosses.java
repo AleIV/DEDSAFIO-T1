@@ -50,7 +50,6 @@ public class MiniBosses implements Listener {
             dragon.setCustomName(ChatColor.YELLOW + "Blood Ender Dragon");
             dragon.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(400);
             dragon.setHealth(400);
-            e.setCancelled(true);
 
         }else if(random.nextInt(5) == 1 && entity.getWorld() == Bukkit.getWorld("world_the_end") && entity instanceof Enderman){
             e.setCancelled(true);

@@ -39,8 +39,8 @@ public class disguiseCMD extends BaseCommand {
         var disguises = instance.getGame().getDisguises();
         disguises.put(sender.getName(), "fake");
 
-        var name = "&cDED Clown";
-        Bukkit.dispatchCommand(sender, "disguise slime setSize 3 setcustomname \""+ name +"\" setcustomnamevisible false setSelfDisguiseVisible false");
+        var name = "&cDed Clown";
+        Bukkit.dispatchCommand(sender, "disguise slime setSoundGroup IRON_GOLEM setSize 5 setcustomname \""+ name +"\" setcustomnamevisible false setSelfDisguiseVisible false");
 
         var shootFireball = new ItemBuilder(Material.BOW).enchant(Enchantment.ARROW_INFINITE).meta(ItemMeta.class, meta -> meta.setCustomModelData(666)).name(ChatColor.GOLD + "Shoot Fireball").build();
 
@@ -82,18 +82,27 @@ public class disguiseCMD extends BaseCommand {
         var disguises = instance.getGame().getDisguises();
         disguises.put(sender.getName(), "clown");
 
-        var name = "&5Death Clown";
-        Bukkit.dispatchCommand(sender, "disguise slime setSize 5 setcustomname \""+ name +"\" setcustomnamevisible false setSelfDisguiseVisible false");
+        var name = "Death Clown";
+        Bukkit.dispatchCommand(sender, "disguise slime setSoundGroup IRON_GOLEM setSize 10 setcustomname \""+ name +"\" setcustomnamevisible false setSelfDisguiseVisible false");
 
 
-        var explosion = new ItemBuilder(Material.GUNPOWDER).name(ChatColor.GOLD + "Explosion").meta(ItemMeta.class, meta -> meta.setCustomModelData(666)).build();
+        var pisoton = new ItemBuilder(Material.GUNPOWDER).name(ChatColor.GOLD + "Pisoton").meta(ItemMeta.class, meta -> meta.setCustomModelData(666)).build();
 
-        var jump = new ItemBuilder(Material.IRON_BOOTS).name(ChatColor.GREEN + "JumpWarden").meta(ItemMeta.class, meta -> meta.setCustomModelData(666)).build();
+        var jump = new ItemBuilder(Material.IRON_BOOTS).name(ChatColor.GREEN + "ClownJump").meta(ItemMeta.class, meta -> meta.setCustomModelData(666)).build();
+
+        var fangs = new ItemBuilder(Material.GREEN_DYE).name(ChatColor.GREEN + "Fangs").meta(ItemMeta.class, meta -> meta.setCustomModelData(666)).build();
+
+        var big = new ItemBuilder(Material.BLAZE_POWDER).name(ChatColor.GREEN + "Big").meta(ItemMeta.class, meta -> meta.setCustomModelData(666)).build();
+
+        var small = new ItemBuilder(Material.MELON_SEEDS).name(ChatColor.GREEN + "Small").meta(ItemMeta.class, meta -> meta.setCustomModelData(666)).build();
 
         var inv = sender.getInventory();
         inv.clear();
-        inv.addItem(explosion);
+        inv.addItem(pisoton);
         inv.addItem(jump);
+        inv.addItem(fangs);
+        inv.addItem(big);
+        inv.addItem(small);
 
         inv.addItem(new ItemStack(Material.ARROW));
 

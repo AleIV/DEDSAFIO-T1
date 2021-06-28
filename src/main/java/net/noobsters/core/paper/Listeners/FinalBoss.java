@@ -10,15 +10,19 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.MagmaCube;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Slime;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import co.aikar.taskchain.TaskChain;
 import net.md_5.bungee.api.ChatColor;
 import net.noobsters.core.paper.GameTickEvent;
 import net.noobsters.core.paper.PERMADED;
@@ -27,6 +31,14 @@ public class FinalBoss implements Listener {
 
     Location blood1 = new Location(Bukkit.getWorld("FINALFIGHT"), -1060, 160, 67);
     Location blood2 = new Location(Bukkit.getWorld("FINALFIGHT"), -943, 21, 141);
+
+    Location para1 = new Location(Bukkit.getWorld("FINALFIGHT"), -424, 19, 454);
+    Location para2 = new Location(Bukkit.getWorld("FINALFIGHT"), -392, 19, 487);
+
+    Location flash1 = new Location(Bukkit.getWorld("FINALFIGHT"), -400, 24, 479);
+    Location flash2 = new Location(Bukkit.getWorld("FINALFIGHT"), -387, 24, 457);
+
+    Location fightclown = new Location(Bukkit.getWorld("FINALFIGHT"), -582.5, 58, -573.5);
 
     PERMADED instance;
     Random random = new Random();
@@ -116,10 +128,100 @@ public class FinalBoss implements Listener {
                             "title " + name + " actionbar {\"text\":\"" + charac + "uE4A8" + "\"}");
                 }
 
+                if(isInArea(player.getLocation(), para1, para2)){
+                    var paranoia = instance.getGame().getParanoia();
+                    var name = player.getName();
+                    if(!paranoia.contains(name)){
+                        paranoia.add(name);
+                        player.playSound(player.getLocation(), "paranoia", 10, 1);
+                    }
+                }
+
+                if(isInArea(player.getLocation(), flash1, flash2)){
+                    var flash = instance.getGame().getFlash();
+                    var name = player.getName();
+                    if(!flash.contains(name)){
+                        flash.add(name);
+                        flash(player);
+                    }
+                }
+
             }
 
         });
 
+    }
+
+    public void flash(Player player){
+        var chain = PERMADED.newChain();
+
+        var name = player.getName();
+        var character = 92;
+        var charac = Character.toString((char) character);
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "stopsound " + name);
+        player.playSound(player.getLocation(), "flash", 10, 1);
+
+        chain.delay(15).sync(() -> {
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
+                            "title " + name + " actionbar {\"text\":\"" + charac + "uE6A0" + "\"}");
+
+        });
+
+        chain.delay(15).sync(() -> {
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
+                            "title " + name + " actionbar {\"text\":\"" + charac + "uE6A1" + "\"}");
+
+        });
+
+        chain.delay(15).sync(() -> {
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
+                            "title " + name + " actionbar {\"text\":\"" + charac + "uE6A2" + "\"}");
+
+        });
+
+        chain.delay(15).sync(() -> {
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
+                            "title " + name + " actionbar {\"text\":\"" + charac + "uE6A3" + "\"}");
+
+        });
+
+        chain.delay(15).sync(() -> {
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
+                            "title " + name + " actionbar {\"text\":\"" + charac + "uE6A4" + "\"}");
+
+        });
+
+        chain.delay(15).sync(() -> {
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
+                            "title " + name + " actionbar {\"text\":\"" + charac + "uE6A5" + "\"}");
+
+        });
+
+        chain.delay(15).sync(() -> {
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
+                            "title " + name + " actionbar {\"text\":\"" + charac + "uE6A6" + "\"}");
+
+        });
+
+        chain.delay(15).sync(() -> {
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
+                            "title " + name + " actionbar {\"text\":\"" + charac + "uE6A7" + "\"}");
+            Bukkit.broadcast("TELEPORT " + name, "mod.perm");
+        });
+
+        chain.delay(15).sync(() -> {
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
+                            "title " + name + " actionbar {\"text\":\"" + charac + "uE6A8" + "\"}");
+
+        });
+
+        chain.delay(15).sync(() -> {
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
+                            "title " + name + " actionbar {\"text\":\"" + charac + "uE6A9" + "\"}");
+            
+        });
+
+        chain.sync(TaskChain::abort).execute();
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -136,11 +238,9 @@ public class FinalBoss implements Listener {
     public void onSpawn(CreatureSpawnEvent e) {
         var entity = e.getEntity();
 
-        if (entity.getWorld() == Bukkit.getWorld("FINALFIGHT")) {
-            if(entity instanceof MagmaCube && e.getSpawnReason().toString().contains("NATURAL")){
-                e.setCancelled(true);              
+        if((entity instanceof MagmaCube || entity instanceof Slime) && e.getSpawnReason().toString().contains("NATURAL")){
+            e.setCancelled(true);              
 
-            }
         }
     }
 
@@ -160,6 +260,15 @@ public class FinalBoss implements Listener {
                 }
                 
             }
+        }
+    }
+
+    @EventHandler
+    public void ondamage(EntityDamageEvent e){
+        var entity = e.getEntity();
+        var cause = e.getCause();
+        if(entity instanceof ItemFrame && (cause == DamageCause.ENTITY_EXPLOSION || cause == DamageCause.BLOCK_EXPLOSION)){
+            e.setCancelled(true);
         }
     }
 

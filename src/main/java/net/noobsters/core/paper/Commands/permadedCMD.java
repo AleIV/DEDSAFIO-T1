@@ -229,6 +229,16 @@ public class permadedCMD extends BaseCommand {
         sender.sendMessage(ChatColor.BLUE + "Blood Scale ");
     }
 
+    @Subcommand("paranoia-clear")
+    public void parano(Player sender) {
+
+        instance.getGame().getParanoia().clear();
+        instance.getGame().getFlash().clear();
+
+        sender.sendMessage(ChatColor.BLUE + "Cleared paranoia.");
+    }
+
+
     @Subcommand("blind-stand")
     public void blind(Player sender) {
 
